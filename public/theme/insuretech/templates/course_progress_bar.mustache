@@ -1,0 +1,76 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_insuretech/course_progress_bar
+
+    Student progress strip at the top of a course page.
+
+    Example context (json):
+    {
+        "percent": 33, "done": 3, "tracked": 9, "complete": false,
+        "next": {"name": "Networking cheat sheet", "url": "#", "icon": "", "section": "Module 1" },
+        "access": {"soon": false, "text": "Access until 9 December 2026"}
+    }
+}}
+<div class="it-card it-coursebar mb-4">
+    {{#hastracking}}
+    <div class="it-coursebar-progress">
+        <div class="it-coursebar-top">
+            <span class="it-eyebrow">{{#str}}yourprogress, theme_insuretech{{/str}}</span>
+            <span class="it-coursebar-percent">{{percent}}%</span>
+        </div>
+        <div class="it-progress" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100"
+             aria-label="{{#str}}courseprogress, theme_insuretech{{/str}}">
+            <span style="width: {{percent}}%"></span>
+        </div>
+        <p class="it-progress-meta">
+            {{#str}}activitiesdone, theme_insuretech, {"done": {{done}}, "total": {{tracked}} }{{/str}}
+            {{#access}}
+                <span class="it-dot" aria-hidden="true">·</span>
+                <span class="{{#soon}}it-text-warn{{/soon}}"><i class="icon fa fa-clock" aria-hidden="true"></i>{{text}}</span>
+            {{/access}}
+        </p>
+    </div>
+    {{/hastracking}}
+    <div class="it-coursebar-next">
+        {{#next}}
+            <div class="it-next">
+                <img src="{{icon}}" alt="" class="it-next-icon">
+                <div>
+                    <span class="it-next-label">{{#str}}upnext, theme_insuretech{{/str}} · {{section}}</span>
+                    <span class="it-next-name">{{name}}</span>
+                </div>
+            </div>
+            {{#url}}<a href="{{url}}" class="btn btn-primary">{{#str}}resume, theme_insuretech{{/str}} <i class="icon fa fa-arrow-right ms-1 me-0" aria-hidden="true"></i></a>{{/url}}
+        {{/next}}
+        {{^next}}
+            {{#complete}}<span class="it-pill it-pill-success"><i class="icon fa fa-check" aria-hidden="true"></i>{{#str}}coursecomplete, theme_insuretech{{/str}}</span>{{/complete}}
+        {{/next}}
+    </div>
+    {{#live}}
+        <div class="it-coursebar-liverow">
+            <div class="it-live-info">
+                <span class="it-eyebrow">{{#str}}liveclasses, theme_insuretech{{/str}}</span>
+                <span class="it-live-meta">
+                    {{#batch}}<span class="it-pill">{{batch}}</span>{{/batch}}
+                    {{#schedule}}<span class="it-live-schedule"><i class="icon fa fa-clock" aria-hidden="true"></i>{{schedule}}</span>{{/schedule}}
+                </span>
+            </div>
+            <a href="{{url}}" class="btn it-btn-live" target="_blank" rel="noopener noreferrer"><span class="it-live-dot" aria-hidden="true"></span>{{#str}}joinclass, theme_insuretech{{/str}}<span class="visually-hidden"> ({{#str}}opensinnewwindow{{/str}})</span></a>
+        </div>
+    {{/live}}
+</div>

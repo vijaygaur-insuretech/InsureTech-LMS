@@ -1,0 +1,110 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_insuretech/public_course
+
+    Public course details for visitors: overview, curriculum outline, trainers and a login call to action.
+
+    Example context (json):
+    { "name": "AWS", "category": "Cloud", "summary": "<p>Learn</p>", "image": "", "modules": [], "hasmodules": false,
+      "modulecount": 0, "lessoncount": 0, "trainers": [], "hastrainers": false, "schedule": "", "loggedin": false,
+      "enrolled": false, "courseurl": "#", "loginurl": "#", "email": "", "phone": "", "phonelink": "", "homeurl": "#" }
+}}
+<article class="it-pc">
+    <nav class="it-pc-crumbs" aria-label="{{#str}}breadcrumb, theme_insuretech{{/str}}">
+        <a href="{{homeurl}}">{{#str}}home{{/str}}</a> <span aria-hidden="true">/</span>
+        <a href="{{homeurl}}#courses">{{#str}}navcourses, theme_insuretech{{/str}}</a>
+        {{#category}}<span aria-hidden="true">/</span> <span>{{category}}</span>{{/category}}
+    </nav>
+
+    <div class="it-pc-grid">
+        <div class="it-pc-main">
+            <header class="it-pc-hero">
+                {{#category}}<span class="it-pill">{{category}}</span>{{/category}}
+                <h1 class="it-pc-title">{{name}}</h1>
+                <ul class="it-pc-facts">
+                    <li><i class="icon fa fa-layer-group" aria-hidden="true"></i>{{#str}}modulescount, theme_insuretech, {{modulecount}}{{/str}}</li>
+                    <li><i class="icon fa fa-book-open" aria-hidden="true"></i>{{#str}}lessonscount, theme_insuretech, {{lessoncount}}{{/str}}</li>
+                    {{#schedule}}<li><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}liveclasses, theme_insuretech{{/str}}: {{schedule}}</li>{{/schedule}}
+                    <li><i class="icon fa fa-certificate" aria-hidden="true"></i>{{#str}}certificateincluded, theme_insuretech{{/str}}</li>
+                </ul>
+            </header>
+
+            {{#summary}}
+                <section class="it-pc-section" aria-labelledby="pc-overview">
+                    <h2 id="pc-overview">{{#str}}overview, theme_insuretech{{/str}}</h2>
+                    <div class="it-pc-summary">{{{summary}}}</div>
+                </section>
+            {{/summary}}
+
+            {{#hasmodules}}
+                <section class="it-pc-section" aria-labelledby="pc-curriculum">
+                    <h2 id="pc-curriculum">{{#str}}curriculum, theme_insuretech{{/str}}</h2>
+                    <div class="it-curriculum">
+                        {{#modules}}
+                            <details {{#open}}open{{/open}}>
+                                <summary><span class="it-cur-name">{{name}}</span><span class="it-cur-count">{{counttext}}</span></summary>
+                                <ul>
+                                    {{#lessons}}
+                                        <li><img src="{{icon}}" alt="" class="it-cur-icon"><span>{{name}}</span><span class="it-cur-type">{{type}}</span><i class="icon fa fa-lock it-cur-lock" aria-hidden="true"></i></li>
+                                    {{/lessons}}
+                                </ul>
+                            </details>
+                        {{/modules}}
+                    </div>
+                </section>
+            {{/hasmodules}}
+
+            {{#hastrainers}}
+                <section class="it-pc-section" aria-labelledby="pc-trainers">
+                    <h2 id="pc-trainers">{{#str}}yourtrainers, theme_insuretech{{/str}}</h2>
+                    <ul class="it-pc-trainers">
+                        {{#trainers}}<li><span class="it-pc-avatar" aria-hidden="true"><i class="icon fa fa-user m-0"></i></span><div><strong>{{name}}</strong><span>{{role}}</span></div></li>{{/trainers}}
+                    </ul>
+                </section>
+            {{/hastrainers}}
+        </div>
+
+        <aside class="it-pc-side">
+            <div class="it-pc-card">
+                <div class="it-pc-img card-img-top" style="background-image: url('{{{image}}}');"></div>
+                <div class="it-pc-card-body">
+                    {{#enrolled}}
+                        <a href="{{courseurl}}" class="btn btn-primary btn-lg w-100">{{#str}}gotocourse, theme_insuretech{{/str}}</a>
+                    {{/enrolled}}
+                    {{^enrolled}}
+                        {{^loggedin}}
+                            <a href="{{loginurl}}" class="btn btn-primary btn-lg w-100">{{#str}}logintostart, theme_insuretech{{/str}}</a>
+                            <p class="it-pc-note">{{#str}}logintostart_note, theme_insuretech{{/str}}</p>
+                        {{/loggedin}}
+                        {{#loggedin}}
+                            <p class="it-pc-note mt-0">{{#str}}notenrolledyet, theme_insuretech{{/str}}</p>
+                        {{/loggedin}}
+                        {{#email}}<a href="mailto:{{email}}?subject={{mailsubject}}" class="btn btn-outline-primary w-100 mt-2"><i class="icon fa fa-envelope" aria-hidden="true"></i>{{#str}}requestaccess, theme_insuretech{{/str}}</a>{{/email}}
+                        {{#phone}}<a href="tel:{{phonelink}}" class="btn btn-link w-100"><i class="icon fa fa-phone" aria-hidden="true"></i>{{phone}}</a>{{/phone}}
+                    {{/enrolled}}
+                    <ul class="it-pc-includes">
+                        <li><i class="icon fa fa-check" aria-hidden="true"></i>{{#str}}incl1, theme_insuretech{{/str}}</li>
+                        <li><i class="icon fa fa-check" aria-hidden="true"></i>{{#str}}incl2, theme_insuretech{{/str}}</li>
+                        <li><i class="icon fa fa-check" aria-hidden="true"></i>{{#str}}incl3, theme_insuretech{{/str}}</li>
+                        <li><i class="icon fa fa-check" aria-hidden="true"></i>{{#str}}incl4, theme_insuretech{{/str}}</li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </div>
+</article>

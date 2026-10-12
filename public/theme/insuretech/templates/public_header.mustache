@@ -1,0 +1,63 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_insuretech/public_header
+
+    Top bar of the public pages: logo, section links and Log in (or Go to dashboard when signed in).
+
+    Example context (json):
+    { "homeurl": "#", "loginurl": "#", "dashboardurl": "#", "loggedin": false, "brandname": "insureTech Skills" }
+}}
+<header class="it-pub-header">
+    <div class="it-pub-container it-pub-header-inner">
+        <a href="{{homeurl}}" class="it-pub-brand" aria-label="{{brandname}}">
+            <img src="{{logourl}}" alt="{{brandname}}" class="it-pub-logo">
+        </a>
+        <nav class="it-pub-nav" aria-label="{{#str}}mainmenu, theme_insuretech{{/str}}">
+            <a href="{{homeurl}}#courses">{{#str}}navcourses, theme_insuretech{{/str}}</a>
+            <a href="{{homeurl}}#how">{{#str}}navhow, theme_insuretech{{/str}}</a>
+            <a href="{{homeurl}}#about">{{#str}}navabout, theme_insuretech{{/str}}</a>
+            <a href="{{homeurl}}#faq">{{#str}}navfaq, theme_insuretech{{/str}}</a>
+            <a href="{{homeurl}}#contact">{{#str}}navcontact, theme_insuretech{{/str}}</a>
+        </nav>
+        <div class="it-pub-cta">
+            {{#loggedin}}
+                <a href="{{dashboardurl}}" class="btn btn-primary">{{#str}}gotodashboard, theme_insuretech{{/str}}</a>
+            {{/loggedin}}
+            {{^loggedin}}
+                <a href="{{loginurl}}" class="btn btn-primary"><i class="icon fa fa-right-to-bracket" aria-hidden="true"></i>{{#str}}login{{/str}}</a>
+            {{/loggedin}}
+        </div>
+        <details class="it-pub-menu">
+            <summary aria-label="{{#str}}mainmenu, theme_insuretech{{/str}}"><i class="icon fa fa-bars m-0" aria-hidden="true"></i></summary>
+            <div class="it-pub-menu-panel">
+                <a href="{{homeurl}}#courses">{{#str}}navcourses, theme_insuretech{{/str}}</a>
+                <a href="{{homeurl}}#how">{{#str}}navhow, theme_insuretech{{/str}}</a>
+                <a href="{{homeurl}}#about">{{#str}}navabout, theme_insuretech{{/str}}</a>
+                <a href="{{homeurl}}#faq">{{#str}}navfaq, theme_insuretech{{/str}}</a>
+                <a href="{{homeurl}}#contact">{{#str}}navcontact, theme_insuretech{{/str}}</a>
+            </div>
+        </details>
+    </div>
+</header>
+{{#js}}
+document.querySelectorAll('.it-pub-menu-panel a').forEach(function(link) {
+    link.addEventListener('click', function() {
+        link.closest('details').removeAttribute('open');
+    });
+});
+{{/js}}

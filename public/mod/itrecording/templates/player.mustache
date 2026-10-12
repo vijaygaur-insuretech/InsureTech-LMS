@@ -1,0 +1,45 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_itrecording/player
+
+    Embedded recording player.
+
+    Example context (json):
+    { "name": "Class 1", "intro": "", "hasintro": false, "duration": "1h", "invalid": false, "isdrive": true,
+      "sandbox": true, "watermark": "Priya Sharma", "canmanage": false,
+      "embed": {"provider": "drive", "src": "https://drive.google.com/file/d/x/preview"} }
+}}
+<div class="itrec">
+    {{#invalid}}
+        <div class="alert alert-warning">{{#str}}invalidvideourl, itrecording{{/str}}</div>
+    {{/invalid}}
+    {{#embed}}
+        <div class="itrec-frame itrec-{{provider}}" oncontextmenu="return false;">
+            <iframe src="{{src}}" title="{{name}}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                    allowfullscreen referrerpolicy="strict-origin-when-cross-origin"
+                    {{#sandbox}}sandbox="allow-scripts allow-same-origin allow-presentation"{{/sandbox}}></iframe>
+            {{#isdrive}}<div class="itrec-shield" aria-hidden="true"></div>{{/isdrive}}
+            {{#watermark}}<div class="itrec-watermark" aria-hidden="true"><span>{{watermark}}</span></div>{{/watermark}}
+        </div>
+    {{/embed}}
+    <div class="itrec-meta">
+        {{#duration}}<span class="itrec-duration"><i class="icon fa fa-clock" aria-hidden="true"></i>{{duration}}</span>{{/duration}}
+        <span class="itrec-note"><i class="icon fa fa-shield-halved" aria-hidden="true"></i>{{#str}}downloadnote, itrecording{{/str}}</span>
+    </div>
+    {{#hasintro}}<div class="itrec-intro">{{{intro}}}</div>{{/hasintro}}
+</div>

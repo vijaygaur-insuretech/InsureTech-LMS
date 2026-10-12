@@ -1,0 +1,214 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_insuretech/landing
+
+    Public landing page for visitors who are not logged in.
+
+    Example context (json):
+    { "output": { "doctype": "<!DOCTYPE html>", "page_title": "Home", "favicon": "", "main_content": "" },
+      "bodyattributes": "", "homeurl": "#", "loginurl": "#", "brandname": "insureTech Skills",
+      "badge": "Career-focused learning", "herotitle": "Get certified.", "herosubtitle": "Build skills.",
+      "stats": [{"value": "10,000+", "label": "Professionals trained"}],
+      "partners": ["AWS"], "haspartners": true,
+      "courses": [{"id": 2, "name": "AWS", "category": "Cloud", "categoryid": 1, "summary": "Learn AWS",
+          "image": "", "modulestext": "4 modules", "url": "#", "schedule": "Mon-Fri"}],
+      "hascourses": true, "categories": [], "hascategories": false,
+      "abouttitle": "About", "abouttext": "<p>About</p>", "faqs": [], "hasfaqs": false,
+      "ctatitle": "Ready?", "ctatext": "Log in." }
+}}
+{{> theme_boost/head }}
+
+<body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
+<div id="page-wrapper" class="it-public">
+    {{{ output.standard_top_of_body_html }}}
+    {{> theme_insuretech/public_header }}
+
+    <main id="page" class="it-landing">
+        <section class="it-hero">
+            <div class="it-pub-container it-hero-grid">
+                <div class="it-hero-copy">
+                    {{#badge}}<span class="it-login-badge">{{badge}}</span>{{/badge}}
+                    <h1 class="it-hero-title">{{herotitle}}</h1>
+                    <p class="it-hero-subtitle">{{herosubtitle}}</p>
+                    <div class="it-hero-actions">
+                        <a href="#courses" class="btn btn-primary btn-lg">{{#str}}explorecourses, theme_insuretech{{/str}}</a>
+                        {{^loggedin}}<a href="{{loginurl}}" class="btn btn-lg it-btn-ghost">{{#str}}loginstudents, theme_insuretech{{/str}}</a>{{/loggedin}}
+                        {{#loggedin}}<a href="{{dashboardurl}}" class="btn btn-lg it-btn-ghost">{{#str}}gotodashboard, theme_insuretech{{/str}}</a>{{/loggedin}}
+                    </div>
+                    <div class="it-hero-stats">
+                        {{#stats}}<div><strong>{{value}}</strong><span>{{label}}</span></div>{{/stats}}
+                    </div>
+                </div>
+                <div class="it-hero-visual" aria-hidden="true">
+                    <div class="it-hero-card it-hero-card-1">
+                        <span class="it-eyebrow">{{#str}}continuelearning, theme_insuretech{{/str}}</span>
+                        <strong>AWS Solutions Architect</strong>
+                        <div class="it-progress"><span style="width: 68%"></span></div>
+                        <small>68% · Module 3: Security</small>
+                    </div>
+                    <div class="it-hero-card it-hero-card-2">
+                        <span class="it-live-dot"></span>
+                        <div><strong>{{#str}}joinclass, theme_insuretech{{/str}}</strong><small>Mon–Fri · 7:00 PM IST</small></div>
+                    </div>
+                    <div class="it-hero-card it-hero-card-3">
+                        <i class="icon fa fa-award m-0"></i>
+                        <div><strong>{{#str}}herocertificate, theme_insuretech{{/str}}</strong><small>Kubernetes Administrator (CKA)</small></div>
+                    </div>
+                </div>
+            </div>
+            {{#haspartners}}
+                <div class="it-pub-container">
+                    <div class="it-partners">
+                        <span class="it-partners-label">{{#str}}partnerslabel, theme_insuretech{{/str}}</span>
+                        <ul>{{#partners}}<li>{{.}}</li>{{/partners}}</ul>
+                    </div>
+                </div>
+            {{/haspartners}}
+        </section>
+
+        <section class="it-pub-section" id="courses" aria-labelledby="courses-title">
+            <div class="it-pub-container">
+                <div class="it-pub-section-head">
+                    <span class="it-eyebrow">{{#str}}navcourses, theme_insuretech{{/str}}</span>
+                    <h2 id="courses-title">{{#str}}coursestitle, theme_insuretech{{/str}}</h2>
+                    <p>{{#str}}coursessubtitle, theme_insuretech{{/str}}</p>
+                </div>
+                {{#hascategories}}
+                    <div class="it-filter" role="group" aria-label="{{#str}}filterbycategory, theme_insuretech{{/str}}" data-region="it-course-filter">
+                        <button type="button" class="it-chip active" data-filter="all" aria-pressed="true">{{#str}}allcourses, theme_insuretech{{/str}}</button>
+                        {{#categories}}<button type="button" class="it-chip" data-filter="{{id}}" aria-pressed="false">{{name}}</button>{{/categories}}
+                    </div>
+                {{/hascategories}}
+                {{#hascourses}}
+                    <div class="it-course-grid" data-region="it-course-grid">
+                        {{#courses}}
+                            <article class="it-course" data-category="{{categoryid}}">
+                                <a href="{{url}}" class="it-course-link">
+                                    <div class="it-course-img card-img-top" style="background-image: url('{{{image}}}');"></div>
+                                    <div class="it-course-body">
+                                        {{#category}}<span class="it-pill">{{category}}</span>{{/category}}
+                                        <h3 class="it-course-title">{{name}}</h3>
+                                        {{#summary}}<p class="it-course-summary">{{summary}}</p>{{/summary}}
+                                        <div class="it-course-meta">
+                                            <span><i class="icon fa fa-layer-group" aria-hidden="true"></i>{{modulestext}}</span>
+                                            {{#schedule}}<span><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}liveclasses, theme_insuretech{{/str}}</span>{{/schedule}}
+                                        </div>
+                                        <span class="it-course-more">{{#str}}viewcourse, theme_insuretech{{/str}} <i class="icon fa fa-arrow-right m-0" aria-hidden="true"></i></span>
+                                    </div>
+                                </a>
+                            </article>
+                        {{/courses}}
+                    </div>
+                {{/hascourses}}
+                {{^hascourses}}<p class="it-empty">{{#str}}nocoursesyet, theme_insuretech{{/str}}</p>{{/hascourses}}
+            </div>
+        </section>
+
+        <section class="it-pub-section it-pub-section-alt" id="how" aria-labelledby="how-title">
+            <div class="it-pub-container">
+                <div class="it-pub-section-head">
+                    <span class="it-eyebrow">{{#str}}navhow, theme_insuretech{{/str}}</span>
+                    <h2 id="how-title">{{#str}}howtitle, theme_insuretech{{/str}}</h2>
+                </div>
+                <ol class="it-steps">
+                    <li><i class="icon fa fa-user-check m-0" aria-hidden="true"></i><h3>{{#str}}step1title, theme_insuretech{{/str}}</h3><p>{{#str}}step1text, theme_insuretech{{/str}}</p></li>
+                    <li><i class="icon fa fa-video m-0" aria-hidden="true"></i><h3>{{#str}}step2title, theme_insuretech{{/str}}</h3><p>{{#str}}step2text, theme_insuretech{{/str}}</p></li>
+                    <li><i class="icon fa fa-laptop-code m-0" aria-hidden="true"></i><h3>{{#str}}step3title, theme_insuretech{{/str}}</h3><p>{{#str}}step3text, theme_insuretech{{/str}}</p></li>
+                    <li><i class="icon fa fa-award m-0" aria-hidden="true"></i><h3>{{#str}}step4title, theme_insuretech{{/str}}</h3><p>{{#str}}step4text, theme_insuretech{{/str}}</p></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="it-pub-section" id="about" aria-labelledby="about-title">
+            <div class="it-pub-container it-about-grid">
+                <div>
+                    <span class="it-eyebrow">{{#str}}navabout, theme_insuretech{{/str}}</span>
+                    <h2 id="about-title">{{abouttitle}}</h2>
+                    <div class="it-about-text">{{{abouttext}}}</div>
+                </div>
+                <ul class="it-features">
+                    <li><i class="icon fa fa-chalkboard-user m-0" aria-hidden="true"></i><div><h3>{{#str}}feat1title, theme_insuretech{{/str}}</h3><p>{{#str}}feat1text, theme_insuretech{{/str}}</p></div></li>
+                    <li><i class="icon fa fa-flask m-0" aria-hidden="true"></i><div><h3>{{#str}}feat2title, theme_insuretech{{/str}}</h3><p>{{#str}}feat2text, theme_insuretech{{/str}}</p></div></li>
+                    <li><i class="icon fa fa-chart-line m-0" aria-hidden="true"></i><div><h3>{{#str}}feat3title, theme_insuretech{{/str}}</h3><p>{{#str}}feat3text, theme_insuretech{{/str}}</p></div></li>
+                    <li><i class="icon fa fa-briefcase m-0" aria-hidden="true"></i><div><h3>{{#str}}feat4title, theme_insuretech{{/str}}</h3><p>{{#str}}feat4text, theme_insuretech{{/str}}</p></div></li>
+                </ul>
+            </div>
+        </section>
+
+        {{#hasfaqs}}
+            <section class="it-pub-section it-pub-section-alt" id="faq" aria-labelledby="faq-title">
+                <div class="it-pub-container it-faq-wrap">
+                    <div class="it-pub-section-head">
+                        <span class="it-eyebrow">{{#str}}navfaq, theme_insuretech{{/str}}</span>
+                        <h2 id="faq-title">{{#str}}faqtitle, theme_insuretech{{/str}}</h2>
+                    </div>
+                    <div class="it-faq">
+                        {{#faqs}}<details><summary>{{q}}</summary><p>{{a}}</p></details>{{/faqs}}
+                    </div>
+                </div>
+            </section>
+        {{/hasfaqs}}
+
+        <section class="it-pub-section">
+            <div class="it-pub-container">
+                <div class="it-cta-band">
+                    <div>
+                        <h2>{{ctatitle}}</h2>
+                        <p>{{ctatext}}</p>
+                    </div>
+                    <div class="it-hero-actions">
+                        {{^loggedin}}<a href="{{loginurl}}" class="btn btn-lg btn-light">{{#str}}login{{/str}}</a>{{/loggedin}}
+                        {{#email}}<a href="mailto:{{email}}" class="btn btn-lg it-btn-ghost">{{#str}}contactus, theme_insuretech{{/str}}</a>{{/email}}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{! Moodle's own site home content: kept in the page because the layout must output it, hidden for visitors. }}
+        <div class="d-none">{{{ output.main_content }}}</div>
+    </main>
+
+    {{> theme_insuretech/public_footer }}
+    {{{ output.standard_end_of_body_html }}}
+</div>
+</body>
+</html>
+{{#js}}
+(function() {
+    var filter = document.querySelector('[data-region="it-course-filter"]');
+    if (!filter) {
+        return;
+    }
+    filter.addEventListener('click', function(e) {
+        var chip = e.target.closest('[data-filter]');
+        if (!chip) {
+            return;
+        }
+        var value = chip.getAttribute('data-filter');
+        filter.querySelectorAll('[data-filter]').forEach(function(c) {
+            var on = c === chip;
+            c.classList.toggle('active', on);
+            c.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        document.querySelectorAll('[data-region="it-course-grid"] [data-category]').forEach(function(card) {
+            card.hidden = value !== 'all' && card.getAttribute('data-category') !== value;
+        });
+    });
+})();
+{{/js}}

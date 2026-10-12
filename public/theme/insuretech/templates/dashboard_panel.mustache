@@ -1,0 +1,175 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_insuretech/dashboard_panel
+
+    Role-aware panel at the top of the Dashboard: Continue learning for students, batches and grading for
+    trainers, shortcuts for admins. Every block below it on the Dashboard stays as it is.
+
+    Example context (json):
+    {
+        "greeting": "Welcome back, Priya",
+        "role": "student",
+        "subtitle": "Pick up where you left off.",
+        "student": {
+            "resume": {"name": "AWS Solutions Architect", "url": "#", "percent": 33, "done": 3, "tracked": 9,
+                "hastracking": true, "next": {"name": "Networking cheat sheet", "url": "#", "icon": "", "section": "Module 1"} },
+            "stats": [{"value": 2, "label": "Enrolled courses"}],
+            "notices": [{"soon": true, "text": "Your access to Azure ends in 5 days."} ],
+            "hasnotices": true
+        }
+    }
+}}
+<section class="it-dash it-dash-{{role}} mb-4" aria-labelledby="it-dash-title">
+    <div class="it-dash-hero">
+        <div class="it-dash-greeting">
+            <h2 id="it-dash-title" class="it-dash-title">{{greeting}}</h2>
+            <p class="it-dash-subtitle">{{subtitle}}</p>
+        </div>
+
+        {{#student}}
+            <div class="it-stats">
+                {{#stats}}
+                    <div class="it-stat"><strong>{{value}}</strong><span>{{label}}</span></div>
+                {{/stats}}
+            </div>
+        {{/student}}
+        {{^student}}{{#trainer}}
+            <div class="it-stats">
+                {{#stats}}
+                    <div class="it-stat {{#highlight}}it-stat-highlight{{/highlight}}"><strong>{{value}}</strong><span>{{label}}</span></div>
+                {{/stats}}
+            </div>
+        {{/trainer}}{{/student}}
+    </div>
+
+    {{#admin}}
+        <h3 class="it-section-title">{{#str}}adminshortcuts, theme_insuretech{{/str}}</h3>
+        <div class="it-actions">
+            {{#actions}}
+                <a href="{{url}}" class="it-action"><i class="icon fa {{icon}}" aria-hidden="true"></i><span>{{label}}</span></a>
+            {{/actions}}
+        </div>
+    {{/admin}}
+
+    {{#student}}
+        {{#hasnotices}}
+            <div class="it-notices">
+                {{#notices}}
+                    <div class="it-notice {{#soon}}it-notice-warn{{/soon}}" role="status">
+                        <i class="icon fa fa-clock" aria-hidden="true"></i>{{text}}
+                    </div>
+                {{/notices}}
+            </div>
+        {{/hasnotices}}
+
+        {{#resume}}
+            <div class="it-card it-resume">
+                <div class="it-resume-body">
+                    <span class="it-eyebrow">{{#str}}continuelearning, theme_insuretech{{/str}}</span>
+                    <h3 class="it-resume-course"><a href="{{url}}">{{name}}</a></h3>
+                    {{#hastracking}}
+                        <div class="it-progress" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100"
+                             aria-label="{{#str}}courseprogress, theme_insuretech{{/str}}">
+                            <span style="width: {{percent}}%"></span>
+                        </div>
+                        <p class="it-progress-meta">
+                            <strong>{{percent}}%</strong> · {{#str}}activitiesdone, theme_insuretech, {"done": {{done}}, "total": {{tracked}} }{{/str}}
+                        </p>
+                    {{/hastracking}}
+                    {{#next}}
+                        <div class="it-next">
+                            <img src="{{icon}}" alt="" class="it-next-icon">
+                            <div>
+                                <span class="it-next-label">{{#str}}upnext, theme_insuretech{{/str}} · {{section}}</span>
+                                <span class="it-next-name">{{name}}</span>
+                            </div>
+                        </div>
+                    {{/next}}
+                </div>
+                <div class="it-resume-action">
+                    {{#next}}{{#url}}
+                        <a href="{{url}}" class="btn btn-primary btn-lg">{{#str}}resume, theme_insuretech{{/str}} <i class="icon fa fa-arrow-right ms-1 me-0" aria-hidden="true"></i></a>
+                    {{/url}}{{/next}}
+                    {{^next}}
+                        <a href="{{url}}" class="btn btn-primary btn-lg">{{#str}}opencourse, theme_insuretech{{/str}}</a>
+                    {{/next}}
+                </div>
+            </div>
+        {{/resume}}
+
+        {{#hasliveclasses}}
+            <h3 class="it-section-title">{{#str}}liveclasses, theme_insuretech{{/str}}</h3>
+            <div class="it-card it-live-list">
+                {{#liveclasses}}
+                    <div class="it-live-row">
+                        <div class="it-live-info">
+                            <span class="it-live-course">{{course}}</span>
+                            <span class="it-live-meta">{{#batch}}<span class="it-pill">{{batch}}</span>{{/batch}}{{#schedule}}<span class="it-live-schedule"><i class="icon fa fa-clock" aria-hidden="true"></i>{{schedule}}</span>{{/schedule}}</span>
+                        </div>
+                        <a href="{{url}}" class="btn it-btn-live" target="_blank" rel="noopener noreferrer"><span class="it-live-dot" aria-hidden="true"></span>{{#str}}joinclass, theme_insuretech{{/str}}<span class="visually-hidden"> ({{#str}}opensinnewwindow{{/str}})</span></a>
+                    </div>
+                {{/liveclasses}}
+            </div>
+        {{/hasliveclasses}}
+    {{/student}}
+
+    {{#trainer}}
+        <div class="it-section-head">
+            <h3 class="it-section-title">{{#str}}mybatches, theme_insuretech{{/str}}</h3>
+            <a href="{{manageurl}}" class="it-section-link"><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}managelinks, theme_insuretech{{/str}}</a>
+        </div>
+        <div class="it-grid">
+            {{#courses}}
+                <div class="it-card it-teach">
+                    <div class="it-teach-head">
+                        <h4 class="it-teach-course"><a href="{{url}}">{{name}}</a></h4>
+                        {{#hastograde}}
+                            <span class="it-pill it-pill-warn">{{#str}}tograde, theme_insuretech, {{tograde}}{{/str}}</span>
+                        {{/hastograde}}
+                    </div>
+                    <p class="it-teach-meta">
+                        <i class="icon fa fa-users" aria-hidden="true"></i>{{learnerstext}}
+                        {{#hasbatches}}
+                            <span class="it-dot" aria-hidden="true">·</span>
+                            {{#batches}}<span class="it-pill">{{name}}</span>{{/batches}}
+                        {{/hasbatches}}
+                    </p>
+                    <div class="it-teach-live">
+                        {{#hasclasses}}
+                            {{#classes}}
+                                <a href="{{url}}" class="btn btn-sm it-btn-live" target="_blank" rel="noopener noreferrer"><span class="it-live-dot" aria-hidden="true"></span>{{label}}<span class="visually-hidden"> ({{#str}}opensinnewwindow{{/str}})</span></a>
+                                {{#schedule}}<span class="it-live-schedule"><i class="icon fa fa-clock" aria-hidden="true"></i>{{schedule}}</span>{{/schedule}}
+                            {{/classes}}
+                        {{/hasclasses}}
+                        {{^hasclasses}}
+                            <span class="it-live-none"><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}nomeetinglink, theme_insuretech{{/str}}</span>
+                            {{#editurl}}<a href="{{editurl}}" class="it-live-add">{{#str}}addmeetinglink, theme_insuretech{{/str}}</a>{{/editurl}}
+                        {{/hasclasses}}
+                    </div>
+                    <div class="it-links">
+                        <a href="{{url}}" class="it-link it-link-primary"><i class="icon fa fa-book-open" aria-hidden="true"></i>{{#str}}linkcourse, theme_insuretech{{/str}}</a>
+                        {{#links}}
+                            <a href="{{url}}" class="it-link"><i class="icon fa {{icon}}" aria-hidden="true"></i>{{label}}</a>
+                        {{/links}}
+                    </div>
+                </div>
+            {{/courses}}
+        </div>
+    {{/trainer}}
+
+</section>

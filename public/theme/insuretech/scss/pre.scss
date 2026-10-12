@@ -1,0 +1,65 @@
+// insureTech Skills — brand tokens.
+//
+// Loaded before Boost. Every variable Boost, Bootstrap and the Moodle Design System declare with !default
+// picks these values up, so the whole platform (buttons, links, focus rings, nav pills, alerts, progress
+// bars, the course index...) follows the brand without overriding each component by hand.
+
+// Brand palette (from insuretechskills.tech).
+$it-teal:        #1199B6;   // Logo teal: accents, highlights.
+$it-teal-deep:   #0D7F97;   // Primary: passes 4.5:1 with white text.
+$it-navy:        #0C1A2B;   // Logo navy: headings, dark surfaces.
+$it-navy-soft:   #13253A;
+$it-gold:        #D4AF37;   // Sparing accent.
+$it-page:        #F4F7FB;   // Page background.
+
+// Teal ramp. Re-points the design system's "blue" scale, which drives every interactive token.
+$mds-color-blue-50:  #E8F6F9 !default;
+$mds-color-blue-100: #CDEBF2 !default;
+$mds-color-blue-200: #9BD6E5 !default;
+$mds-color-blue-300: #5FBDD4 !default;
+$mds-color-blue-400: #1199B6 !default;
+$mds-color-blue-500: #0D7F97 !default;
+$mds-color-blue-600: #0B6A7E !default;
+$mds-color-blue-700: #085565 !default;
+$mds-color-blue-800: #06404C !default;
+$mds-color-blue-900: #032A33 !default;
+
+$mds-bg-nav-pill-selected: $mds-color-blue-50 !default;
+$mds-bg-nav-pill-hover: #EEF3F8 !default;
+$mds-bg-nav-pill-pressed: $mds-color-blue-100 !default;
+
+// Typography.
+$mds-typography-font-family-sans-serif: Inter !default;
+$it-font-heading: Poppins, Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+$primary: $mds-color-blue-500 !default;
+$body-color: #1E2B3B !default;
+$body-bg: $it-page !default;
+$headings-color: $it-navy !default;
+$headings-font-weight: 600 !default;
+
+// Shape.
+$border-radius:    .625rem !default;
+$border-radius-sm: .4rem !default;
+$border-radius-lg: .875rem !default;
+$border-radius-xl: 1.125rem !default;
+
+// Controls.
+$btn-font-weight: 600 !default;
+$btn-padding-y: .5rem !default;
+$btn-padding-x: 1.1rem !default;
+$input-padding-y: .5rem !default;
+$input-padding-x: .85rem !default;
+
+// Elevation.
+$box-shadow-sm: 0 1px 2px rgba(12, 26, 43, .06) !default;
+$box-shadow:    0 4px 16px rgba(12, 26, 43, .08) !default;
+$box-shadow-lg: 0 12px 32px rgba(12, 26, 43, .12) !default;
+
+// Navbar.
+$navbar-height: 64px !default;
+
+// Dark mode surfaces, tinted navy to match the brand instead of neutral grey.
+$dark-surface-raised:   #15263A !default;
+$dark-surface-page:     #0A1522 !default;
+$dark-surface-recessed: #0F1D2E !default;

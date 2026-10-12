@@ -1,0 +1,56 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template core/login_panel
+
+    insureTech Skills branded left panel of the split-screen login layout.
+
+    When leftinstructions is provided (custom auth instructions configured by the admin),
+    it replaces the default welcome copy, exactly as in Boost.
+
+    Example context (json):
+    {
+        "leftinstructions": "<p>Welcome to our learning platform. Please log in to continue.</p>"
+    }
+}}
+<div class="login-layout-left-content it-login-panel">
+    <div class="it-login-logo" role="img" aria-label="{{#str}}pluginname, theme_insuretech{{/str}}"></div>
+    {{^leftinstructions}}
+        <span class="it-login-badge">{{#str}}loginbadge, theme_insuretech{{/str}}</span>
+        <h1 class="it-login-title">{{#str}}logintitle, theme_insuretech{{/str}}</h1>
+        <p class="it-login-tagline">{{#str}}logintagline, theme_insuretech{{/str}}</p>
+        <div class="it-login-stats">
+            <div class="it-login-stat">
+                <strong>{{#str}}loginstatlearners_value, theme_insuretech{{/str}}</strong>
+                <span>{{#str}}loginstatlearners, theme_insuretech{{/str}}</span>
+            </div>
+            <div class="it-login-stat">
+                <strong>{{#str}}loginstatcourses_value, theme_insuretech{{/str}}</strong>
+                <span>{{#str}}loginstatcourses, theme_insuretech{{/str}}</span>
+            </div>
+            <div class="it-login-stat">
+                <strong>{{#str}}loginstatplacement_value, theme_insuretech{{/str}}</strong>
+                <span>{{#str}}loginstatplacement, theme_insuretech{{/str}}</span>
+            </div>
+        </div>
+    {{/leftinstructions}}
+    {{#leftinstructions}}
+        <div class="it-login-instructions">
+            {{{leftinstructions}}}
+        </div>
+    {{/leftinstructions}}
+</div>

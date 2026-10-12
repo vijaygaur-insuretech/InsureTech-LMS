@@ -1,0 +1,74 @@
+.itrec-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #0c1a2b;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(12, 26, 43, .18);
+}
+
+.itrec-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Covers Google Drive's pop-out button (top right) so it cannot be clicked. */
+.itrec-shield {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 64px;
+    z-index: 2;
+}
+
+.itrec-watermark {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.itrec-watermark span {
+    position: absolute;
+    top: 12%;
+    left: 6%;
+    padding: .2rem .5rem;
+    font-size: .8rem;
+    color: rgba(255, 255, 255, .45);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+    white-space: nowrap;
+    animation: itrec-drift 40s linear infinite alternate;
+}
+
+@keyframes itrec-drift {
+    0% { top: 12%; left: 6%; }
+    25% { top: 70%; left: 55%; }
+    50% { top: 30%; left: 60%; }
+    75% { top: 80%; left: 10%; }
+    100% { top: 45%; left: 35%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .itrec-watermark span {
+        animation: none;
+    }
+}
+
+.itrec-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.5rem;
+    margin: 1rem 0;
+    font-size: .875rem;
+    color: var(--bs-gray-600);
+}
+
+.itrec-intro {
+    margin-top: 1rem;
+}

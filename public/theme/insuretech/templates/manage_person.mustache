@@ -1,0 +1,146 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_insuretech/manage_person
+
+    One student or trainer: courses, batches, access dates, and the assign form.
+
+    Example context (json):
+    {
+        "picture": "", "name": "Priya Sharma", "email": "p@example.com", "typelabel": "Student",
+        "editurl": "#", "profileurl": "#", "listurl": "#", "actionurl": "#", "sesskey": "x",
+        "rows": [{"courseid": 2, "course": "AWS", "courseurl": "#", "typelabel": "Student", "isstudent": true,
+            "batches": [{"id": 1, "name": "Batch A"}], "hasbatches": true, "available": [], "hasavailable": false,
+            "start": "1 Oct 2026", "end": "9 Dec 2026", "enddate": "2026-12-09", "status": "active",
+            "statuslabel": "Active", "suspended": false, "confirmremove": "Remove?"}],
+        "hasrows": true, "form": ""
+    }
+}}
+<div class="it-manage">
+    <div class="it-card it-profile mb-4">
+        {{{picture}}}
+        <div class="it-profile-info">
+            <h2 class="it-profile-name">{{name}}
+                <span class="it-pill">{{typelabel}}</span>
+                {{#suspended}}<span class="it-pill it-pill-danger">{{#str}}suspended{{/str}}</span>{{/suspended}}
+            </h2>
+            <span class="it-person-email">{{email}}</span>
+        </div>
+        <div class="it-manage-actions">
+            <a href="{{profileurl}}" class="btn btn-outline-secondary">{{#str}}viewprofile{{/str}}</a>
+            <a href="{{editurl}}" class="btn btn-outline-secondary">{{#str}}editdetails, theme_insuretech{{/str}}</a>
+        </div>
+    </div>
+
+    <h3 class="it-section-title">{{#str}}coursesandbatches, theme_insuretech{{/str}}</h3>
+    {{#hasrows}}
+        <div class="it-assign-list">
+            {{#rows}}
+                <div class="it-card it-assign">
+                    <div class="it-assign-head">
+                        <div>
+                            <a href="{{courseurl}}" class="it-assign-title">{{course}}</a>
+                            <span class="it-pill">{{typelabel}}</span>
+                            {{#isstudent}}<span class="it-status it-status-{{status}}">{{statuslabel}}</span>{{/isstudent}}
+                        </div>
+                        {{#manual}}
+                            <form method="post" action="{{actionurl}}" data-confirm="{{confirmremove}}"
+                                  onsubmit="return window.confirm(this.dataset.confirm);">
+                                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                <input type="hidden" name="action" value="remove">
+                                <input type="hidden" name="courseid" value="{{courseid}}">
+                                <button type="submit" class="btn btn-sm btn-link text-danger">{{#str}}removefromcourse, theme_insuretech{{/str}}</button>
+                            </form>
+                        {{/manual}}
+                    </div>
+
+                    <div class="it-assign-grid">
+                        <div>
+                            <span class="it-eyebrow">{{#str}}batches, theme_insuretech{{/str}}</span>
+                            <div class="it-assign-batches">
+                                {{#batches}}
+                                    <form method="post" action="{{actionurl}}" class="d-inline">
+                                        <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                        <input type="hidden" name="action" value="removebatch">
+                                        <input type="hidden" name="courseid" value="{{courseid}}">
+                                        <input type="hidden" name="groupid" value="{{id}}">
+                                        <span class="it-pill">{{name}}
+                                            <button type="submit" class="it-pill-x" title="{{#str}}removefrombatch, theme_insuretech{{/str}}">
+                                                <span aria-hidden="true">&times;</span>
+                                                <span class="visually-hidden">{{#str}}removefrombatch, theme_insuretech{{/str}}: {{name}}</span>
+                                            </button>
+                                        </span>
+                                    </form>
+                                {{/batches}}
+                                {{^hasbatches}}<span class="text-muted small">{{#str}}nobatchyet, theme_insuretech{{/str}}</span>{{/hasbatches}}
+                            </div>
+                            {{#hasavailable}}
+                                <form method="post" action="{{actionurl}}" class="it-inline-form mt-2">
+                                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                    <input type="hidden" name="action" value="addbatch">
+                                    <input type="hidden" name="courseid" value="{{courseid}}">
+                                    <label class="visually-hidden" for="it-addbatch-{{courseid}}">{{#str}}addtobatch, theme_insuretech{{/str}}</label>
+                                    <select name="groupid" id="it-addbatch-{{courseid}}" class="form-select form-select-sm">
+                                        {{#available}}<option value="{{id}}">{{name}}</option>{{/available}}
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">{{#str}}addtobatch, theme_insuretech{{/str}}</button>
+                                </form>
+                            {{/hasavailable}}
+                        </div>
+
+                        {{#isstudent}}
+                            <div>
+                                <span class="it-eyebrow">{{#str}}access, theme_insuretech{{/str}}</span>
+                                <p class="mb-2 small">{{start}} → {{end}}</p>
+                                {{#manual}}
+                                    <form method="post" action="{{actionurl}}" class="it-inline-form">
+                                        <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                        <input type="hidden" name="action" value="renew">
+                                        <input type="hidden" name="courseid" value="{{courseid}}">
+                                        <label class="visually-hidden" for="it-end-{{courseid}}">{{#str}}accessend, theme_insuretech{{/str}}</label>
+                                        <input type="date" name="timeend" id="it-end-{{courseid}}" value="{{enddate}}" class="form-control form-control-sm">
+                                        <button type="submit" class="btn btn-sm btn-primary">{{#str}}renew, theme_insuretech{{/str}}</button>
+                                    </form>
+                                    <form method="post" action="{{actionurl}}" class="d-inline">
+                                        <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                        <input type="hidden" name="courseid" value="{{courseid}}">
+                                        {{#suspended}}
+                                            <input type="hidden" name="action" value="activate">
+                                            <button type="submit" class="btn btn-sm btn-link px-0 mt-1">{{#str}}activate, theme_insuretech{{/str}}</button>
+                                        {{/suspended}}
+                                        {{^suspended}}
+                                            <input type="hidden" name="action" value="suspend">
+                                            <button type="submit" class="btn btn-sm btn-link px-0 mt-1 text-danger">{{#str}}suspend, theme_insuretech{{/str}}</button>
+                                        {{/suspended}}
+                                    </form>
+                                {{/manual}}
+                            </div>
+                        {{/isstudent}}
+                    </div>
+                </div>
+            {{/rows}}
+        </div>
+    {{/hasrows}}
+    {{^hasrows}}
+        <div class="it-card it-empty mb-3">{{#str}}notassignedyet, theme_insuretech{{/str}}</div>
+    {{/hasrows}}
+
+    <h3 class="it-section-title">{{#str}}assigntocourse, theme_insuretech{{/str}}</h3>
+    <div class="it-card">
+        {{{form}}}
+    </div>
+</div>

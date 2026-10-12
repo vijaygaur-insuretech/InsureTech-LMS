@@ -1,0 +1,55 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_insuretech/course_trainer_bar
+
+    Trainer quick-actions strip at the top of a course page.
+
+    Example context (json):
+    {
+        "learners": 4, "tograde": 2, "hastograde": true, "hasbatches": true,
+        "batches": [{"name": "Batch A"}],
+        "links": [{"label": "Learners", "url": "#", "icon": "fa-users"}]
+    }
+}}
+<div class="it-card it-trainerbar mb-4">
+    <div class="it-trainerbar-info">
+        <span class="it-eyebrow">{{#str}}trainerview, theme_insuretech{{/str}}</span>
+        <p class="it-teach-meta mb-0">
+            <i class="icon fa fa-users" aria-hidden="true"></i>{{learnerstext}}
+            {{#hasbatches}}
+                <span class="it-dot" aria-hidden="true">·</span>
+                {{#batches}}<span class="it-pill">{{name}}</span>{{/batches}}
+            {{/hasbatches}}
+            {{#hastograde}}
+                <span class="it-pill it-pill-warn">{{#str}}tograde, theme_insuretech, {{tograde}}{{/str}}</span>
+            {{/hastograde}}
+        </p>
+    </div>
+    <div class="it-links">
+        {{#classes}}
+            <a href="{{url}}" class="btn it-btn-live" target="_blank" rel="noopener noreferrer"><span class="it-live-dot" aria-hidden="true"></span>{{label}}<span class="visually-hidden"> ({{#str}}opensinnewwindow{{/str}})</span></a>
+            {{#schedule}}<span class="it-live-schedule me-2"><i class="icon fa fa-clock" aria-hidden="true"></i>{{schedule}}</span>{{/schedule}}
+        {{/classes}}
+        {{#editurl}}
+            <a href="{{editurl}}" class="it-link"><i class="icon fa fa-video" aria-hidden="true"></i>{{#hasclasses}}{{#str}}managelinks, theme_insuretech{{/str}}{{/hasclasses}}{{^hasclasses}}{{#str}}addmeetinglink, theme_insuretech{{/str}}{{/hasclasses}}</a>
+        {{/editurl}}
+        {{#links}}
+            <a href="{{url}}" class="it-link"><i class="icon fa {{icon}}" aria-hidden="true"></i>{{label}}</a>
+        {{/links}}
+    </div>
+</div>

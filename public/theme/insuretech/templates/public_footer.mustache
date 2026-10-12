@@ -1,0 +1,59 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_insuretech/public_footer
+
+    Footer of the public pages: about, quick links, contact and social links.
+
+    Example context (json):
+    { "homeurl": "#", "loginurl": "#", "brandname": "insureTech Skills", "footerabout": "Training.",
+      "email": "a@b.c", "phone": "+91", "phonelink": "+91", "address": "Dehradun", "socials": [], "year": 2026 }
+}}
+<footer class="it-pub-footer" id="contact">
+    <div class="it-pub-container it-pub-footer-grid">
+        <div>
+            <img src="{{logolighturl}}" alt="{{brandname}}" class="it-pub-footer-logo">
+            <p class="it-pub-footer-about">{{footerabout}}</p>
+            {{#hassocials}}
+                <div class="it-pub-socials">
+                    {{#socials}}
+                        <a href="{{url}}" target="_blank" rel="noopener noreferrer" aria-label="{{label}}"><i class="icon fa-brands {{icon}} m-0" aria-hidden="true"></i></a>
+                    {{/socials}}
+                </div>
+            {{/hassocials}}
+        </div>
+        <div>
+            <h2 class="it-pub-footer-title">{{#str}}quicklinks, theme_insuretech{{/str}}</h2>
+            <ul class="it-pub-footer-links">
+                <li><a href="{{homeurl}}#courses">{{#str}}navcourses, theme_insuretech{{/str}}</a></li>
+                <li><a href="{{homeurl}}#about">{{#str}}navabout, theme_insuretech{{/str}}</a></li>
+                <li><a href="{{homeurl}}#faq">{{#str}}navfaq, theme_insuretech{{/str}}</a></li>
+                <li><a href="{{loginurl}}">{{#str}}login{{/str}}</a></li>
+                {{#websiteurl}}<li><a href="{{websiteurl}}">{{#str}}mainwebsite, theme_insuretech{{/str}}</a></li>{{/websiteurl}}
+            </ul>
+        </div>
+        <div>
+            <h2 class="it-pub-footer-title">{{#str}}navcontact, theme_insuretech{{/str}}</h2>
+            <ul class="it-pub-footer-links it-pub-contact">
+                {{#email}}<li><i class="icon fa fa-envelope" aria-hidden="true"></i><a href="mailto:{{email}}">{{email}}</a></li>{{/email}}
+                {{#phone}}<li><i class="icon fa fa-phone" aria-hidden="true"></i><a href="tel:{{phonelink}}">{{phone}}</a></li>{{/phone}}
+                {{#address}}<li><i class="icon fa fa-location-dot" aria-hidden="true"></i><span>{{address}}</span></li>{{/address}}
+            </ul>
+        </div>
+    </div>
+    <div class="it-pub-container it-pub-copyright">&copy; {{year}} {{brandname}}. {{#str}}allrightsreserved, theme_insuretech{{/str}}</div>
+</footer>
