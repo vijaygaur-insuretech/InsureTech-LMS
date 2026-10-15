@@ -28,6 +28,7 @@ jobs:
       - name: Shell syntax check
         run: for f in deploy/*.sh; do bash -n "$f"; done
       - name: Image builds
+        if: github.event_name == 'pull_request'
         run: docker build -f deploy/Dockerfile -t insuretech-lms:ci .
 
   deploy:
@@ -52,11 +53,13 @@ jobs:
           else ssh-keyscan -p "$PORT" "$HOST" > ~/.ssh/known_hosts; fi
           printf 'Host vps\n  HostName %s\n  Port %s\n  User lmsdeploy\n  IdentityFile ~/.ssh/id_deploy\n' "$HOST" "$PORT" > ~/.ssh/config
 
-      - name: Upload code
-        run: |
-          rsync -az --delete \
-            --exclude '/.git/' --exclude '/node_modules/' --exclude '/vendor/' --exclude '/config.php' \
-            ./ vps:/opt/insuretech-lms/app/
+      - name: Build image
+        run: docker build -f deploy/Dockerfile -t insuretech-lms:latest .
 
-      - name: Build, install or upgrade, restart
-        run: ssh vps 'bash /opt/insuretech-lms/app/deploy/remote-deploy.sh'
+      - name: Send image and deploy scripts to the server
+        run: |
+          docker save insuretech-lms:latest | gzip -1 | ssh vps 'gunzip | docker load'
+          rsync -az --delete deploy/ vps:/opt/insuretech-lms/app/deploy/
+
+      - name: Install or upgrade, restart
+        run: ssh vps 'LMS_BUILD=0 bash /opt/insuretech-lms/app/deploy/remote-deploy.sh'

@@ -30,7 +30,7 @@ chown lmsdeploy:lmsdeploy /home/lmsdeploy/.ssh/authorized_keys; chmod 600 /home/
 echo "== App folder =="
 install -d -o lmsdeploy -g lmsdeploy "$LMS_HOME" "$LMS_HOME/app"
 if [ ! -f "$LMS_HOME/.env" ]; then
-    rand() { tr -dc 'A-Za-z0-9' </dev/urandom | head -c "$1"; }
+    rand() { LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom 2>/dev/null | head -c "$1" || true; }
     ADMIN_PASS="$(rand 16)Aa1!"
     cat > "$LMS_HOME/.env" <<ENV
 LMS_URL=$LMS_URL

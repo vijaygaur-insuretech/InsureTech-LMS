@@ -1,0 +1,24 @@
+# Traefik dynamic config for Easypanel servers. Copy to /etc/easypanel/traefik/config/ (replace the domain).
+http:
+  routers:
+    insuretech-lms-http:
+      rule: Host(`LMS_DOMAIN`)
+      entryPoints: [http]
+      middlewares: [insuretech-lms-https]
+      service: insuretech-lms
+    insuretech-lms:
+      rule: Host(`LMS_DOMAIN`)
+      entryPoints: [https]
+      service: insuretech-lms
+      tls:
+        certResolver: letsencrypt
+  middlewares:
+    insuretech-lms-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+  services:
+    insuretech-lms:
+      loadBalancer:
+        servers:
+          - url: http://insuretech-lms-web:80

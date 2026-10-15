@@ -7,11 +7,17 @@ LMS_HOME="${LMS_HOME:-/opt/insuretech-lms}"
 cd "$LMS_HOME/app"
 set -a; . "$LMS_HOME/.env"; set +a
 
-dc() { docker compose --env-file "$LMS_HOME/.env" -f deploy/docker-compose.yml "$@"; }
+files=(-f deploy/docker-compose.yml)
+# Join the server's existing reverse-proxy network (e.g. Easypanel/Traefik) when one is configured.
+[ -n "${LMS_PROXY_NETWORK:-}" ] && files+=(-f deploy/docker-compose.proxy.yml)
+dc() { docker compose --env-file "$LMS_HOME/.env" "${files[@]}" "$@"; }
 php_cli() { dc exec -T -u www-data web php "$@"; }
 
-echo "==> Building image"
-dc build --pull web
+# GitHub Actions builds the image and loads it on the server (LMS_BUILD=0); set LMS_BUILD=1 to build here instead.
+if [ "${LMS_BUILD:-1}" = "1" ]; then
+    echo "==> Building image"
+    dc build --pull web
+fi
 
 echo "==> Starting database"
 dc up -d db
@@ -24,7 +30,7 @@ installed=$(dc exec -T db psql -U "$LMS_DB_USER" -d "$LMS_DB_NAME" -tAc \
     "SELECT 1 FROM information_schema.tables WHERE table_name = 'mdl_config'" || true)
 
 echo "==> Starting web and cron"
-dc up -d --remove-orphans web cron
+dc up -d --no-build --remove-orphans web cron
 
 if [ "$installed" != "1" ]; then
     echo "==> First deploy: installing the LMS"

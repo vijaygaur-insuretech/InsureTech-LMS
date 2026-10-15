@@ -1,0 +1,13 @@
+# Added by remote-deploy.sh when LMS_PROXY_NETWORK is set in .env: attaches the web container to the server's existing
+# reverse-proxy network so the proxy (e.g. Easypanel's Traefik) can reach it at http://insuretech-lms-web:80.
+services:
+  web:
+    networks:
+      default:
+      proxy:
+        aliases: [insuretech-lms-web]
+
+networks:
+  proxy:
+    name: ${LMS_PROXY_NETWORK}
+    external: true
