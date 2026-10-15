@@ -1,0 +1,62 @@
+name: Check and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Lint custom code
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: none
+      - name: PHP syntax check
+        run: |
+          find public/theme/insuretech public/local/itskills public/mod/itrecording deploy -name '*.php' -print0 \
+            | xargs -0 -n1 php -l > lint.txt 2>&1 || { grep -v '^No syntax errors' lint.txt; exit 1; }
+      - name: Shell syntax check
+        run: for f in deploy/*.sh; do bash -n "$f"; done
+      - name: Image builds
+        run: docker build -f deploy/Dockerfile -t insuretech-lms:ci .
+
+  deploy:
+    name: Deploy to VPS
+    needs: check
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+          HOST: ${{ secrets.VPS_HOST }}
+          PORT: ${{ secrets.VPS_PORT || '22' }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+          if [ -n "$KNOWN_HOSTS" ]; then printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else ssh-keyscan -p "$PORT" "$HOST" > ~/.ssh/known_hosts; fi
+          printf 'Host vps\n  HostName %s\n  Port %s\n  User lmsdeploy\n  IdentityFile ~/.ssh/id_deploy\n' "$HOST" "$PORT" > ~/.ssh/config
+
+      - name: Upload code
+        run: |
+          rsync -az --delete \
+            --exclude '/.git/' --exclude '/node_modules/' --exclude '/vendor/' --exclude '/config.php' \
+            ./ vps:/opt/insuretech-lms/app/
+
+      - name: Build, install or upgrade, restart
+        run: ssh vps 'bash /opt/insuretech-lms/app/deploy/remote-deploy.sh'

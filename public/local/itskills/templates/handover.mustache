@@ -1,0 +1,130 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_itskills/handover
+
+    Trainer handover for a batch.
+
+    Example context (json):
+    { "url": "#", "baseurl": "#", "courseid": 2, "groupid": 1, "batches": [], "sesskey": "x", "modules": [], "hasmodules": false, "current": "", "completed": 0, "total": 0, "learners": [], "haslearners": false, "notes": [], "hasnotes": false }
+}}
+<div class="its">
+    <div class="its-head">
+        <div>
+            <h2 class="its-title">{{#str}}handover, local_itskills{{/str}}</h2>
+            <p class="its-muted mb-0">{{#str}}handover_intro, local_itskills{{/str}}</p>
+        </div>
+        <form method="get" action="{{baseurl}}" class="it-inline-form">
+            <input type="hidden" name="courseid" value="{{courseid}}">
+            <label for="its-batch" class="visually-hidden">{{#str}}batch, local_itskills{{/str}}</label>
+            <select id="its-batch" name="groupid" class="form-select" onchange="this.form.submit()">
+                {{#batches}}<option value="{{id}}" {{#selected}}selected{{/selected}}>{{name}}</option>{{/batches}}
+            </select>
+        </form>
+    </div>
+
+    <div class="its-statgrid mb-4">
+        <div class="its-card"><span class="it-eyebrow">{{#str}}currenttopic, local_itskills{{/str}}</span><strong class="its-statvalue">{{#current}}{{current}}{{/current}}{{^current}}–{{/current}}</strong></div>
+        <div class="its-card"><span class="it-eyebrow">{{#str}}modulescompleted, local_itskills{{/str}}</span><strong class="its-statvalue">{{completed}} / {{total}}</strong></div>
+        <div class="its-card"><span class="it-eyebrow">{{#str}}privatenotes, local_itskills{{/str}}</span><strong class="its-statvalue">{{notecount}}</strong></div>
+    </div>
+
+    {{#hasmodules}}
+        <h3 class="its-subtitle">{{#str}}topicstatus, local_itskills{{/str}}</h3>
+        <form method="post" action="{{url}}">
+            <input type="hidden" name="sesskey" value="{{sesskey}}">
+            <input type="hidden" name="action" value="status">
+            <div class="its-modules">
+                {{#modules}}
+                    <details class="its-card its-module" {{#open}}open{{/open}}>
+                        <summary>
+                            <span class="its-module-name">{{name}} {{#iscurrent}}<span class="its-badge its-livebadge">{{#str}}current, local_itskills{{/str}}</span>{{/iscurrent}}</span>
+                            <span class="its-status its-st-{{statusname}}">{{statuslabel}}</span>
+                        </summary>
+                        <div class="its-item">
+                            <span>{{#str}}wholemodule, local_itskills{{/str}}</span>
+                            <select name="st_{{key}}" class="form-select form-select-sm" aria-label="{{name}}">{{#options}}<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>{{/options}}</select>
+                            <label class="its-current"><input type="radio" name="current" value="{{key}}" {{#iscurrent}}checked{{/iscurrent}}> {{#str}}current, local_itskills{{/str}}</label>
+                        </div>
+                        {{#topics}}
+                            <div class="its-item its-topic">
+                                <span>{{name}} {{#updated}}<small class="its-muted">· {{updated}}</small>{{/updated}}</span>
+                                <select name="st_{{key}}" class="form-select form-select-sm" aria-label="{{name}}">{{#options}}<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>{{/options}}</select>
+                                <label class="its-current"><input type="radio" name="current" value="{{key}}" {{#iscurrent}}checked{{/iscurrent}}> {{#str}}current, local_itskills{{/str}}</label>
+                            </div>
+                        {{/topics}}
+                    </details>
+                {{/modules}}
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">{{#str}}savehandover, local_itskills{{/str}}</button>
+        </form>
+    {{/hasmodules}}
+
+    <h3 class="its-subtitle mt-4">{{#str}}learners, local_itskills{{/str}}</h3>
+    {{#haslearners}}
+        <div class="its-card p-0">
+            <table class="table mb-0 its-table">
+                <thead><tr><th>{{#str}}learner, local_itskills{{/str}}</th><th>{{#str}}progress, local_itskills{{/str}}</th><th>{{#str}}attendance, local_itskills{{/str}}</th><th>{{#str}}quizaverage, local_itskills{{/str}}</th><th>{{#str}}lastaccess{{/str}}</th></tr></thead>
+                <tbody>
+                    {{#learners}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td><div class="its-minibar"><div class="it-progress"><span style="width: {{progress}}%"></span></div><span>{{progress}}%</span></div></td>
+                            <td>{{attendance}}</td><td>{{quiz}}</td><td class="its-muted">{{lastaccess}}</td>
+                        </tr>
+                    {{/learners}}
+                </tbody>
+            </table>
+        </div>
+    {{/haslearners}}
+    {{^haslearners}}<div class="its-card its-empty">{{#str}}nolearners, local_itskills{{/str}}</div>{{/haslearners}}
+
+    <h3 class="its-subtitle mt-4">{{#str}}privatenotes, local_itskills{{/str}} <span class="its-badge its-A">{{#str}}notvisiblestudents, local_itskills{{/str}}</span></h3>
+    <form method="post" action="{{url}}" class="its-card mb-3">
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        <input type="hidden" name="action" value="note">
+        <label for="its-note" class="form-label">{{#str}}addnote, local_itskills{{/str}}</label>
+        <textarea id="its-note" name="note" class="form-control mb-2" rows="3" placeholder="{{#str}}noteplaceholder, local_itskills{{/str}}" required></textarea>
+        <div class="it-inline-form">
+            <label for="its-learner" class="visually-hidden">{{#str}}learner, local_itskills{{/str}}</label>
+            <select id="its-learner" name="learner" class="form-select form-select-sm">
+                <option value="0">{{#str}}batchnote, local_itskills{{/str}}</option>
+                {{#learners}}<option value="{{id}}">{{name}}</option>{{/learners}}
+            </select>
+            <button type="submit" class="btn btn-sm btn-primary">{{#str}}savenote, local_itskills{{/str}}</button>
+        </div>
+    </form>
+    {{#hasnotes}}
+        <div class="its-notes">
+            {{#notes}}
+                <div class="its-card its-note">
+                    <div class="its-note-head">
+                        <strong>{{trainer}}</strong>{{#learner}} → <span class="it-pill">{{learner}}</span>{{/learner}}
+                        <span class="its-muted">{{date}}</span>
+                        {{#mine}}
+                            <form method="post" action="{{url}}" class="ms-auto">
+                                <input type="hidden" name="sesskey" value="{{sesskey}}"><input type="hidden" name="action" value="deletenote"><input type="hidden" name="noteid" value="{{id}}">
+                                <button type="submit" class="btn btn-sm btn-link text-danger p-0">{{#str}}delete{{/str}}</button>
+                            </form>
+                        {{/mine}}
+                    </div>
+                    <p class="mb-0">{{note}}</p>
+                </div>
+            {{/notes}}
+        </div>
+    {{/hasnotes}}
+</div>

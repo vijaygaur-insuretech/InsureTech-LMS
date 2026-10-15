@@ -1,0 +1,89 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_itskills/sessions
+
+    Live classes of a course.
+
+    Example context (json):
+    { "canmanage": true, "addurl": "#", "upcoming": [], "hasupcoming": false, "past": [], "haspast": false,
+      "summary": null, "hassummary": false }
+}}
+<div class="its">
+    <div class="its-head">
+        <h2 class="its-title">{{#str}}liveclasses, local_itskills{{/str}}</h2>
+        {{#canmanage}}<a href="{{addurl}}" class="btn btn-primary"><i class="icon fa fa-plus" aria-hidden="true"></i>{{#str}}addsession, local_itskills{{/str}}</a>{{/canmanage}}
+    </div>
+
+    {{#hassummary}}{{#summary}}
+        <div class="its-card its-statrow mb-3">
+            <div class="its-bigstat"><strong>{{percent}}%</strong><span>{{#str}}attendance, local_itskills{{/str}}</span></div>
+            <div class="its-minis">
+                <span class="its-badge its-P">{{#str}}att_P, local_itskills{{/str}} {{present}}</span>
+                <span class="its-badge its-L">{{#str}}att_L, local_itskills{{/str}} {{late}}</span>
+                <span class="its-badge its-A">{{#str}}att_A, local_itskills{{/str}} {{absent}}</span>
+            </div>
+        </div>
+    {{/summary}}{{/hassummary}}
+
+    <h3 class="its-subtitle">{{#str}}upcoming, local_itskills{{/str}}</h3>
+    {{#hasupcoming}}
+        <div class="its-list">
+            {{#upcoming}}
+                <div class="its-card its-session {{#live}}its-live{{/live}}">
+                    <div class="its-session-date"><strong>{{date}}</strong><span>{{time}}</span></div>
+                    <div class="its-session-info">
+                        <h4>{{title}} {{#live}}<span class="its-badge its-livebadge">{{#str}}livenow, local_itskills{{/str}}</span>{{/live}}</h4>
+                        <span class="it-pill">{{batch}}</span>
+                        {{#description}}<p class="its-muted">{{description}}</p>{{/description}}
+                    </div>
+                    <div class="its-session-actions">
+                        {{#link}}<a href="{{link}}" class="btn it-btn-live" target="_blank" rel="noopener noreferrer"><span class="it-live-dot" aria-hidden="true"></span>{{#str}}joinclass, local_itskills{{/str}}</a>{{/link}}
+                        {{^link}}<span class="its-muted">{{#str}}linksoon, local_itskills{{/str}}</span>{{/link}}
+                        {{#canmanage}}
+                            <a href="{{editurl}}" class="btn btn-sm btn-outline-secondary">{{#str}}edit{{/str}}</a>
+                            <a href="{{cancelurl}}" class="btn btn-sm btn-link text-danger" onclick="return window.confirm(this.dataset.confirm);" data-confirm="{{confirmcancel}}">{{#str}}cancelsession, local_itskills{{/str}}</a>
+                        {{/canmanage}}
+                    </div>
+                </div>
+            {{/upcoming}}
+        </div>
+    {{/hasupcoming}}
+    {{^hasupcoming}}<div class="its-card its-empty">{{#str}}noupcoming, local_itskills{{/str}}</div>{{/hasupcoming}}
+
+    {{#haspast}}
+        <h3 class="its-subtitle">{{#str}}pastsessions, local_itskills{{/str}}</h3>
+        <div class="its-card p-0">
+            <table class="table mb-0 its-table">
+                <thead><tr><th>{{#str}}sessiontitle, local_itskills{{/str}}</th><th>{{#str}}date{{/str}}</th><th>{{#str}}batch, local_itskills{{/str}}</th><th>{{#str}}attendance, local_itskills{{/str}}</th></tr></thead>
+                <tbody>
+                    {{#past}}
+                        <tr class="{{#cancelled}}its-cancelled{{/cancelled}}">
+                            <td>{{title}} {{#cancelled}}<span class="its-badge its-A">{{#str}}cancelled, local_itskills{{/str}}</span>{{/cancelled}}</td>
+                            <td class="text-nowrap">{{date}}<br><span class="its-muted">{{time}}</span></td>
+                            <td>{{batch}}</td>
+                            <td>
+                                {{#canmanage}}{{^cancelled}}<a href="{{attendanceurl}}" class="btn btn-sm btn-outline-primary">{{#str}}takeattendance, local_itskills{{/str}}{{#marked}} ({{marked}}){{/marked}}</a>{{/cancelled}}{{/canmanage}}
+                                {{^canmanage}}{{#mystatus}}<span class="its-badge its-{{mystatuscode}}">{{mystatus}}</span>{{/mystatus}}{{/canmanage}}
+                            </td>
+                        </tr>
+                    {{/past}}
+                </tbody>
+            </table>
+        </div>
+    {{/haspast}}
+</div>

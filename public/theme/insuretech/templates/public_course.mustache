@@ -36,7 +36,9 @@
             <header class="it-pc-hero">
                 {{#category}}<span class="it-pill">{{category}}</span>{{/category}}
                 <h1 class="it-pc-title">{{name}}</h1>
+                {{#hasreviews}}{{#reviews}}<p class="it-pc-rating"><span class="it-stars">{{stars}}</span> <strong>{{average}}</strong> <span>({{count}})</span></p>{{/reviews}}{{/hasreviews}}
                 <ul class="it-pc-facts">
+                    {{#level}}<li><i class="icon fa fa-signal" aria-hidden="true"></i>{{level}}</li>{{/level}}
                     <li><i class="icon fa fa-layer-group" aria-hidden="true"></i>{{#str}}modulescount, theme_insuretech, {{modulecount}}{{/str}}</li>
                     <li><i class="icon fa fa-book-open" aria-hidden="true"></i>{{#str}}lessonscount, theme_insuretech, {{lessoncount}}{{/str}}</li>
                     {{#schedule}}<li><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}liveclasses, theme_insuretech{{/str}}: {{schedule}}</li>{{/schedule}}
@@ -51,6 +53,12 @@
                 </section>
             {{/summary}}
 
+            {{#outcomes}}
+                <section class="it-pc-section" aria-labelledby="pc-outcomes">
+                    <h2 id="pc-outcomes">{{#str}}whatyoulearn, theme_insuretech{{/str}}</h2>
+                    <div class="it-pc-outcomes">{{{outcomes}}}</div>
+                </section>
+            {{/outcomes}}
             {{#hasmodules}}
                 <section class="it-pc-section" aria-labelledby="pc-curriculum">
                     <h2 id="pc-curriculum">{{#str}}curriculum, theme_insuretech{{/str}}</h2>
@@ -69,6 +77,12 @@
                 </section>
             {{/hasmodules}}
 
+            {{#prereq}}
+                <section class="it-pc-section" aria-labelledby="pc-prereq">
+                    <h2 id="pc-prereq">{{#str}}prerequisites, theme_insuretech{{/str}}</h2>
+                    <div>{{{prereq}}}</div>
+                </section>
+            {{/prereq}}
             {{#hastrainers}}
                 <section class="it-pc-section" aria-labelledby="pc-trainers">
                     <h2 id="pc-trainers">{{#str}}yourtrainers, theme_insuretech{{/str}}</h2>
@@ -77,6 +91,20 @@
                     </ul>
                 </section>
             {{/hastrainers}}
+            {{#hasreviews}}{{#reviews}}
+                <section class="it-pc-section" aria-labelledby="pc-reviews">
+                    <h2 id="pc-reviews">{{#str}}learnerreviews, theme_insuretech{{/str}} <span class="it-stars">{{stars}}</span> <small>{{average}} · {{count}}</small></h2>
+                    <div class="it-reviews">
+                        {{#items}}
+                            <figure class="it-review">
+                                <div class="it-stars">{{stars}}</div>
+                                {{#comment}}<blockquote>{{comment}}</blockquote>{{/comment}}
+                                <figcaption>{{name}} · {{date}}</figcaption>
+                            </figure>
+                        {{/items}}
+                    </div>
+                </section>
+            {{/reviews}}{{/hasreviews}}
         </div>
 
         <aside class="it-pc-side">

@@ -124,7 +124,7 @@ class core_renderer extends \theme_boost\output\core_renderer {
             }
             if (is_enrolled($context, null, '', true)) {
                 $data = role_panels::course_progress($course);
-                return ($data['hastracking'] || $data['live']) ? $this->render_from_template('theme_insuretech/course_progress_bar', $data) : '';
+                return ($data['hastracking'] || $data['live'] || $data['features']) ? $this->render_from_template('theme_insuretech/course_progress_bar', $data) : '';
             }
         }
 

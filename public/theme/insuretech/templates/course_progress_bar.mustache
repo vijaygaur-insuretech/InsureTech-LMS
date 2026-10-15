@@ -61,6 +61,13 @@
             {{#complete}}<span class="it-pill it-pill-success"><i class="icon fa fa-check" aria-hidden="true"></i>{{#str}}coursecomplete, theme_insuretech{{/str}}</span>{{/complete}}
         {{/next}}
     </div>
+    {{#features}}
+        <div class="it-coursebar-links">
+            <a href="{{sessionsurl}}" class="it-link"><i class="icon fa fa-calendar-days" aria-hidden="true"></i>{{#str}}linksessions, theme_insuretech{{/str}}</a>
+            <a href="{{certurl}}" class="it-link {{#certificate}}it-link-primary{{/certificate}}"><i class="icon fa fa-award" aria-hidden="true"></i>{{#certificate}}{{#str}}viewcertificate, theme_insuretech{{/str}}{{/certificate}}{{^certificate}}{{#str}}linkcertificates, theme_insuretech{{/str}}{{/certificate}}</a>
+            <a href="{{feedbackurl}}" class="it-link"><i class="icon fa fa-star" aria-hidden="true"></i>{{#str}}ratecourse, theme_insuretech{{/str}}</a>
+        </div>
+    {{/features}}
     {{#live}}
         <div class="it-coursebar-liverow">
             <div class="it-live-info">

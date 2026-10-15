@@ -1,0 +1,89 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_itskills/certificate
+
+    Certificate page.
+
+    Example context (json):
+    { "issued": true, "student": "Priya", "title": "Certificate", "subtitle": "", "body": "", "date": "", "code": "ITS-1", "signname": "", "signtitle": "", "primary": "#0C1A2B", "accent": "#1199B6", "gold": "#D4AF37", "logourl": "", "bgurl": "", "signurl": "", "downloadurl": "#", "viewurl": "#", "verifyurl": "#", "progress": 100, "rule": "", "canmanage": false, "learners": [], "haslearners": false, "designurl": "" }
+}}
+<div class="its">
+    <div class="its-head">
+        <h2 class="its-title">{{#str}}certificate, local_itskills{{/str}}</h2>
+        {{#designurl}}<a href="{{designurl}}" class="btn btn-outline-secondary"><i class="icon fa fa-palette" aria-hidden="true"></i>{{#str}}changedesign, local_itskills{{/str}}</a>{{/designurl}}
+    </div>
+
+    {{#issued}}
+        <div class="its-cert" style="--c-primary: {{primary}}; --c-accent: {{accent}}; --c-gold: {{gold}};{{#bgurl}} background-image: url('{{bgurl}}');{{/bgurl}}">
+            {{^bgurl}}<div class="its-cert-band" aria-hidden="true"></div>{{/bgurl}}
+            <div class="its-cert-inner">
+                <img src="{{logourl}}" alt="" class="its-cert-logo">
+                <div class="its-cert-title">{{title}}</div>
+                <div class="its-cert-sub">{{subtitle}}</div>
+                <div class="its-cert-name">{{student}}</div>
+                <div class="its-cert-body">{{body}}</div>
+                <div class="its-cert-foot">
+                    <div><span>{{#str}}cert_issued, local_itskills{{/str}}: {{date}}</span><span>{{#str}}cert_id, local_itskills{{/str}}: {{code}}</span></div>
+                    <div class="its-cert-sign">{{#signurl}}<img src="{{signurl}}" alt="">{{/signurl}}<strong>{{signname}}</strong><span>{{signtitle}}</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="its-actions">
+            <a href="{{downloadurl}}" class="btn btn-primary"><i class="icon fa fa-download" aria-hidden="true"></i>{{#str}}downloadpdf, local_itskills{{/str}}</a>
+            <a href="{{viewurl}}" class="btn btn-outline-secondary" target="_blank">{{#str}}viewpdf, local_itskills{{/str}}</a>
+            <a href="{{verifyurl}}" class="btn btn-link" target="_blank">{{#str}}verifylink, local_itskills{{/str}}</a>
+        </div>
+    {{/issued}}
+    {{^issued}}{{^canmanage}}
+        <div class="its-card its-locked">
+            <i class="icon fa fa-award" aria-hidden="true"></i>
+            <h3>{{#str}}certnotyet, local_itskills{{/str}}</h3>
+            <p class="its-muted">{{rule}}</p>
+            <div class="it-progress"><span style="width: {{progress}}%"></span></div>
+            <p class="its-muted mt-2">{{#str}}yourprogress, local_itskills, {{progress}}{{/str}}</p>
+        </div>
+    {{/canmanage}}{{/issued}}
+
+    {{#canmanage}}
+        <h3 class="its-subtitle">{{#str}}learnercerts, local_itskills{{/str}}</h3>
+        <p class="its-muted">{{rule}}</p>
+        {{#haslearners}}
+            <div class="its-card p-0">
+                <table class="table mb-0 its-table">
+                    <thead><tr><th>{{#str}}learner, local_itskills{{/str}}</th><th>{{#str}}progress, local_itskills{{/str}}</th><th>{{#str}}status, local_itskills{{/str}}</th><th></th></tr></thead>
+                    <tbody>
+                        {{#learners}}
+                            <tr>
+                                <td>{{name}}</td>
+                                <td>{{progress}}%</td>
+                                <td>
+                                    {{#issued}}<span class="its-badge its-P">{{#str}}issued, local_itskills{{/str}} {{date}}</span> <code>{{code}}</code>{{#override}} <span class="its-badge its-L">{{#str}}override, local_itskills{{/str}}</span>{{/override}}{{/issued}}
+                                    {{^issued}}{{#eligible}}<span class="its-badge its-L">{{#str}}eligible, local_itskills{{/str}}</span>{{/eligible}}{{^eligible}}<span class="its-muted">{{#str}}notyet, local_itskills{{/str}}</span>{{/eligible}}{{/issued}}
+                                </td>
+                                <td class="text-end">
+                                    {{#issued}}<a href="{{downloadurl}}" class="btn btn-sm btn-outline-primary">{{#str}}download{{/str}}</a>{{/issued}}
+                                    {{^issued}}<a href="{{issueurl}}" class="btn btn-sm btn-outline-secondary" data-confirm="{{confirmissue}}" onclick="return window.confirm(this.dataset.confirm);">{{#str}}issuenow, local_itskills{{/str}}</a>{{/issued}}
+                                </td>
+                            </tr>
+                        {{/learners}}
+                    </tbody>
+                </table>
+            </div>
+        {{/haslearners}}
+    {{/canmanage}}
+</div>

@@ -124,17 +124,90 @@ class role_panels {
         }
         $resume = $resume ?? reset($courses);
 
+        $stats = [
+            ['value' => count($courses), 'label' => get_string('statenrolled', 'theme_insuretech')],
+            ['value' => round($total / count($courses)) . '%', 'label' => get_string('statavgprogress', 'theme_insuretech')],
+        ];
+        $insights = self::student_insights();
+        if ($insights) {
+            $stats[] = ['value' => $insights['quizavg'], 'label' => get_string('statquizavg', 'theme_insuretech')];
+            $stats[] = ['value' => $insights['attendance'], 'label' => get_string('statattendance', 'theme_insuretech')];
+        } else {
+            $stats[] = ['value' => $completed, 'label' => get_string('statcompleted', 'theme_insuretech')];
+        }
+
         return [
             'resume' => self::course_progress($resume),
-            'stats' => [
-                ['value' => count($courses), 'label' => get_string('statenrolled', 'theme_insuretech')],
-                ['value' => round($total / count($courses)) . '%', 'label' => get_string('statavgprogress', 'theme_insuretech')],
-                ['value' => $completed, 'label' => get_string('statcompleted', 'theme_insuretech')],
-            ],
+            'stats' => $stats,
+            'insights' => $insights,
+            'nextclass' => self::next_class(),
             'notices' => $notices,
             'hasnotices' => !empty($notices),
             'liveclasses' => $live,
             'hasliveclasses' => !empty($live),
+        ];
+    }
+
+    /**
+     * Whether the insureTech learning features plugin is installed.
+     *
+     * @return bool
+     */
+    public static function has_features(): bool {
+        return class_exists('\\local_itskills\\local\\insights');
+    }
+
+    /**
+     * Quiz average, attendance, weak topics, readiness and certificates for the current learner.
+     *
+     * @return array|null
+     */
+    protected static function student_insights(): ?array {
+        global $USER;
+        if (!self::has_features()) {
+            return null;
+        }
+        $quiz = \local_itskills\local\insights::quiz_average($USER->id);
+        $att = \local_itskills\local\attendance::summary($USER->id)['percent'];
+        $weak = \local_itskills\local\insights::weak_topics($USER->id, 0, 3);
+        $ready = \local_itskills\local\insights::readiness($USER->id)['score'];
+        $certs = \local_itskills\local\certificates::for_user($USER->id);
+        return [
+            'quizavg' => $quiz === null ? '–' : $quiz . '%',
+            'attendance' => $att === null ? '–' : $att . '%',
+            'weak' => $weak,
+            'hasweak' => !empty($weak),
+            'readiness' => $ready,
+            'hasreadiness' => $ready !== null,
+            'certcount' => count($certs),
+            'progressurl' => (new moodle_url('/local/itskills/progress.php'))->out(false),
+        ];
+    }
+
+    /**
+     * The next scheduled live class for the current user, from the live class schedule.
+     *
+     * @return array|null
+     */
+    protected static function next_class(): ?array {
+        global $USER;
+        if (!self::has_features()) {
+            return null;
+        }
+        $session = \local_itskills\local\sessions::next_for_user($USER->id);
+        if (!$session) {
+            return null;
+        }
+        $end = $session->timestart + $session->duration * MINSECS;
+        return [
+            'title' => $session->title,
+            'course' => $session->coursename,
+            'date' => userdate($session->timestart, get_string('strftimedaydate', 'langconfig')),
+            'time' => userdate($session->timestart, get_string('strftimetime', 'langconfig')) . ' – '
+                . userdate($end, get_string('strftimetime', 'langconfig')),
+            'link' => \local_itskills\local\sessions::link($session),
+            'live' => $session->timestart - 15 * MINSECS <= time(),
+            'allurl' => (new moodle_url('/local/itskills/sessions.php', ['courseid' => $session->courseid]))->out(false),
         ];
     }
 
@@ -148,6 +221,8 @@ class role_panels {
         global $USER, $CFG;
         require_once($CFG->dirroot . '/course/lib.php');
         require_once($CFG->libdir . '/completionlib.php');
+        // Callers may pass a partial course record; section names need the full one (format etc.).
+        $course = get_course($course->id);
 
         $percent = (int) round(progress::get_course_progress_percentage($course, $USER->id) ?? 0);
         $done = 0;
@@ -188,6 +263,12 @@ class role_panels {
             'next' => $next,
             'access' => self::access_notice($course, true),
             'live' => live_class_fields::for_user($course->id, $USER->id),
+            'features' => self::has_features() ? [
+                'sessionsurl' => (new moodle_url('/local/itskills/sessions.php', ['courseid' => $course->id]))->out(false),
+                'certurl' => (new moodle_url('/local/itskills/certificate.php', ['courseid' => $course->id]))->out(false),
+                'feedbackurl' => (new moodle_url('/local/itskills/feedback.php', ['courseid' => $course->id]))->out(false),
+                'certificate' => (bool) \local_itskills\local\certificates::get($USER->id, $course->id),
+            ] : null,
         ];
     }
 
@@ -292,6 +373,15 @@ class role_panels {
         if (has_capability('report/progress:view', $context)) {
             $add('progress', '/report/progress/index.php', ['course' => $course->id], 'fa-chart-line');
         }
+        if (self::has_features()) {
+            $add('sessions', '/local/itskills/sessions.php', ['courseid' => $course->id], 'fa-calendar-days');
+            if (has_capability('local/itskills:handover', $context)) {
+                $add('handover', '/local/itskills/handover.php', ['courseid' => $course->id], 'fa-right-left');
+            }
+            if (\local_itskills\local\certificates::enabled_for($course)) {
+                $add('certificates', '/local/itskills/certificate.php', ['courseid' => $course->id], 'fa-award');
+            }
+        }
 
         $learners = count_enrolled_users($context, 'moodle/course:isincompletionreports', 0, true);
         $classes = array_map(fn($c) => $c + [
@@ -326,11 +416,17 @@ class role_panels {
         $actions = [
             ['people', '/theme/insuretech/manage/people.php', [], 'fa-users'],
             ['classes', '/theme/insuretech/manage/classes.php', [], 'fa-video'],
-            ['adduser', '/user/editadvanced.php', ['id' => -1], 'fa-user-plus'],
+            ['adduser', '/theme/insuretech/manage/addperson.php', [], 'fa-user-plus'],
             ['addcourse', '/course/edit.php', ['category' => \core_course_category::get_default()->id], 'fa-plus'],
             ['courses', '/course/management.php', [], 'fa-book'],
             ['reports', '/admin/category.php', ['category' => 'reports'], 'fa-chart-pie'],
         ];
+        if (self::has_features()) {
+            $actions[] = ['certdesign', '/admin/settings.php', ['section' => 'local_itskills_certificate'], 'fa-award'];
+            $actions[] = ['emails', '/admin/settings.php', ['section' => 'local_itskills_emails'], 'fa-envelope'];
+            $actions[] = ['feedback', '/local/itskills/admin/feedback.php', [], 'fa-star'];
+            $actions[] = ['skills', '/local/itskills/admin/skills.php', [], 'fa-id-badge'];
+        }
         return ['actions' => array_map(fn($a) => [
             'label' => get_string('admin' . $a[0], 'theme_insuretech'),
             'url' => (new moodle_url($a[1], $a[2]))->out(false),

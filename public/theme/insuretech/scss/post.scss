@@ -2625,3 +2625,145 @@ body.it-public-body {
     height: auto;
     min-height: 100%;
 }
+
+// -------------------------------------------------------------------------------------------------
+// Learning features on dashboards (next live class, insights)
+// -------------------------------------------------------------------------------------------------
+
+.it-dash-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.it-nextclass-title {
+    margin: .35rem 0 .4rem;
+    font-size: 1.15rem;
+}
+
+.it-nextclass-meta {
+    font-size: .9rem;
+    color: var(--#{$prefix}gray-700);
+
+    .icon {
+        font-size: .8rem;
+    }
+
+    span {
+        color: var(--#{$prefix}gray-600);
+    }
+}
+
+.it-nextclass-live {
+    border-color: rgba(#FF4D4F, .45);
+    box-shadow: 0 0 0 3px rgba(#FF4D4F, .1);
+}
+
+.it-insights-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+}
+
+.it-insights-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: .75rem;
+
+    strong {
+        display: block;
+        font-family: $it-font-heading;
+        font-size: 1.5rem;
+        color: $it-teal-deep;
+
+        @include dark-mode {
+            color: $it-teal;
+        }
+    }
+
+    span {
+        font-size: .8rem;
+        color: var(--#{$prefix}gray-600);
+    }
+}
+
+.it-weak {
+    list-style: none;
+    margin: .4rem 0 0;
+    padding: 0;
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        gap: .75rem;
+        padding: .45rem 0;
+        border-top: 1px solid $it-border;
+        font-size: .9rem;
+    }
+
+    small {
+        color: var(--#{$prefix}gray-600);
+    }
+}
+
+.it-weak-links {
+    display: flex;
+    gap: .75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.it-coursebar-links {
+    flex: 1 1 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.it-stars {
+    color: $it-gold;
+    letter-spacing: .05em;
+}
+
+.it-pc-rating {
+    margin: -.25rem 0 .75rem;
+    color: var(--#{$prefix}gray-700);
+}
+
+.it-pc-outcomes ul,
+.it-pc-outcomes ol {
+    columns: 2;
+    column-gap: 2rem;
+    padding-left: 1.1rem;
+
+    @include media-breakpoint-down(md) {
+        columns: 1;
+    }
+}
+
+.it-reviews {
+    display: grid;
+    gap: 1rem;
+}
+
+.it-review {
+    margin: 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $it-border;
+
+    blockquote {
+        margin: .35rem 0;
+    }
+
+    figcaption {
+        font-size: .85rem;
+        color: var(--#{$prefix}gray-600);
+    }
+}
+
+.it-inline-form .it-date {
+    min-width: 0;
+    flex: 0 1 10rem;
+}

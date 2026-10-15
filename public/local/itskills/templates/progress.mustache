@@ -1,0 +1,133 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_itskills/progress
+
+    My progress.
+
+    Example context (json):
+    { "readiness": 70, "hasreadiness": true, "factors": [], "suggestions": [], "hassuggestions": false, "quizavg": "80%", "attendance": "90%", "assignpending": 1, "assignsubmitted": 1, "assignreviewed": 1, "assignments": [], "hasassignments": false, "skills": [], "hasskills": false, "certificates": [], "hascertificates": false, "weak": [], "hasweak": false, "courses": [], "hascourses": false }
+}}
+<div class="its">
+    <div class="its-progress-top">
+        <div class="its-card its-ready">
+            <span class="it-eyebrow">{{#str}}careerreadiness, local_itskills{{/str}}</span>
+            {{#hasreadiness}}
+                <div class="its-ring" style="--p: {{readiness}};"><strong>{{readiness}}%</strong></div>
+            {{/hasreadiness}}
+            {{^hasreadiness}}<p class="its-muted">{{#str}}notenoughdata, local_itskills{{/str}}</p>{{/hasreadiness}}
+            <ul class="its-factors">
+                {{#factors}}<li><span>{{name}}</span><strong>{{#hasvalue}}{{value}}%{{/hasvalue}}{{^hasvalue}}–{{/hasvalue}}</strong></li>{{/factors}}
+            </ul>
+        </div>
+        <div class="its-statgrid its-statgrid-2">
+            <div class="its-card"><span class="it-eyebrow">{{#str}}quizaverage, local_itskills{{/str}}</span><strong class="its-statvalue">{{quizavg}}</strong></div>
+            <div class="its-card"><span class="it-eyebrow">{{#str}}attendance, local_itskills{{/str}}</span><strong class="its-statvalue">{{attendance}}</strong></div>
+            <div class="its-card its-span2">
+                <span class="it-eyebrow">{{#str}}assignments, local_itskills{{/str}}</span>
+                <div class="its-minis mt-2">
+                    <span class="its-badge its-A">{{#str}}assign_pending, local_itskills{{/str}} {{assignpending}}</span>
+                    <span class="its-badge its-L">{{#str}}assign_submitted, local_itskills{{/str}} {{assignsubmitted}}</span>
+                    <span class="its-badge its-P">{{#str}}assign_reviewed, local_itskills{{/str}} {{assignreviewed}}</span>
+                </div>
+            </div>
+            {{#hassuggestions}}
+                <div class="its-card its-span2 its-suggest">
+                    <span class="it-eyebrow">{{#str}}toimprove, local_itskills{{/str}}</span>
+                    <ul class="mb-0">{{#suggestions}}<li>{{.}}</li>{{/suggestions}}</ul>
+                </div>
+            {{/hassuggestions}}
+        </div>
+    </div>
+
+    {{#hasweak}}
+        <h3 class="its-subtitle">{{#str}}needspractice, local_itskills{{/str}}</h3>
+        <div class="its-weak">
+            {{#weak}}
+                <div class="its-card its-weakitem">
+                    <div><strong>{{topic}}</strong><span class="its-muted">{{#str}}mistakes, local_itskills, {{mistakes}}{{/str}} · {{quizname}}</span></div>
+                    <div class="its-weaksteps">
+                        {{#reviewurl}}<a href="{{reviewurl}}" class="it-link"><i class="icon fa fa-book-open" aria-hidden="true"></i>{{#str}}reviewlesson, local_itskills{{/str}}</a>{{/reviewurl}}
+                        {{#quizurl}}<a href="{{quizurl}}" class="it-link it-link-primary"><i class="icon fa fa-rotate-right" aria-hidden="true"></i>{{#str}}retryquiz, local_itskills{{/str}}</a>{{/quizurl}}
+                    </div>
+                </div>
+            {{/weak}}
+        </div>
+    {{/hasweak}}
+
+    <div class="its-twocol">
+        <div>
+            <h3 class="its-subtitle">{{#str}}skillpassport, local_itskills{{/str}}</h3>
+            {{#hasskills}}
+                <div class="its-card">
+                    {{#skills}}
+                        <div class="its-skill">
+                            <div class="its-skill-head"><strong>{{name}}</strong><span>{{score}}% · {{level}}</span></div>
+                            <div class="it-progress"><span style="width: {{score}}%"></span></div>
+                        </div>
+                    {{/skills}}
+                </div>
+            {{/hasskills}}
+            {{^hasskills}}<div class="its-card its-empty">{{#str}}noskills, local_itskills{{/str}}</div>{{/hasskills}}
+        </div>
+        <div>
+            <h3 class="its-subtitle">{{#str}}mycertificates, local_itskills{{/str}}</h3>
+            {{#hascertificates}}
+                <div class="its-certs">
+                    {{#certificates}}
+                        <div class="its-card its-certitem">
+                            <i class="icon fa fa-award" aria-hidden="true"></i>
+                            <div><strong>{{course}}</strong><span class="its-muted">{{date}} · {{code}}</span></div>
+                            <a href="{{downloadurl}}" class="btn btn-sm btn-primary ms-auto">{{#str}}download{{/str}}</a>
+                        </div>
+                    {{/certificates}}
+                </div>
+            {{/hascertificates}}
+            {{^hascertificates}}<div class="its-card its-empty">{{#str}}nocertificates, local_itskills{{/str}}</div>{{/hascertificates}}
+        </div>
+    </div>
+
+    {{#hascourses}}
+        <h3 class="its-subtitle">{{#str}}bycourse, local_itskills{{/str}}</h3>
+        <div class="its-card p-0">
+            <table class="table mb-0 its-table">
+                <thead><tr><th>{{#str}}course{{/str}}</th><th>{{#str}}progress, local_itskills{{/str}}</th><th>{{#str}}quizaverage, local_itskills{{/str}}</th><th>{{#str}}attendance, local_itskills{{/str}}</th><th></th></tr></thead>
+                <tbody>
+                    {{#courses}}
+                        <tr>
+                            <td><a href="{{url}}">{{name}}</a></td>
+                            <td><div class="its-minibar"><div class="it-progress"><span style="width: {{progress}}%"></span></div><span>{{progress}}%</span></div></td>
+                            <td>{{quiz}}</td><td>{{attendance}}</td>
+                            <td class="text-end"><a href="{{feedbackurl}}" class="btn btn-sm btn-outline-secondary">{{#str}}ratecourse, local_itskills{{/str}}</a></td>
+                        </tr>
+                    {{/courses}}
+                </tbody>
+            </table>
+        </div>
+    {{/hascourses}}
+
+    {{#hasassignments}}
+        <h3 class="its-subtitle">{{#str}}assignments, local_itskills{{/str}}</h3>
+        <div class="its-card p-0">
+            <table class="table mb-0 its-table">
+                <tbody>
+                    {{#assignments}}<tr><td><a href="{{url}}">{{name}}</a></td><td class="its-muted">{{due}}</td><td class="text-end"><span class="its-badge its-as-{{status}}">{{statuslabel}}</span></td></tr>{{/assignments}}
+                </tbody>
+            </table>
+        </div>
+    {{/hasassignments}}
+</div>

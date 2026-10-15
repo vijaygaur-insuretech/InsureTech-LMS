@@ -90,6 +90,7 @@
                             <span class="it-link-form-label">
                                 <i class="icon fa fa-layer-group" aria-hidden="true"></i>{{name}}
                                 <a href="{{membersurl}}" class="it-batch-members">{{#str}}memberscount, theme_insuretech, {{members}}{{/str}}</a>
+                                {{#dates}}<span class="it-batch-members">{{dates}}</span>{{/dates}}
                             </span>
                             <label class="visually-hidden" for="blink-{{id}}">{{#str}}liveclasslink, theme_insuretech{{/str}}: {{name}}</label>
                             <input type="url" name="link" id="blink-{{id}}" value="{{link}}" class="form-control form-control-sm"
@@ -111,6 +112,10 @@
                     <label class="visually-hidden" for="newbatch-{{id}}">{{#str}}newbatchname, theme_insuretech{{/str}}</label>
                     <input type="text" name="name" id="newbatch-{{id}}" class="form-control form-control-sm"
                            placeholder="{{#str}}newbatchname, theme_insuretech{{/str}}" required>
+                    <label class="visually-hidden" for="bstart-{{id}}">{{#str}}batchstart, theme_insuretech{{/str}}</label>
+                    <input type="date" name="start" id="bstart-{{id}}" class="form-control form-control-sm it-date" title="{{#str}}batchstart, theme_insuretech{{/str}}">
+                    <label class="visually-hidden" for="bend-{{id}}">{{#str}}batchend, theme_insuretech{{/str}}</label>
+                    <input type="date" name="end" id="bend-{{id}}" class="form-control form-control-sm it-date" title="{{#str}}batchend, theme_insuretech{{/str}}">
                     <button type="submit" class="btn btn-sm btn-outline-secondary"><i class="icon fa fa-plus" aria-hidden="true"></i>{{#str}}addbatch, theme_insuretech{{/str}}</button>
                 </form>
             {{/canbatch}}

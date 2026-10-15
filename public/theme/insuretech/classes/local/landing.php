@@ -168,6 +168,7 @@ class landing {
                 'modulestext' => get_string($modules == 1 ? 'modulecount' : 'modulescount', 'theme_insuretech', $modules),
                 'url' => (new moodle_url('/theme/insuretech/course.php', ['id' => $course->id]))->out(false),
                 'schedule' => live_class_fields::get_course($course->id)['schedule'],
+                'level' => class_exists('\\local_itskills\\local\\fields') ? \local_itskills\local\fields::course($course->id)['itlevel'] : '',
             ];
         }
         return $cards;

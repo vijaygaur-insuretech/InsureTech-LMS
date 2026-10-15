@@ -112,6 +112,43 @@
             </div>
         {{/resume}}
 
+        <div class="it-dash-row">
+            {{#nextclass}}
+                <div class="it-card it-nextclass {{#live}}it-nextclass-live{{/live}}">
+                    <span class="it-eyebrow">{{#str}}nextclass, theme_insuretech{{/str}}</span>
+                    <h3 class="it-nextclass-title">{{title}}</h3>
+                    <p class="it-nextclass-meta"><i class="icon fa fa-calendar" aria-hidden="true"></i>{{date}} · {{time}}<br><span>{{course}}</span></p>
+                    <div class="it-links">
+                        {{#link}}<a href="{{link}}" class="btn it-btn-live" target="_blank" rel="noopener noreferrer"><span class="it-live-dot" aria-hidden="true"></span>{{#str}}joinclass, theme_insuretech{{/str}}</a>{{/link}}
+                        <a href="{{allurl}}" class="it-link">{{#str}}allclasses, theme_insuretech{{/str}}</a>
+                    </div>
+                </div>
+            {{/nextclass}}
+            {{#insights}}
+                <div class="it-card it-insights">
+                    <div class="it-insights-head">
+                        <span class="it-eyebrow">{{#str}}myprogress, theme_insuretech{{/str}}</span>
+                        <a href="{{progressurl}}" class="it-link it-link-primary"><i class="icon fa fa-chart-simple" aria-hidden="true"></i>{{#str}}myprogress, theme_insuretech{{/str}}</a>
+                    </div>
+                    <div class="it-insights-stats">
+                        <div><strong>{{#hasreadiness}}{{readiness}}%{{/hasreadiness}}{{^hasreadiness}}–{{/hasreadiness}}</strong><span>{{#str}}careerready, theme_insuretech{{/str}}</span></div>
+                        <div><strong>{{certcount}}</strong><span>{{#str}}certsearned, theme_insuretech{{/str}}</span></div>
+                    </div>
+                    {{#hasweak}}
+                        <span class="it-eyebrow mt-3">{{#str}}needspractice, theme_insuretech{{/str}}</span>
+                        <ul class="it-weak">
+                            {{#weak}}
+                                <li>
+                                    <span><strong>{{topic}}</strong> <small>{{#str}}mistakescount, theme_insuretech, {{mistakes}}{{/str}}</small></span>
+                                    <span class="it-weak-links">{{#reviewurl}}<a href="{{reviewurl}}">{{#str}}review, theme_insuretech{{/str}}</a>{{/reviewurl}}{{#quizurl}}<a href="{{quizurl}}">{{#str}}retry, theme_insuretech{{/str}}</a>{{/quizurl}}</span>
+                                </li>
+                            {{/weak}}
+                        </ul>
+                    {{/hasweak}}
+                </div>
+            {{/insights}}
+        </div>
+
         {{#hasliveclasses}}
             <h3 class="it-section-title">{{#str}}liveclasses, theme_insuretech{{/str}}</h3>
             <div class="it-card it-live-list">

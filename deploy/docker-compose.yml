@@ -1,0 +1,47 @@
+# insureTech Skills LMS stack. Runs as its own project ("insuretech-lms") with its own network and volumes, so it
+# never touches other containers or sites on the server. Only the web port is published, and only on 127.0.0.1:
+# the server's existing web server (nginx, Caddy, Traefik...) forwards the LMS domain to it.
+name: insuretech-lms
+
+x-app: &app
+  image: insuretech-lms:latest
+  env_file: ../../.env
+  restart: unless-stopped
+  depends_on:
+    db:
+      condition: service_healthy
+  volumes:
+    - lmsdata:/var/www/lmsdata
+
+services:
+  web:
+    <<: *app
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "127.0.0.1:${LMS_PORT:-8090}:80"
+
+  cron:
+    <<: *app
+    user: www-data
+    command: ["sh", "-c", "while true; do php /var/www/html/admin/cli/cron.php --keep-alive=59 || sleep 60; done"]
+
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    env_file: ../../.env
+    environment:
+      POSTGRES_DB: ${LMS_DB_NAME:-lms}
+      POSTGRES_USER: ${LMS_DB_USER:-lms}
+      POSTGRES_PASSWORD: ${LMS_DB_PASSWORD:?set LMS_DB_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      retries: 20
+
+volumes:
+  lmsdata:
+  pgdata:

@@ -75,7 +75,13 @@ if ($action) {
                 $ok = false;
                 $message = 'batchnamerequired';
             } else {
-                groups_create_group((object) ['courseid' => $courseid, 'name' => $name]);
+                $groupid = groups_create_group((object) ['courseid' => $courseid, 'name' => $name]);
+                if (class_exists('\\local_itskills\\local\\fields')) {
+                    $start = optional_param('start', '', PARAM_TEXT);
+                    $end = optional_param('end', '', PARAM_TEXT);
+                    \local_itskills\local\fields::save_batch($groupid, $start ? (int) strtotime($start . ' 00:00') : 0,
+                        $end ? (int) strtotime($end . ' 00:00') : 0);
+                }
                 $ok = true;
                 $message = 'batchadded';
             }
@@ -126,7 +132,10 @@ foreach ($courses as $course) {
     $batches = [];
     foreach (groups_get_all_groups($course->id) as $group) {
         $live = live_class_fields::get_group($group->id);
+        $dates = class_exists('\\local_itskills\\local\\fields') ? \local_itskills\local\fields::batch($group->id) : ['start' => 0, 'end' => 0];
         $batches[] = [
+            'dates' => ($dates['start'] || $dates['end']) ? (($dates['start'] ? userdate($dates['start'], get_string('strftimedatefullshort', 'langconfig')) : '…')
+                . ' → ' . ($dates['end'] ? userdate($dates['end'], get_string('strftimedatefullshort', 'langconfig')) : '…')) : '',
             'id' => $group->id,
             'courseid' => $course->id,
             'name' => format_string($group->name, true, ['context' => $context, 'escape' => false]),

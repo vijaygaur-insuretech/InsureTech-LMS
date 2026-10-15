@@ -50,6 +50,20 @@ One system for three kinds of users:
 - In-app and email notifications, calendar and timeline.
 - Full activity logs and audit trail.
 
+### Training operations
+- **Scheduled live sessions** per course or batch with date, time and meeting link; email and in-app reminders before each class, and notices when a class is scheduled, changed or cancelled.
+- **Attendance** (Present / Absent / Late) per session, with an attendance percentage for each learner.
+- **Trainer handover**: topic status (completed / pending) and private trainer notes that learners never see.
+- **Certificates** with a unique ID, issued automatically on course completion (admins can override, and every override is logged). They include a public verification page and an **admin certificate designer** (colours, text, signature, logo) that applies to every certificate.
+- **Learner insights**: average quiz score, attendance, weak topics (with *Review lesson* / *Retry quiz*), **Skill Passport** and **Career Readiness** scores with configurable weights.
+- **Feedback**: course and trainer ratings with admin approval, plus a Google reviews link.
+- **Email notifications**, each with an on/off switch and an editable template:
+  - welcome email with login details (temporary password, changed at first login);
+  - enrolment, new content, class reminders and certificate issued;
+  - subscription expiring;
+  - assignment submitted (to the trainer), new learner (to the trainer) and a weekly inactive-learner report (to admins).
+- **Trainer restrictions**: trainers cannot enrol learners, change subscriptions or assign roles unless an admin allows it.
+
 ### Design
 - Custom brand theme (teal / navy / gold, Inter + Poppins typography).
 - Responsive from phone to desktop, light and dark mode, accessible markup (landmarks, labels, focus states, reduced-motion support).
@@ -108,7 +122,10 @@ The schema is created and upgraded automatically by the installer; never edit it
 │   │   ├── scss/                   Brand design system
 │   │   ├── lang/en/                All user-facing text
 │   │   └── settings.php            Admin settings (branding, landing page, SEO)
+│   ├── local/itskills/             Sessions, attendance, handover, certificates, insights, feedback, emails
 │   └── mod/itrecording/            Protected "Recording" activity
+├── deploy/                         Docker image, compose stack and VPS deploy scripts
+├── .github/workflows/deploy.yml    CI/CD: check and deploy on every push to main
 ├── admin/                          Command-line tools (install, upgrade, cache purge…)
 ├── composer.json                   PHP dependencies
 └── config-dist.php                 Configuration template
@@ -205,16 +222,26 @@ Everything is configurable from the admin panel — no code changes needed.
 
 ---
 
+## Deployment (CI/CD)
+
+Every push to `main` runs **GitHub Actions**:
+1. Lint the custom code and build the Docker image.
+2. Copy the code to the VPS over SSH.
+3. Build the image there, then install the site on the first run or upgrade the database on later runs.
+4. Restart the containers and health-check the login page.
+
+The LMS runs as an isolated Docker Compose stack (PHP 8.3 + Apache, PostgreSQL 17, a cron worker). It listens only on `127.0.0.1`, behind the server's existing web server, so other sites on the same VPS are not affected. Database passwords and the admin password live in `/opt/insuretech-lms/.env` on the server, never in git.
+
+The one-time server setup, GitHub secrets and web-server snippet are in [deploy/README.md](deploy/README.md).
+
+---
+
 ## Roadmap
 
-- Attendance (Present / Absent / Late) and attendance percentage
-- Certificates with unique IDs
-- Resume videos from the last position (needs a provider with a player API)
-- Trainer handover: topic status and private trainer notes
-- Student dashboard: average quiz score, attendance and weak topics
-- Scheduled live-class sessions with date/time and email reminders
-- Skill Passport and Career Readiness scores
-- Course and trainer feedback with a Google reviews link
+- Resume videos from the last position (needs a video provider with a player API instead of Google Drive)
+- Signed, expiring video links (same reason)
+- AI-based career recommendations
+- Automatic display of Google reviews
 
 ---
 

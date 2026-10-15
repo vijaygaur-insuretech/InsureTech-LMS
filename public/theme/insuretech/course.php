@@ -125,6 +125,13 @@ landing::set_meta($coursename . ' | ' . landing::setting('brandname'), $descript
         ],
     ]]);
 
+$extra = ['itlevel' => '', 'itoutcomes' => '', 'itprereq' => ''];
+$reviews = ['average' => null, 'count' => 0, 'items' => [], 'hasitems' => false, 'stars' => ''];
+if (class_exists('\\local_itskills\\local\\fields')) {
+    $extra = \local_itskills\local\fields::course($course->id);
+    $reviews = \local_itskills\local\feedback::published($course->id);
+}
+
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('theme_insuretech/public_course', [
     'name' => $coursename,
@@ -147,5 +154,10 @@ echo $OUTPUT->render_from_template('theme_insuretech/public_course', [
     'phone' => $chrome['phone'],
     'phonelink' => $chrome['phonelink'],
     'homeurl' => $chrome['homeurl'],
+    'level' => $extra['itlevel'],
+    'outcomes' => $extra['itoutcomes'],
+    'prereq' => $extra['itprereq'],
+    'reviews' => $reviews,
+    'hasreviews' => $reviews['count'] > 0,
 ]);
 echo $OUTPUT->footer();

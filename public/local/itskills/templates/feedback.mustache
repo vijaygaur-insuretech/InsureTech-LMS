@@ -1,0 +1,54 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_itskills/feedback
+
+    Rate a course and its trainer.
+
+    Example context (json):
+    { "actionurl": "#", "sesskey": "x", "saved": false, "moderated": true, "course": "AWS", "ratingstars": [], "trainerstars": [], "comment": "", "googleurl": "", "courseurl": "#" }
+}}
+<div class="its its-narrow">
+    <div class="its-card">
+        <h2 class="its-title">{{#str}}ratecourse, local_itskills{{/str}}</h2>
+        <p class="its-muted">{{course}}</p>
+        {{#saved}}
+            <div class="alert alert-success">{{#moderated}}{{#str}}feedbackthanksmoderated, local_itskills{{/str}}{{/moderated}}{{^moderated}}{{#str}}feedbackthanks, local_itskills{{/str}}{{/moderated}}</div>
+            {{#googleurl}}
+                <div class="its-google">
+                    <p class="mb-2">{{#str}}googleprompt, local_itskills{{/str}}</p>
+                    <a href="{{googleurl}}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary"><i class="icon fa-brands fa-google" aria-hidden="true"></i>{{#str}}googlereview, local_itskills{{/str}}</a>
+                </div>
+            {{/googleurl}}
+        {{/saved}}
+        <form method="post" action="{{actionurl}}">
+            <input type="hidden" name="sesskey" value="{{sesskey}}">
+            <fieldset class="mb-3">
+                <legend class="its-legend">{{#str}}courserating, local_itskills{{/str}}</legend>
+                <div class="its-stars">{{#ratingstars}}<input type="radio" id="r{{value}}" name="{{name}}" value="{{value}}" {{#checked}}checked{{/checked}} required><label for="r{{value}}" title="{{value}}">★</label>{{/ratingstars}}</div>
+            </fieldset>
+            <fieldset class="mb-3">
+                <legend class="its-legend">{{#str}}trainerrating, local_itskills{{/str}}</legend>
+                <div class="its-stars">{{#trainerstars}}<input type="radio" id="t{{value}}" name="{{name}}" value="{{value}}" {{#checked}}checked{{/checked}}><label for="t{{value}}" title="{{value}}">★</label>{{/trainerstars}}</div>
+            </fieldset>
+            <label for="its-comment" class="form-label">{{#str}}yourfeedback, local_itskills{{/str}}</label>
+            <textarea id="its-comment" name="comment" rows="4" class="form-control mb-3">{{comment}}</textarea>
+            <button type="submit" class="btn btn-primary">{{#str}}submitfeedback, local_itskills{{/str}}</button>
+            <a href="{{courseurl}}" class="btn btn-link">{{#str}}backtocourse, local_itskills{{/str}}</a>
+        </form>
+    </div>
+</div>

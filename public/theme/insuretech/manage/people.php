@@ -85,7 +85,7 @@ foreach ($users as $user) {
     ];
 }
 
-$addurl = new moodle_url('/user/editadvanced.php', ['id' => -1]);
+$addurl = new moodle_url('/theme/insuretech/manage/addperson.php');
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('theme_insuretech/manage_people', [
