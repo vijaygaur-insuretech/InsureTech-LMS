@@ -12,6 +12,8 @@ http:
       service: insuretech-lms
       tls:
         certResolver: letsencrypt
+        domains:
+          - main: LMS_DOMAIN
   middlewares:
     insuretech-lms-https:
       redirectScheme:
