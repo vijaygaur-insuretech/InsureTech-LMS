@@ -122,10 +122,10 @@ $page = function(int $section, string $name, string $html) use ($gen, $course, &
     $cmids[] = $m->cmid;
     return $m;
 };
-$recording = function(int $section, string $name, string $duration) use ($gen, $course, &$cmids) {
+$recording = function(int $section, string $name, string $duration, string $url) use ($gen, $course, &$cmids) {
     $m = $gen->create_module('itrecording', [
-        'course' => $course->id, 'section' => $section, 'name' => $name, 'duration' => $duration,
-        'intro' => '<p>Class recording. Admin: replace the video link with the Google Drive recording.</p>',
+        'course' => $course->id, 'section' => $section, 'name' => $name, 'duration' => $duration, 'videourl' => $url,
+        'intro' => '<p>Sample video. Admin: replace the video link with your Google Drive class recording.</p>',
         'completion' => COMPLETION_TRACKING_AUTOMATIC, 'completionview' => 1,
     ]);
     $cmids[] = $m->cmid;
@@ -223,7 +223,7 @@ $page(1, 'Identity across AWS, Azure and Google Cloud', $p(
     'Use one identity provider (e.g. Entra ID or Okta) federated into every cloud with SSO, short-lived credentials and least privilege. Avoid long-lived access keys.',
     'Map roles consistently: AWS IAM roles and permission sets, Azure RBAC role assignments, Google Cloud IAM roles on folders and projects.'
 ));
-$recording(1, 'Class recording: Multi-cloud foundations', '1h 52m');
+$recording(1, 'Video: What is cloud computing?', '6m', 'https://www.youtube.com/watch?v=M988_fsOSWo');
 $quiz1 = $quiz(1, 'Module 1 quiz: Foundations', [
     ['single', 'What is the main purpose of a landing zone?', ['A secure, pre-configured baseline for accounts, networking, identity and logging', 'A region where virtual machines are cheapest', 'A storage bucket for backups', 'A Kubernetes namespace'], 'A landing zone is the governed baseline (hierarchy, guardrails, logging, network hub, identity) every workload lands in.', 'Landing zones'],
     ['tf', 'In the shared responsibility model, the customer is responsible for configuring security groups and IAM permissions.', true, 'The provider secures the infrastructure; you secure your configuration, data and identities.', 'Shared responsibility'],
@@ -243,7 +243,7 @@ $page(2, 'Routing, Internet Gateway and NAT Gateway', $p(
 $page(2, 'EC2, Auto Scaling and S3', $p(
     'EC2 instances run in subnets behind an Application Load Balancer; an Auto Scaling group keeps the desired capacity across AZs. S3 stores objects with 11 nines of durability; block public access and use bucket policies with least privilege.'
 ));
-$recording(2, 'Class recording: VPC, subnets and NAT', '2h 05m');
+$recording(2, 'Video: AWS in 100 seconds', '2m', 'https://www.youtube.com/watch?v=ZzI9JE0i6Lc');
 $quiz2 = $quiz(2, 'Module 2 quiz: AWS networking', [
     ['single', 'How many usable IP addresses does a /24 subnet have in AWS?', ['251', '256', '254', '250'], 'A /24 has 256 addresses and AWS reserves 5 in every subnet, leaving 251.', 'Subnetting'],
     ['single', 'Which CIDR block is a valid private range for a VPC?', ['10.0.0.0/16', '8.8.8.0/24', '172.32.0.0/16', '192.169.0.0/16'], '10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/16 are the RFC 1918 private ranges.', 'Subnetting'],
@@ -294,7 +294,8 @@ $page(5, 'CI/CD with GitHub Actions', $p(
 $page(5, 'GitOps with Argo CD', $p(
     'In GitOps the desired cluster state lives in Git; Argo CD continuously reconciles clusters to it. Rollbacks become git reverts.'
 ));
-$recording(5, 'Class recording: Terraform and pipelines', '1h 47m');
+$recording(5, 'Video: Terraform in 100 seconds', '2m', 'https://www.youtube.com/watch?v=tomUWcQ0P3k');
+$recording(5, 'Video: CI/CD explained', '2m', 'https://www.youtube.com/watch?v=scEDHsr3APg');
 
 // Module 6.
 $page(6, 'GenAI services: Amazon Bedrock, Azure OpenAI and Vertex AI', $p(
@@ -317,6 +318,11 @@ $quiz(7, 'Final assessment', [
 ], 3);
 
 rebuild_course_cache($course->id, true);
+
+// Sample videos for the containers and GenAI modules.
+$recording(4, 'Video: Docker in 100 seconds', '2m', 'https://www.youtube.com/watch?v=Gjnup-PuquQ');
+$recording(4, 'Video: Kubernetes explained', '2m', 'https://www.youtube.com/watch?v=PziYflu8cB8');
+$recording(6, 'Video: Large language models explained', '8m', 'https://www.youtube.com/watch?v=LPZh9BOjkQs');
 
 // Course completion: every activity with completion (lessons viewed, quizzes passed, labs and capstone submitted).
 $criterion = new completion_criteria_activity();
