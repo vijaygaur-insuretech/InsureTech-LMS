@@ -24,6 +24,10 @@ if (str_starts_with($CFG->wwwroot, 'https://')) {
     $CFG->sslproxy = true;
 }
 
+// Show the brand name wherever interface text says "Moodle".
+$CFG->customstringmanager = '\\local_itskills\\local\\string_manager';
+$CFG->brandname = getenv('LMS_BRAND_NAME') ?: 'insureTech Skills';
+
 // Production hardening.
 $CFG->debug = 0;
 $CFG->debugdisplay = 0;

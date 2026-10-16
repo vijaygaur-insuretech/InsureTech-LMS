@@ -48,5 +48,9 @@ function xmldb_local_itskills_upgrade($oldversion) {
         set_config('sendnotifications', 1, 'assign');
         upgrade_plugin_savepoint(true, 2026101501, 'local', 'itskills');
     }
+    if ($oldversion < 2026101600) {
+        local_itskills_disable_mobile_app();
+        upgrade_plugin_savepoint(true, 2026101600, 'local', 'itskills');
+    }
     return true;
 }

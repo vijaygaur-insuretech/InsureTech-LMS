@@ -119,3 +119,14 @@ function local_itskills_apply_trainer_restrictions(): void {
     }
     $syscontext->mark_dirty();
 }
+
+/**
+ * Turn off the mobile app: no "Get the mobile app" link, no app banners and no app access to the site.
+ */
+function local_itskills_disable_mobile_app(): void {
+    global $DB;
+    set_config('enablemobilewebservice', 0);
+    set_config('setuplink', '', 'tool_mobile');
+    set_config('enablesmartappbanners', 0, 'tool_mobile');
+    $DB->set_field('external_services', 'enabled', 0, ['shortname' => 'moodle_mobile_app']);
+}

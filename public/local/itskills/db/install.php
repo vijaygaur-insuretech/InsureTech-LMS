@@ -34,5 +34,6 @@ function xmldb_local_itskills_install() {
     require_once($CFG->dirroot . '/local/itskills/lib.php');
     \local_itskills\local\fields::ensure();
     local_itskills_apply_trainer_restrictions();
+    local_itskills_disable_mobile_app();
     return true;
 }
