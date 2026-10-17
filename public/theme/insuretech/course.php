@@ -106,7 +106,9 @@ $summaryhtml = format_text(
 );
 $category = core_course_category::get($course->category, IGNORE_MISSING);
 $image = landing::course_image($course);
-$schedule = live_class_fields::get_course($course->id)['schedule'];
+$live = live_class_fields::get_course($course->id);
+$islive = \theme_insuretech\local\landing::delivery($course->id, $live) === 'live';
+$schedule = $islive ? $live['schedule'] : '';
 $chrome = landing::chrome();
 $description = landing::excerpt($summaryhtml, 160) ?: $coursename;
 
@@ -145,6 +147,7 @@ echo $OUTPUT->render_from_template('theme_insuretech/public_course', [
     'trainers' => $trainers,
     'hastrainers' => !empty($trainers),
     'schedule' => $schedule,
+    'islive' => $islive,
     'loggedin' => $loggedin,
     'enrolled' => $enrolled,
     'courseurl' => $courseurl->out(false),

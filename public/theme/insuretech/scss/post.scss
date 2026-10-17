@@ -2767,3 +2767,137 @@ body.it-public-body {
     min-width: 0;
     flex: 0 1 10rem;
 }
+
+// Course types: live classes and self-paced.
+.it-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+
+    .icon {
+        font-size: .8rem;
+        width: auto;
+        height: auto;
+    }
+}
+
+.it-type-live {
+    color: #fff;
+    background-color: rgba($it-navy, .88);
+}
+
+.it-type-selfpaced {
+    color: $it-navy;
+    background-color: $it-gold;
+}
+
+.it-course-img {
+    position: relative;
+
+    .it-type-badge {
+        position: absolute;
+        top: .75rem;
+        left: .75rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .18);
+    }
+}
+
+.it-pc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.it-filter-type {
+    margin-bottom: .75rem;
+
+    .it-chip .icon {
+        margin-right: .35rem;
+        font-size: .85rem;
+    }
+}
+
+.it-ways-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 1.5rem;
+}
+
+.it-way {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    padding: 1.75rem;
+    border: 1px solid $it-border;
+    border-radius: 1rem;
+    background-color: var(--#{$prefix}white);
+    border-top: 4px solid $it-teal;
+
+    h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    p {
+        margin: 0;
+        color: var(--#{$prefix}gray-700);
+    }
+
+    ul {
+        margin: 0;
+        padding-left: 0;
+        list-style: none;
+
+        li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin: .35rem 0;
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: .2rem;
+                top: .45rem;
+                width: .55rem;
+                height: .3rem;
+                border-left: 2px solid $it-teal-deep;
+                border-bottom: 2px solid $it-teal-deep;
+                transform: rotate(-45deg);
+            }
+        }
+    }
+
+    .btn {
+        align-self: flex-start;
+        margin-top: auto;
+    }
+}
+
+.it-way-selfpaced {
+    border-top-color: $it-gold;
+}
+
+.it-way-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: .75rem;
+    font-size: 1.3rem;
+    color: $it-teal-deep;
+    background-color: rgba($it-teal, .12);
+
+    .it-way-selfpaced & {
+        color: darken($it-gold, 22%);
+        background-color: rgba($it-gold, .18);
+    }
+}

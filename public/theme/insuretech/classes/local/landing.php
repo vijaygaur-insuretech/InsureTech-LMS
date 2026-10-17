@@ -156,6 +156,8 @@ class landing {
             $category = core_course_category::get($course->category, IGNORE_MISSING);
             $modules = $DB->count_records_select('course_sections', 'course = ? AND section > 0 AND visible = 1',
                 [$course->id]);
+            $live = live_class_fields::get_course($course->id);
+            $delivery = self::delivery($course->id, $live);
             $cards[] = [
                 'id' => $course->id,
                 'name' => format_string($course->fullname, true, ['context' => $context, 'escape' => false]),
@@ -167,11 +169,27 @@ class landing {
                 'modules' => $modules,
                 'modulestext' => get_string($modules == 1 ? 'modulecount' : 'modulescount', 'theme_insuretech', $modules),
                 'url' => (new moodle_url('/theme/insuretech/course.php', ['id' => $course->id]))->out(false),
-                'schedule' => live_class_fields::get_course($course->id)['schedule'],
+                'schedule' => $delivery === 'live' ? $live['schedule'] : '',
+                'delivery' => $delivery,
+                'islive' => $delivery === 'live',
                 'level' => class_exists('\\local_itskills\\local\\fields') ? \local_itskills\local\fields::course($course->id)['itlevel'] : '',
             ];
         }
         return $cards;
+    }
+
+    /**
+     * How a course is delivered: 'live' or 'selfpaced'.
+     *
+     * @param int $courseid
+     * @param array $live The course's live-class link and timing
+     * @return string
+     */
+    public static function delivery(int $courseid, array $live): string {
+        if (class_exists('\\local_itskills\\local\\fields')) {
+            return \local_itskills\local\fields::delivery($courseid, $live);
+        }
+        return ($live['link'] !== '' || $live['schedule'] !== '') ? 'live' : 'selfpaced';
     }
 
     /**
@@ -306,6 +324,8 @@ class landing {
             'hascourses' => !empty($courses),
             'categories' => array_values($categories),
             'hascategories' => count($categories) > 1,
+            'livecount' => count(array_filter($courses, fn($c) => $c['islive'])),
+            'selfpacedcount' => count(array_filter($courses, fn($c) => !$c['islive'])),
             'abouttitle' => self::setting('abouttitle'),
             'abouttext' => format_text(self::setting('abouttext'), FORMAT_HTML, ['context' => \context_system::instance()]),
             'faqs' => $faqs,

@@ -52,5 +52,10 @@ function xmldb_local_itskills_upgrade($oldversion) {
         local_itskills_disable_mobile_app();
         upgrade_plugin_savepoint(true, 2026101600, 'local', 'itskills');
     }
+    if ($oldversion < 2026101700) {
+        // New "Course type" field (Live classes / Self-paced).
+        \local_itskills\local\fields::ensure();
+        upgrade_plugin_savepoint(true, 2026101700, 'local', 'itskills');
+    }
     return true;
 }

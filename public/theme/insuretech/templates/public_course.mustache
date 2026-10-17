@@ -21,7 +21,7 @@
 
     Example context (json):
     { "name": "AWS", "category": "Cloud", "summary": "<p>Learn</p>", "image": "", "modules": [], "hasmodules": false,
-      "modulecount": 0, "lessoncount": 0, "trainers": [], "hastrainers": false, "schedule": "", "loggedin": false,
+      "modulecount": 0, "lessoncount": 0, "trainers": [], "hastrainers": false, "schedule": "", "islive": true, "loggedin": false,
       "enrolled": false, "courseurl": "#", "loginurl": "#", "email": "", "phone": "", "phonelink": "", "homeurl": "#" }
 }}
 <article class="it-pc">
@@ -34,14 +34,19 @@
     <div class="it-pc-grid">
         <div class="it-pc-main">
             <header class="it-pc-hero">
-                {{#category}}<span class="it-pill">{{category}}</span>{{/category}}
+                <div class="it-pc-tags">
+                    {{#category}}<span class="it-pill">{{category}}</span>{{/category}}
+                    {{#islive}}<span class="it-type-badge it-type-live"><span class="it-live-dot"></span>{{#str}}typelive, theme_insuretech{{/str}}</span>{{/islive}}
+                    {{^islive}}<span class="it-type-badge it-type-selfpaced"><i class="icon fa fa-circle-play m-0" aria-hidden="true"></i>{{#str}}typeselfpaced, theme_insuretech{{/str}}</span>{{/islive}}
+                </div>
                 <h1 class="it-pc-title">{{name}}</h1>
                 {{#hasreviews}}{{#reviews}}<p class="it-pc-rating"><span class="it-stars">{{stars}}</span> <strong>{{average}}</strong> <span>({{count}})</span></p>{{/reviews}}{{/hasreviews}}
                 <ul class="it-pc-facts">
                     {{#level}}<li><i class="icon fa fa-signal" aria-hidden="true"></i>{{level}}</li>{{/level}}
                     <li><i class="icon fa fa-layer-group" aria-hidden="true"></i>{{#str}}modulescount, theme_insuretech, {{modulecount}}{{/str}}</li>
                     <li><i class="icon fa fa-book-open" aria-hidden="true"></i>{{#str}}lessonscount, theme_insuretech, {{lessoncount}}{{/str}}</li>
-                    {{#schedule}}<li><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}liveclasses, theme_insuretech{{/str}}: {{schedule}}</li>{{/schedule}}
+                    {{#islive}}{{#schedule}}<li><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}liveclasses, theme_insuretech{{/str}}: {{schedule}}</li>{{/schedule}}{{/islive}}
+                    {{^islive}}<li><i class="icon fa fa-clock" aria-hidden="true"></i>{{#str}}learnatyourpace, theme_insuretech{{/str}}</li>{{/islive}}
                     <li><i class="icon fa fa-certificate" aria-hidden="true"></i>{{#str}}certificateincluded, theme_insuretech{{/str}}</li>
                 </ul>
             </header>

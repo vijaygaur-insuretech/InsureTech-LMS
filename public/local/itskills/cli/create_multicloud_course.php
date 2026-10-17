@@ -81,6 +81,7 @@ echo "Course {$course->id} created\n";
 \core_course\customfield\course_handler::create()->instance_form_save((object) [
     'id' => $course->id,
     'customfield_itlevel' => 2,
+    'customfield_itdelivery' => 1,
     'customfield_itoutcomes_editor' => ['text' => $ul([
         'Design secure landing zones and identity across AWS, Azure and Google Cloud',
         'Build VPC/VNet networks: subnetting, routing, NAT and private connectivity',

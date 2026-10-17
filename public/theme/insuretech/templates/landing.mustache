@@ -26,8 +26,8 @@
       "stats": [{"value": "10,000+", "label": "Professionals trained"}],
       "partners": ["AWS"], "haspartners": true,
       "courses": [{"id": 2, "name": "AWS", "category": "Cloud", "categoryid": 1, "summary": "Learn AWS",
-          "image": "", "modulestext": "4 modules", "url": "#", "schedule": "Mon-Fri"}],
-      "hascourses": true, "categories": [], "hascategories": false,
+          "image": "", "modulestext": "4 modules", "url": "#", "schedule": "Mon-Fri", "delivery": "live", "islive": true}],
+      "hascourses": true, "categories": [], "hascategories": false, "livecount": 1, "selfpacedcount": 0,
       "abouttitle": "About", "abouttext": "<p>About</p>", "faqs": [], "hasfaqs": false,
       "ctatitle": "Ready?", "ctatext": "Log in." }
 }}
@@ -82,6 +82,40 @@
             {{/haspartners}}
         </section>
 
+        <section class="it-pub-section it-ways" id="ways" aria-labelledby="ways-title">
+            <div class="it-pub-container">
+                <div class="it-pub-section-head">
+                    <span class="it-eyebrow">{{#str}}waystag, theme_insuretech{{/str}}</span>
+                    <h2 id="ways-title">{{#str}}waystitle, theme_insuretech{{/str}}</h2>
+                    <p>{{#str}}wayssubtitle, theme_insuretech{{/str}}</p>
+                </div>
+                <div class="it-ways-grid">
+                    <article class="it-way it-way-live">
+                        <span class="it-way-icon" aria-hidden="true"><i class="icon fa fa-video m-0"></i></span>
+                        <h3>{{#str}}typelive, theme_insuretech{{/str}}</h3>
+                        <p>{{#str}}waylivetext, theme_insuretech{{/str}}</p>
+                        <ul>
+                            <li>{{#str}}waylive1, theme_insuretech{{/str}}</li>
+                            <li>{{#str}}waylive2, theme_insuretech{{/str}}</li>
+                            <li>{{#str}}waylive3, theme_insuretech{{/str}}</li>
+                        </ul>
+                        <a href="#courses" class="btn btn-primary" data-show-type="live">{{#str}}browselive, theme_insuretech, {{livecount}}{{/str}}</a>
+                    </article>
+                    <article class="it-way it-way-selfpaced">
+                        <span class="it-way-icon" aria-hidden="true"><i class="icon fa fa-circle-play m-0"></i></span>
+                        <h3>{{#str}}typeselfpaced, theme_insuretech{{/str}}</h3>
+                        <p>{{#str}}wayselftext, theme_insuretech{{/str}}</p>
+                        <ul>
+                            <li>{{#str}}wayself1, theme_insuretech{{/str}}</li>
+                            <li>{{#str}}wayself2, theme_insuretech{{/str}}</li>
+                            <li>{{#str}}wayself3, theme_insuretech{{/str}}</li>
+                        </ul>
+                        <a href="#courses" class="btn btn-primary" data-show-type="selfpaced">{{#str}}browseselfpaced, theme_insuretech, {{selfpacedcount}}{{/str}}</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
         <section class="it-pub-section" id="courses" aria-labelledby="courses-title">
             <div class="it-pub-container">
                 <div class="it-pub-section-head">
@@ -89,6 +123,13 @@
                     <h2 id="courses-title">{{#str}}coursestitle, theme_insuretech{{/str}}</h2>
                     <p>{{#str}}coursessubtitle, theme_insuretech{{/str}}</p>
                 </div>
+                {{#hascourses}}
+                    <div class="it-filter it-filter-type" role="group" aria-label="{{#str}}filterbytype, theme_insuretech{{/str}}" data-region="it-type-filter">
+                        <button type="button" class="it-chip active" data-type="all" aria-pressed="true">{{#str}}alltypes, theme_insuretech{{/str}}</button>
+                        <button type="button" class="it-chip" data-type="live" aria-pressed="false"><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}typelive, theme_insuretech{{/str}}</button>
+                        <button type="button" class="it-chip" data-type="selfpaced" aria-pressed="false"><i class="icon fa fa-circle-play" aria-hidden="true"></i>{{#str}}typeselfpaced, theme_insuretech{{/str}}</button>
+                    </div>
+                {{/hascourses}}
                 {{#hascategories}}
                     <div class="it-filter" role="group" aria-label="{{#str}}filterbycategory, theme_insuretech{{/str}}" data-region="it-course-filter">
                         <button type="button" class="it-chip active" data-filter="all" aria-pressed="true">{{#str}}allcourses, theme_insuretech{{/str}}</button>
@@ -98,9 +139,12 @@
                 {{#hascourses}}
                     <div class="it-course-grid" data-region="it-course-grid">
                         {{#courses}}
-                            <article class="it-course" data-category="{{categoryid}}">
+                            <article class="it-course" data-category="{{categoryid}}" data-type="{{delivery}}">
                                 <a href="{{url}}" class="it-course-link">
-                                    <div class="it-course-img card-img-top" style="background-image: url('{{{image}}}');"></div>
+                                    <div class="it-course-img card-img-top" style="background-image: url('{{{image}}}');">
+                                        {{#islive}}<span class="it-type-badge it-type-live"><span class="it-live-dot"></span>{{#str}}typelive, theme_insuretech{{/str}}</span>{{/islive}}
+                                        {{^islive}}<span class="it-type-badge it-type-selfpaced"><i class="icon fa fa-circle-play m-0" aria-hidden="true"></i>{{#str}}typeselfpaced, theme_insuretech{{/str}}</span>{{/islive}}
+                                    </div>
                                     <div class="it-course-body">
                                         {{#category}}<span class="it-pill">{{category}}</span>{{/category}}
                                         <h3 class="it-course-title">{{name}}</h3>
@@ -108,7 +152,8 @@
                                         <div class="it-course-meta">
                                             <span><i class="icon fa fa-layer-group" aria-hidden="true"></i>{{modulestext}}</span>
                                             {{#level}}<span><i class="icon fa fa-signal" aria-hidden="true"></i>{{level}}</span>{{/level}}
-                                            {{#schedule}}<span><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}liveclasses, theme_insuretech{{/str}}</span>{{/schedule}}
+                                            {{#islive}}{{#schedule}}<span><i class="icon fa fa-calendar" aria-hidden="true"></i>{{schedule}}</span>{{/schedule}}{{/islive}}
+                                            {{^islive}}<span><i class="icon fa fa-clock" aria-hidden="true"></i>{{#str}}learnanytime, theme_insuretech{{/str}}</span>{{/islive}}
                                         </div>
                                         <span class="it-course-more">{{#str}}viewcourse, theme_insuretech{{/str}} <i class="icon fa fa-arrow-right m-0" aria-hidden="true"></i></span>
                                     </div>
@@ -192,24 +237,60 @@
 </html>
 {{#js}}
 (function() {
-    var filter = document.querySelector('[data-region="it-course-filter"]');
-    if (!filter) {
-        return;
-    }
-    filter.addEventListener('click', function(e) {
-        var chip = e.target.closest('[data-filter]');
-        if (!chip) {
-            return;
-        }
-        var value = chip.getAttribute('data-filter');
-        filter.querySelectorAll('[data-filter]').forEach(function(c) {
+    var state = {type: 'all', category: 'all'};
+    var typeFilter = document.querySelector('[data-region="it-type-filter"]');
+    var catFilter = document.querySelector('[data-region="it-course-filter"]');
+
+    var press = function(group, chip) {
+        group.querySelectorAll('.it-chip').forEach(function(c) {
             var on = c === chip;
             c.classList.toggle('active', on);
             c.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
-        document.querySelectorAll('[data-region="it-course-grid"] [data-category]').forEach(function(card) {
-            card.hidden = value !== 'all' && card.getAttribute('data-category') !== value;
+    };
+    var apply = function() {
+        document.querySelectorAll('[data-region="it-course-grid"] .it-course').forEach(function(card) {
+            card.hidden = (state.type !== 'all' && card.getAttribute('data-type') !== state.type) ||
+                (state.category !== 'all' && card.getAttribute('data-category') !== state.category);
+        });
+    };
+    var setType = function(type) {
+        if (!typeFilter) {
+            return;
+        }
+        state.type = type;
+        press(typeFilter, typeFilter.querySelector('[data-type="' + type + '"]'));
+        apply();
+    };
+
+    if (typeFilter) {
+        typeFilter.addEventListener('click', function(e) {
+            var chip = e.target.closest('[data-type]');
+            if (chip) {
+                setType(chip.getAttribute('data-type'));
+            }
+        });
+    }
+    if (catFilter) {
+        catFilter.addEventListener('click', function(e) {
+            var chip = e.target.closest('[data-filter]');
+            if (!chip) {
+                return;
+            }
+            state.category = chip.getAttribute('data-filter');
+            press(catFilter, chip);
+            apply();
+        });
+    }
+    // "Browse live / self-paced courses" buttons jump to the catalogue with that type selected.
+    document.querySelectorAll('[data-show-type]').forEach(function(link) {
+        link.addEventListener('click', function() {
+            setType(link.getAttribute('data-show-type'));
         });
     });
+    var hash = window.location.hash.replace('#', '');
+    if (hash === 'live' || hash === 'selfpaced') {
+        setType(hash);
+    }
 })();
 {{/js}}

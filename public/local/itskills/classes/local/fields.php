@@ -29,6 +29,7 @@ class fields {
     /** @var array Course fields: shortname => [type, configdata extras]. */
     const COURSE = [
         'itlevel' => ['select', ['options' => "Beginner\nIntermediate\nAdvanced"]],
+        'itdelivery' => ['select', ['options' => "Live classes\nSelf-paced", 'defaultvalue' => 'Live classes']],
         'itoutcomes' => ['textarea', []],
         'itprereq' => ['textarea', []],
     ];
@@ -63,9 +64,16 @@ class fields {
         if (!$missing) {
             return;
         }
-        $category = \core_customfield\category_controller::create(
-            $handler->create_category(get_string($categorystring, 'local_itskills')));
-        $sortorder = 0;
+        // Add to our existing field group when there is one, so new fields sit with the others.
+        $categoryname = get_string($categorystring, 'local_itskills');
+        $category = null;
+        foreach ($handler->get_categories_with_fields() as $existingcategory) {
+            if ($existingcategory->get('name') === $categoryname) {
+                $category = $existingcategory;
+            }
+        }
+        $category = $category ?? \core_customfield\category_controller::create($handler->create_category($categoryname));
+        $sortorder = count($category->get_fields());
         foreach ($missing as $shortname => [$type, $extra]) {
             $config = $extra + [
                 'required' => 0, 'uniquevalues' => 0, 'locked' => 0,
@@ -100,6 +108,25 @@ class fields {
             }
         }
         return $out;
+    }
+
+    /**
+     * How a course is delivered: 'live' or 'selfpaced'.
+     *
+     * Uses the course's "Course type" field. Courses that never had it set count as live when they have a live-class
+     * link or timing, and as self-paced otherwise.
+     *
+     * @param int $courseid
+     * @param array $live The course's live-class link and timing (['link' => ..., 'schedule' => ...]), if known
+     * @return string
+     */
+    public static function delivery(int $courseid, array $live = []): string {
+        foreach (\core_course\customfield\course_handler::create()->get_instance_data($courseid) as $data) {
+            if ($data->get_field()->get('shortname') === 'itdelivery' && $data->get('id')) {
+                return (int) $data->get_value() === 2 ? 'selfpaced' : 'live';
+            }
+        }
+        return (!empty($live['link']) || !empty($live['schedule'])) ? 'live' : 'selfpaced';
     }
 
     /**
