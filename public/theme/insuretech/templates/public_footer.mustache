@@ -25,8 +25,8 @@
 }}
 <footer class="it-pub-footer" id="contact">
     <div class="it-pub-container it-pub-footer-grid">
-        <div>
-            <img src="{{logolighturl}}" alt="{{brandname}}" class="it-pub-footer-logo">
+        <div class="it-pub-footer-brand">
+            <img src="{{logolighturl}}" alt="{{brandname}}" class="it-pub-footer-logo" width="160" height="43">
             <p class="it-pub-footer-about">{{footerabout}}</p>
             {{#hassocials}}
                 <div class="it-pub-socials">
@@ -37,12 +37,20 @@
             {{/hassocials}}
         </div>
         <div>
+            <h2 class="it-pub-footer-title">{{#str}}navcourses, theme_insuretech{{/str}}</h2>
+            <ul class="it-pub-footer-links">
+                <li><a href="{{homeurl}}#live">{{#str}}typelive, theme_insuretech{{/str}}</a></li>
+                <li><a href="{{homeurl}}#selfpaced">{{#str}}typeselfpaced, theme_insuretech{{/str}}</a></li>
+                <li><a href="{{homeurl}}#courses">{{#str}}viewallcourses, theme_insuretech{{/str}}</a></li>
+                <li><a href="{{loginurl}}">{{#str}}login{{/str}}</a></li>
+            </ul>
+        </div>
+        <div>
             <h2 class="it-pub-footer-title">{{#str}}quicklinks, theme_insuretech{{/str}}</h2>
             <ul class="it-pub-footer-links">
-                <li><a href="{{homeurl}}#courses">{{#str}}navcourses, theme_insuretech{{/str}}</a></li>
+                <li><a href="{{homeurl}}#how">{{#str}}navhow, theme_insuretech{{/str}}</a></li>
                 <li><a href="{{homeurl}}#about">{{#str}}navabout, theme_insuretech{{/str}}</a></li>
                 <li><a href="{{homeurl}}#faq">{{#str}}navfaq, theme_insuretech{{/str}}</a></li>
-                <li><a href="{{loginurl}}">{{#str}}login{{/str}}</a></li>
                 {{#websiteurl}}<li><a href="{{websiteurl}}">{{#str}}mainwebsite, theme_insuretech{{/str}}</a></li>{{/websiteurl}}
             </ul>
         </div>
@@ -55,5 +63,16 @@
             </ul>
         </div>
     </div>
-    <div class="it-pub-container it-pub-copyright">&copy; {{year}} {{brandname}}. {{#str}}allrightsreserved, theme_insuretech{{/str}}</div>
+    <div class="it-pub-footer-bottom">
+        <div class="it-pub-container it-pub-footer-bottom-inner">
+            <span>&copy; {{year}} {{brandname}}. {{#str}}allrightsreserved, theme_insuretech{{/str}}</span>
+            {{#haslegal}}
+                <nav class="it-pub-legal" aria-label="{{#str}}quicklinks, theme_insuretech{{/str}}">
+                    {{#privacyurl}}<a href="{{privacyurl}}">{{#str}}privacypolicy, theme_insuretech{{/str}}</a>{{/privacyurl}}
+                    {{#termsurl}}<a href="{{termsurl}}">{{#str}}termslink, theme_insuretech{{/str}}</a>{{/termsurl}}
+                    {{#refundurl}}<a href="{{refundurl}}">{{#str}}refundpolicy, theme_insuretech{{/str}}</a>{{/refundurl}}
+                </nav>
+            {{/haslegal}}
+        </div>
+    </div>
 </footer>

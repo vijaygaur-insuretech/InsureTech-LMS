@@ -84,3 +84,23 @@ function theme_insuretech_get_extra_scss($theme) {
 function theme_insuretech_get_precompiled_css() {
     return theme_boost_get_precompiled_css();
 }
+
+/**
+ * Serve the photos uploaded in the theme settings.
+ *
+ * @param stdClass $course
+ * @param stdClass $cm
+ * @param context $context
+ * @param string $filearea
+ * @param array $args
+ * @param bool $forcedownload
+ * @param array $options
+ * @return bool
+ */
+function theme_insuretech_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
+    if ($context->contextlevel == CONTEXT_SYSTEM && in_array($filearea, ['imglive', 'imgselfpaced', 'imgabout', 'ogimage'])) {
+        // Public landing page photos: no login needed.
+        return theme_config::load('insuretech')->setting_file_serve($filearea, $args, $forcedownload, $options);
+    }
+    send_file_not_found();
+}

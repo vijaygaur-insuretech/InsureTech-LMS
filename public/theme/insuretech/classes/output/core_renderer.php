@@ -51,6 +51,12 @@ class core_renderer extends \theme_boost\output\core_renderer {
         $html = str_replace('<meta name="keywords" content="moodle, ',
             '<meta name="keywords" content="' . s(get_string('pluginname', 'theme_insuretech')) . ', ',
             parent::standard_head_html());
+        // Favicons for browsers, home screens and search results, plus the browser bar colour on phones.
+        $icon = fn(string $name) => s($this->image_url($name, 'theme_insuretech')->out(false));
+        $html .= '<link rel="icon" type="image/png" sizes="32x32" href="' . $icon('favicon-32') . '">' . "\n"
+            . '<link rel="icon" type="image/png" sizes="192x192" href="' . $icon('icon-192') . '">' . "\n"
+            . '<link rel="apple-touch-icon" sizes="180x180" href="' . $icon('apple-touch-icon') . '">' . "\n"
+            . '<meta name="theme-color" content="#0C1A2B">' . "\n";
         // Description, canonical, Open Graph and schema.org data registered by the public pages.
         return $html . \theme_insuretech\local\landing::meta_html();
     }

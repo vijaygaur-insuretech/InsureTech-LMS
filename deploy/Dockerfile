@@ -17,7 +17,7 @@ COPY deploy/php.ini /usr/local/etc/php/conf.d/zz-lms.ini
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
-    && printf '<Location "/">\n  FallbackResource /r.php\n</Location>\nServerTokens Prod\nServerSignature Off\n' \
+    && printf '<Location "/">\n  FallbackResource /r.php\n</Location>\nServerTokens Prod\nServerSignature Off\nAlias /robots.txt /var/www/html/public/theme/insuretech/robots.php\nAlias /sitemap.xml /var/www/html/public/theme/insuretech/sitemap.php\n' \
        > /etc/apache2/conf-enabled/lms.conf \
     && a2enmod rewrite headers
 

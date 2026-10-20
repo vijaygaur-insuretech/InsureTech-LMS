@@ -17,39 +17,57 @@
 {{!
     @template theme_insuretech/public_header
 
-    Top bar of the public pages: logo, section links and Log in (or Go to dashboard when signed in).
+    Top bar of the public pages: logo, Courses menu, section links, course search, Log in and Get started
+    (or Go to dashboard when signed in).
 
     Example context (json):
-    { "homeurl": "#", "loginurl": "#", "dashboardurl": "#", "loggedin": false, "brandname": "insureTech Skills" }
+    { "homeurl": "#", "loginurl": "#", "dashboardurl": "#", "loggedin": false, "brandname": "insureTech Skills",
+      "getstartedurl": "#contact" }
 }}
 <header class="it-pub-header">
     <div class="it-pub-container it-pub-header-inner">
         <a href="{{homeurl}}" class="it-pub-brand" aria-label="{{brandname}}">
-            <img src="{{logourl}}" alt="{{brandname}}" class="it-pub-logo">
+            <img src="{{logourl}}" alt="{{brandname}}" class="it-pub-logo" width="150" height="40">
         </a>
         <nav class="it-pub-nav" aria-label="{{#str}}mainmenu, theme_insuretech{{/str}}">
-            <a href="{{homeurl}}#courses">{{#str}}navcourses, theme_insuretech{{/str}}</a>
+            <div class="it-pub-dropdown">
+                <button type="button" class="it-pub-dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+                    {{#str}}navcourses, theme_insuretech{{/str}} <i class="icon fa fa-chevron-down m-0" aria-hidden="true"></i>
+                </button>
+                <div class="it-pub-dropdown-menu">
+                    <a href="{{homeurl}}#live"><i class="icon fa fa-video" aria-hidden="true"></i><span><strong>{{#str}}typelive, theme_insuretech{{/str}}</strong><small>{{#str}}waylive1, theme_insuretech{{/str}}</small></span></a>
+                    <a href="{{homeurl}}#selfpaced"><i class="icon fa fa-circle-play" aria-hidden="true"></i><span><strong>{{#str}}typeselfpaced, theme_insuretech{{/str}}</strong><small>{{#str}}wayself1, theme_insuretech{{/str}}</small></span></a>
+                    <a href="{{homeurl}}#courses"><i class="icon fa fa-table-cells-large" aria-hidden="true"></i><span><strong>{{#str}}viewallcourses, theme_insuretech{{/str}}</strong></span></a>
+                </div>
+            </div>
             <a href="{{homeurl}}#how">{{#str}}navhow, theme_insuretech{{/str}}</a>
             <a href="{{homeurl}}#about">{{#str}}navabout, theme_insuretech{{/str}}</a>
             <a href="{{homeurl}}#faq">{{#str}}navfaq, theme_insuretech{{/str}}</a>
             <a href="{{homeurl}}#contact">{{#str}}navcontact, theme_insuretech{{/str}}</a>
         </nav>
         <div class="it-pub-cta">
+            <a href="{{homeurl}}#courses" class="it-pub-search-btn" data-action="it-open-search" aria-label="{{#str}}searchcourses_open, theme_insuretech{{/str}}">
+                <i class="icon fa fa-magnifying-glass m-0" aria-hidden="true"></i>
+            </a>
             {{#loggedin}}
                 <a href="{{dashboardurl}}" class="btn btn-primary">{{#str}}gotodashboard, theme_insuretech{{/str}}</a>
             {{/loggedin}}
             {{^loggedin}}
-                <a href="{{loginurl}}" class="btn btn-primary"><i class="icon fa fa-right-to-bracket" aria-hidden="true"></i>{{#str}}login{{/str}}</a>
+                <a href="{{loginurl}}" class="btn it-btn-outline">{{#str}}login{{/str}}</a>
+                <a href="{{getstartedurl}}" class="btn btn-primary it-pub-getstarted">{{#str}}getstarted, theme_insuretech{{/str}}</a>
             {{/loggedin}}
         </div>
         <details class="it-pub-menu">
             <summary aria-label="{{#str}}mainmenu, theme_insuretech{{/str}}"><i class="icon fa fa-bars m-0" aria-hidden="true"></i></summary>
             <div class="it-pub-menu-panel">
-                <a href="{{homeurl}}#courses">{{#str}}navcourses, theme_insuretech{{/str}}</a>
+                <a href="{{homeurl}}#live">{{#str}}typelive, theme_insuretech{{/str}}</a>
+                <a href="{{homeurl}}#selfpaced">{{#str}}typeselfpaced, theme_insuretech{{/str}}</a>
+                <a href="{{homeurl}}#courses">{{#str}}viewallcourses, theme_insuretech{{/str}}</a>
                 <a href="{{homeurl}}#how">{{#str}}navhow, theme_insuretech{{/str}}</a>
                 <a href="{{homeurl}}#about">{{#str}}navabout, theme_insuretech{{/str}}</a>
                 <a href="{{homeurl}}#faq">{{#str}}navfaq, theme_insuretech{{/str}}</a>
                 <a href="{{homeurl}}#contact">{{#str}}navcontact, theme_insuretech{{/str}}</a>
+                {{^loggedin}}<a href="{{loginurl}}" class="btn btn-primary">{{#str}}login{{/str}}</a>{{/loggedin}}
             </div>
         </details>
     </div>
@@ -58,6 +76,33 @@
 document.querySelectorAll('.it-pub-menu-panel a').forEach(function(link) {
     link.addEventListener('click', function() {
         link.closest('details').removeAttribute('open');
+    });
+});
+// Courses menu: opens on hover (CSS) and on click/keyboard (here); closes on outside click or Escape.
+document.querySelectorAll('.it-pub-dropdown').forEach(function(dropdown) {
+    var toggle = dropdown.querySelector('.it-pub-dropdown-toggle');
+    var set = function(open) {
+        dropdown.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    toggle.addEventListener('click', function() {
+        set(!dropdown.classList.contains('open'));
+    });
+    document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+            set(false);
+        }
+    });
+    dropdown.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            set(false);
+            toggle.focus();
+        }
+    });
+    dropdown.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() {
+            set(false);
+        });
     });
 });
 {{/js}}

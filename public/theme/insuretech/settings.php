@@ -65,18 +65,35 @@ if ($ADMIN->fulltree) {
     $page->add(new admin_setting_heading('theme_insuretech/h_brand', get_string('h_brand', 'theme_insuretech'), ''));
     $add('brandname');
     $add('websiteurl', 'url');
+    $add('getstartedurl');
     $add('seotitle');
     $add('seodescription', 'textarea');
 
     $page->add(new admin_setting_heading('theme_insuretech/h_hero', get_string('h_hero', 'theme_insuretech'), ''));
     $add('herobadge');
     $add('herotitle');
+    $add('herohighlight');
     $add('herosubtitle', 'textarea');
     for ($i = 1; $i <= 4; $i++) {
         $add('stat' . $i . 'value');
         $add('stat' . $i . 'label');
     }
+    for ($i = 1; $i <= 4; $i++) {
+        $add('herofeature' . $i);
+    }
     $add('partners', 'textarea');
+
+    // Photos. Each has a bundled default; uploading one here replaces it.
+    $page->add(new admin_setting_heading('theme_insuretech/h_images', get_string('h_images', 'theme_insuretech'),
+        get_string('h_images_desc', 'theme_insuretech')));
+    foreach (['imglive', 'imgselfpaced', 'imgabout', 'ogimage'] as $image) {
+        $setting = new admin_setting_configstoredfile('theme_insuretech/' . $image, get_string('set_' . $image, 'theme_insuretech'),
+            get_string('set_' . $image . '_desc', 'theme_insuretech'), $image, 0,
+            ['maxfiles' => 1, 'accepted_types' => ['.jpg', '.jpeg', '.png', '.webp']]);
+        $setting->set_updatedcallback('theme_reset_all_caches');
+        $page->add($setting);
+    }
+    $add('aboutcaption');
 
     $page->add(new admin_setting_heading('theme_insuretech/h_about', get_string('h_about', 'theme_insuretech'), ''));
     $add('abouttitle');
@@ -91,6 +108,15 @@ if ($ADMIN->fulltree) {
         $add('faq' . $i . 'a', 'textarea');
     }
 
+    // Testimonials: only quotes from real learners who agreed to be quoted. The section is hidden while all are empty.
+    $page->add(new admin_setting_heading('theme_insuretech/h_testimonials', get_string('h_testimonials', 'theme_insuretech'),
+        get_string('h_testimonials_desc', 'theme_insuretech')));
+    for ($i = 1; $i <= 6; $i++) {
+        $add('testimonial' . $i . 'quote', 'textarea');
+        $add('testimonial' . $i . 'name');
+        $add('testimonial' . $i . 'role');
+    }
+
     $page->add(new admin_setting_heading('theme_insuretech/h_contact', get_string('h_contact', 'theme_insuretech'), ''));
     $add('contactemail');
     $add('contactphone');
@@ -98,6 +124,9 @@ if ($ADMIN->fulltree) {
     $add('footerabout', 'textarea');
     foreach (['linkedin', 'instagram', 'facebook', 'youtube'] as $social) {
         $add('social' . $social, 'url');
+    }
+    foreach (['privacyurl', 'termsurl', 'refundurl'] as $link) {
+        $add($link);
     }
 
     $settings->add($page);

@@ -29,7 +29,8 @@
           "image": "", "modulestext": "4 modules", "url": "#", "schedule": "Mon-Fri", "delivery": "live", "islive": true}],
       "hascourses": true, "categories": [], "hascategories": false, "livecount": 1, "selfpacedcount": 0,
       "abouttitle": "About", "abouttext": "<p>About</p>", "faqs": [], "hasfaqs": false,
-      "ctatitle": "Ready?", "ctatext": "Log in." }
+      "ctatitle": "Ready?", "ctatext": "Log in.", "herohighlight": "AI & tech.", "herofeatures": [],
+      "imglive": "", "imgselfpaced": "", "imgabout": "", "aboutcaption": "", "testimonials": [], "hastestimonials": false }
 }}
 {{> theme_boost/head }}
 
@@ -43,44 +44,68 @@
         <section class="it-hero">
             <div class="it-pub-container it-hero-grid">
                 <div class="it-hero-copy">
-                    {{#badge}}<span class="it-login-badge">{{badge}}</span>{{/badge}}
-                    <h1 class="it-hero-title">{{herotitle}}</h1>
+                    {{#badge}}<span class="it-hero-badge"><span class="it-hero-badge-dot"></span>{{badge}}</span>{{/badge}}
+                    <h1 class="it-hero-title">{{#herolead}}<span class="it-hero-line">{{herolead}}</span> {{/herolead}}{{herotitle}}{{#herohighlight}}<span class="it-gradient-text">{{herohighlight}}</span>{{/herohighlight}}</h1>
                     <p class="it-hero-subtitle">{{herosubtitle}}</p>
                     <div class="it-hero-actions">
-                        <a href="#courses" class="btn btn-primary btn-lg">{{#str}}explorecourses, theme_insuretech{{/str}}</a>
+                        <a href="#courses" class="btn btn-primary btn-lg">{{#str}}explorecourses, theme_insuretech{{/str}} <i class="icon fa fa-arrow-right m-0 ms-1" aria-hidden="true"></i></a>
                         {{^loggedin}}<a href="{{loginurl}}" class="btn btn-lg it-btn-ghost">{{#str}}loginstudents, theme_insuretech{{/str}}</a>{{/loggedin}}
                         {{#loggedin}}<a href="{{dashboardurl}}" class="btn btn-lg it-btn-ghost">{{#str}}gotodashboard, theme_insuretech{{/str}}</a>{{/loggedin}}
                     </div>
-                    <div class="it-hero-stats">
-                        {{#stats}}<div><strong>{{value}}</strong><span>{{label}}</span></div>{{/stats}}
-                    </div>
+                    <ul class="it-hero-features">
+                        {{#herofeatures}}<li><i class="icon fa {{icon}} m-0" aria-hidden="true"></i>{{text}}</li>{{/herofeatures}}
+                    </ul>
                 </div>
                 <div class="it-hero-visual" aria-hidden="true">
-                    <div class="it-hero-card it-hero-card-1">
-                        <span class="it-eyebrow">{{#str}}continuelearning, theme_insuretech{{/str}}</span>
-                        <strong>AWS Solutions Architect</strong>
-                        <div class="it-progress"><span style="width: 68%"></span></div>
-                        <small>68% · Module 3: Security</small>
+                    <div class="it-mock">
+                        <div class="it-mock-bar"><span></span><span></span><span></span></div>
+                        <div class="it-mock-body">
+                            <div class="it-mock-side">
+                                <img src="{{logolighturl}}" alt="" class="it-mock-logo">
+                                <span class="active"><i class="icon fa fa-gauge m-0"></i>Dashboard</span>
+                                <span><i class="icon fa fa-book-open m-0"></i>My courses</span>
+                                <span><i class="icon fa fa-video m-0"></i>Live classes</span>
+                                <span><i class="icon fa fa-list-check m-0"></i>Assignments</span>
+                                <span><i class="icon fa fa-award m-0"></i>Certificates</span>
+                            </div>
+                            <div class="it-mock-main">
+                                <strong class="it-mock-hello">{{#str}}mockwelcome, theme_insuretech{{/str}}, Aarav</strong>
+                                <div class="it-mock-card it-mock-course">
+                                    <div class="it-mock-ring"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5" class="bg"/><circle cx="18" cy="18" r="15.5" class="fg"/></svg><b>68%</b></div>
+                                    <div>
+                                        <small>{{#str}}mockcurrentcourse, theme_insuretech{{/str}}</small>
+                                        <strong>Multi-Cloud with DevOps &amp; GenAI</strong>
+                                        <div class="it-progress"><span style="width: 68%"></span></div>
+                                    </div>
+                                </div>
+                                <div class="it-mock-card it-mock-class">
+                                    <span class="it-live-dot"></span>
+                                    <div><small>{{#str}}mockupcoming, theme_insuretech{{/str}}</small><strong>Kubernetes Deep Dive</strong><small>Mon · 7:00 PM IST</small></div>
+                                    <span class="it-mock-join">{{#str}}joinclass, theme_insuretech{{/str}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="it-hero-card it-hero-card-2">
-                        <span class="it-live-dot"></span>
-                        <div><strong>{{#str}}joinclass, theme_insuretech{{/str}}</strong><small>Mon–Fri · 7:00 PM IST</small></div>
-                    </div>
-                    <div class="it-hero-card it-hero-card-3">
-                        <i class="icon fa fa-award m-0"></i>
-                        <div><strong>{{#str}}herocertificate, theme_insuretech{{/str}}</strong><small>Kubernetes Administrator (CKA)</small></div>
-                    </div>
+                    <div class="it-float it-float-cert"><i class="icon fa fa-award m-0"></i><span>{{#str}}mockcertificate, theme_insuretech{{/str}}</span></div>
+                    <div class="it-float it-float-projects"><i class="icon fa fa-cubes m-0"></i><span>{{#str}}mockprojects, theme_insuretech{{/str}}</span></div>
                 </div>
             </div>
-            {{#haspartners}}
-                <div class="it-pub-container">
-                    <div class="it-partners">
-                        <span class="it-partners-label">{{#str}}partnerslabel, theme_insuretech{{/str}}</span>
-                        <ul>{{#partners}}<li>{{.}}</li>{{/partners}}</ul>
-                    </div>
-                </div>
-            {{/haspartners}}
         </section>
+
+        {{#haspartners}}
+            <section class="it-partners-strip" aria-label="{{#str}}partnerslabel, theme_insuretech{{/str}}">
+                <div class="it-pub-container">
+                    <span class="it-partners-label">{{#str}}partnerslabel, theme_insuretech{{/str}}</span>
+                    <ul class="it-partners-logos">{{#partners}}<li>{{.}}</li>{{/partners}}</ul>
+                </div>
+            </section>
+        {{/haspartners}}
+
+        <div class="it-pub-container">
+            <ul class="it-statbar" aria-label="{{#str}}statsregion, theme_insuretech{{/str}}">
+                {{#stats}}<li><span class="it-statbar-icon"><i class="icon fa {{icon}} m-0" aria-hidden="true"></i></span><div><strong>{{value}}</strong><span>{{label}}</span></div></li>{{/stats}}
+            </ul>
+        </div>
 
         <section class="it-pub-section it-ways" id="ways" aria-labelledby="ways-title">
             <div class="it-pub-container">
@@ -91,67 +116,84 @@
                 </div>
                 <div class="it-ways-grid">
                     <article class="it-way it-way-live">
-                        <span class="it-way-icon" aria-hidden="true"><i class="icon fa fa-video m-0"></i></span>
-                        <h3>{{#str}}typelive, theme_insuretech{{/str}}</h3>
-                        <p>{{#str}}waylivetext, theme_insuretech{{/str}}</p>
-                        <ul>
-                            <li>{{#str}}waylive1, theme_insuretech{{/str}}</li>
-                            <li>{{#str}}waylive2, theme_insuretech{{/str}}</li>
-                            <li>{{#str}}waylive3, theme_insuretech{{/str}}</li>
-                        </ul>
-                        <a href="#courses" class="btn btn-primary" data-show-type="live">{{#str}}browselive, theme_insuretech, {{livecount}}{{/str}}</a>
+                        <div class="it-way-copy">
+                            <div class="it-way-head"><span class="it-way-icon" aria-hidden="true"><i class="icon fa fa-video m-0"></i></span><h3>{{#str}}typelive, theme_insuretech{{/str}}</h3></div>
+                            <p>{{#str}}waylivetext, theme_insuretech{{/str}}</p>
+                            <ul>
+                                <li>{{#str}}waylive1, theme_insuretech{{/str}}</li>
+                                <li>{{#str}}waylive2, theme_insuretech{{/str}}</li>
+                                <li>{{#str}}waylive3, theme_insuretech{{/str}}</li>
+                            </ul>
+                            <a href="#courses" class="btn btn-primary" data-show-type="live">{{#str}}browselive, theme_insuretech, {{livecount}}{{/str}} <i class="icon fa fa-arrow-right m-0 ms-1" aria-hidden="true"></i></a>
+                        </div>
+                        <img src="{{imglive}}" alt="" class="it-way-photo" loading="lazy" width="600" height="400">
                     </article>
                     <article class="it-way it-way-selfpaced">
-                        <span class="it-way-icon" aria-hidden="true"><i class="icon fa fa-circle-play m-0"></i></span>
-                        <h3>{{#str}}typeselfpaced, theme_insuretech{{/str}}</h3>
-                        <p>{{#str}}wayselftext, theme_insuretech{{/str}}</p>
-                        <ul>
-                            <li>{{#str}}wayself1, theme_insuretech{{/str}}</li>
-                            <li>{{#str}}wayself2, theme_insuretech{{/str}}</li>
-                            <li>{{#str}}wayself3, theme_insuretech{{/str}}</li>
-                        </ul>
-                        <a href="#courses" class="btn btn-primary" data-show-type="selfpaced">{{#str}}browseselfpaced, theme_insuretech, {{selfpacedcount}}{{/str}}</a>
+                        <div class="it-way-copy">
+                            <div class="it-way-head"><span class="it-way-icon" aria-hidden="true"><i class="icon fa fa-circle-play m-0"></i></span><h3>{{#str}}typeselfpaced, theme_insuretech{{/str}}</h3></div>
+                            <p>{{#str}}wayselftext, theme_insuretech{{/str}}</p>
+                            <ul>
+                                <li>{{#str}}wayself1, theme_insuretech{{/str}}</li>
+                                <li>{{#str}}wayself2, theme_insuretech{{/str}}</li>
+                                <li>{{#str}}wayself3, theme_insuretech{{/str}}</li>
+                            </ul>
+                            <a href="#courses" class="btn btn-primary" data-show-type="selfpaced">{{#str}}browseselfpaced, theme_insuretech, {{selfpacedcount}}{{/str}} <i class="icon fa fa-arrow-right m-0 ms-1" aria-hidden="true"></i></a>
+                        </div>
+                        <img src="{{imgselfpaced}}" alt="" class="it-way-photo" loading="lazy" width="600" height="400">
                     </article>
                 </div>
             </div>
         </section>
 
-        <section class="it-pub-section" id="courses" aria-labelledby="courses-title">
+        <section class="it-pub-section it-pub-section-alt" id="courses" aria-labelledby="courses-title">
             <div class="it-pub-container">
-                <div class="it-pub-section-head">
-                    <span class="it-eyebrow">{{#str}}navcourses, theme_insuretech{{/str}}</span>
-                    <h2 id="courses-title">{{#str}}coursestitle, theme_insuretech{{/str}}</h2>
-                    <p>{{#str}}coursessubtitle, theme_insuretech{{/str}}</p>
+                <div class="it-section-row">
+                    <div class="it-pub-section-head it-head-left">
+                        <span class="it-eyebrow">{{#str}}navcourses, theme_insuretech{{/str}}</span>
+                        <h2 id="courses-title">{{#str}}coursestitle, theme_insuretech{{/str}}</h2>
+                        <p>{{#str}}coursessubtitle, theme_insuretech{{/str}}</p>
+                    </div>
+                    {{#hascourses}}
+                        <div class="it-carousel-nav">
+                            <button type="button" class="it-carousel-btn" data-action="it-prev" aria-label="{{#str}}prevslide, theme_insuretech{{/str}}"><i class="icon fa fa-arrow-left m-0" aria-hidden="true"></i></button>
+                            <button type="button" class="it-carousel-btn" data-action="it-next" aria-label="{{#str}}nextslide, theme_insuretech{{/str}}"><i class="icon fa fa-arrow-right m-0" aria-hidden="true"></i></button>
+                        </div>
+                    {{/hascourses}}
                 </div>
                 {{#hascourses}}
-                    <div class="it-filter it-filter-type" role="group" aria-label="{{#str}}filterbytype, theme_insuretech{{/str}}" data-region="it-type-filter">
-                        <button type="button" class="it-chip active" data-type="all" aria-pressed="true">{{#str}}alltypes, theme_insuretech{{/str}}</button>
-                        <button type="button" class="it-chip" data-type="live" aria-pressed="false"><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}typelive, theme_insuretech{{/str}}</button>
-                        <button type="button" class="it-chip" data-type="selfpaced" aria-pressed="false"><i class="icon fa fa-circle-play" aria-hidden="true"></i>{{#str}}typeselfpaced, theme_insuretech{{/str}}</button>
+                    <div class="it-toolbar">
+                        <div class="it-filter" role="group" aria-label="{{#str}}filterbytype, theme_insuretech{{/str}}" data-region="it-course-filter">
+                            <button type="button" class="it-chip active" data-type="all" aria-pressed="true">{{#str}}alltypes, theme_insuretech{{/str}}</button>
+                            <button type="button" class="it-chip" data-type="live" aria-pressed="false"><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}typelive, theme_insuretech{{/str}}</button>
+                            <button type="button" class="it-chip" data-type="selfpaced" aria-pressed="false"><i class="icon fa fa-circle-play" aria-hidden="true"></i>{{#str}}typeselfpaced, theme_insuretech{{/str}}</button>
+                            <span class="it-filter-sep" aria-hidden="true"></span>
+                            <button type="button" class="it-chip" data-level="beginner" aria-pressed="false">{{#str}}levelbeginner, theme_insuretech{{/str}}</button>
+                            <button type="button" class="it-chip" data-level="intermediate" aria-pressed="false">{{#str}}levelintermediate, theme_insuretech{{/str}}</button>
+                            <button type="button" class="it-chip" data-level="advanced" aria-pressed="false">{{#str}}leveladvanced, theme_insuretech{{/str}}</button>
+                        </div>
+                        <label class="it-search" data-region="it-course-search">
+                            <i class="icon fa fa-magnifying-glass m-0" aria-hidden="true"></i>
+                            <span class="visually-hidden">{{#str}}searchcourses_open, theme_insuretech{{/str}}</span>
+                            <input type="search" placeholder="{{#str}}searchplaceholder, theme_insuretech{{/str}}" autocomplete="off">
+                        </label>
                     </div>
-                {{/hascourses}}
-                {{#hascategories}}
-                    <div class="it-filter" role="group" aria-label="{{#str}}filterbycategory, theme_insuretech{{/str}}" data-region="it-course-filter">
-                        <button type="button" class="it-chip active" data-filter="all" aria-pressed="true">{{#str}}allcourses, theme_insuretech{{/str}}</button>
-                        {{#categories}}<button type="button" class="it-chip" data-filter="{{id}}" aria-pressed="false">{{name}}</button>{{/categories}}
-                    </div>
-                {{/hascategories}}
-                {{#hascourses}}
-                    <div class="it-course-grid" data-region="it-course-grid">
+                    <div class="it-carousel" data-region="it-course-grid" tabindex="-1">
                         {{#courses}}
-                            <article class="it-course" data-category="{{categoryid}}" data-type="{{delivery}}">
+                            <article class="it-course" data-category="{{categoryid}}" data-type="{{delivery}}" data-level="{{levelkey}}">
                                 <a href="{{url}}" class="it-course-link">
-                                    <div class="it-course-img card-img-top" style="background-image: url('{{{image}}}');">
+                                    <div class="it-course-img" style="background-image: url('{{{image}}}');">
                                         {{#islive}}<span class="it-type-badge it-type-live"><span class="it-live-dot"></span>{{#str}}typelive, theme_insuretech{{/str}}</span>{{/islive}}
                                         {{^islive}}<span class="it-type-badge it-type-selfpaced"><i class="icon fa fa-circle-play m-0" aria-hidden="true"></i>{{#str}}typeselfpaced, theme_insuretech{{/str}}</span>{{/islive}}
                                     </div>
                                     <div class="it-course-body">
-                                        {{#category}}<span class="it-pill">{{category}}</span>{{/category}}
+                                        {{#category}}<span class="it-course-cat">{{category}}</span>{{/category}}
                                         <h3 class="it-course-title">{{name}}</h3>
                                         {{#summary}}<p class="it-course-summary">{{summary}}</p>{{/summary}}
                                         <div class="it-course-meta">
                                             <span><i class="icon fa fa-layer-group" aria-hidden="true"></i>{{modulestext}}</span>
                                             {{#level}}<span><i class="icon fa fa-signal" aria-hidden="true"></i>{{level}}</span>{{/level}}
+                                        </div>
+                                        <div class="it-course-meta">
                                             {{#islive}}{{#schedule}}<span><i class="icon fa fa-calendar" aria-hidden="true"></i>{{schedule}}</span>{{/schedule}}{{/islive}}
                                             {{^islive}}<span><i class="icon fa fa-clock" aria-hidden="true"></i>{{#str}}learnanytime, theme_insuretech{{/str}}</span>{{/islive}}
                                         </div>
@@ -161,46 +203,70 @@
                             </article>
                         {{/courses}}
                     </div>
+                    <p class="it-empty" data-region="it-no-results" hidden>{{#str}}nosearchresults, theme_insuretech{{/str}}</p>
                 {{/hascourses}}
                 {{^hascourses}}<p class="it-empty">{{#str}}nocoursesyet, theme_insuretech{{/str}}</p>{{/hascourses}}
             </div>
         </section>
 
-        <section class="it-pub-section it-pub-section-alt" id="how" aria-labelledby="how-title">
+        <section class="it-pub-section" id="how" aria-labelledby="how-title">
             <div class="it-pub-container">
                 <div class="it-pub-section-head">
                     <span class="it-eyebrow">{{#str}}navhow, theme_insuretech{{/str}}</span>
-                    <h2 id="how-title">{{#str}}howtitle, theme_insuretech{{/str}}</h2>
+                    <h2 id="how-title">{{#str}}journeytitle, theme_insuretech{{/str}}</h2>
                 </div>
-                <ol class="it-steps">
-                    <li><i class="icon fa fa-user-check m-0" aria-hidden="true"></i><h3>{{#str}}step1title, theme_insuretech{{/str}}</h3><p>{{#str}}step1text, theme_insuretech{{/str}}</p></li>
-                    <li><i class="icon fa fa-video m-0" aria-hidden="true"></i><h3>{{#str}}step2title, theme_insuretech{{/str}}</h3><p>{{#str}}step2text, theme_insuretech{{/str}}</p></li>
-                    <li><i class="icon fa fa-laptop-code m-0" aria-hidden="true"></i><h3>{{#str}}step3title, theme_insuretech{{/str}}</h3><p>{{#str}}step3text, theme_insuretech{{/str}}</p></li>
-                    <li><i class="icon fa fa-award m-0" aria-hidden="true"></i><h3>{{#str}}step4title, theme_insuretech{{/str}}</h3><p>{{#str}}step4text, theme_insuretech{{/str}}</p></li>
+                <ol class="it-journey">
+                    <li><span class="it-journey-num">01</span><span class="it-journey-icon"><i class="icon fa fa-user-check m-0" aria-hidden="true"></i></span><h3>{{#str}}step1title, theme_insuretech{{/str}}</h3><p>{{#str}}step1text, theme_insuretech{{/str}}</p></li>
+                    <li><span class="it-journey-num">02</span><span class="it-journey-icon"><i class="icon fa fa-video m-0" aria-hidden="true"></i></span><h3>{{#str}}step2title, theme_insuretech{{/str}}</h3><p>{{#str}}step2text, theme_insuretech{{/str}}</p></li>
+                    <li><span class="it-journey-num">03</span><span class="it-journey-icon"><i class="icon fa fa-laptop-code m-0" aria-hidden="true"></i></span><h3>{{#str}}step3title, theme_insuretech{{/str}}</h3><p>{{#str}}step3text, theme_insuretech{{/str}}</p></li>
+                    <li><span class="it-journey-num">04</span><span class="it-journey-icon"><i class="icon fa fa-award m-0" aria-hidden="true"></i></span><h3>{{#str}}step4title, theme_insuretech{{/str}}</h3><p>{{#str}}step4text, theme_insuretech{{/str}}</p></li>
                 </ol>
             </div>
         </section>
 
-        <section class="it-pub-section" id="about" aria-labelledby="about-title">
+        <section class="it-pub-section it-pub-section-alt" id="about" aria-labelledby="about-title">
             <div class="it-pub-container it-about-grid">
-                <div>
+                <div class="it-about-copy">
                     <span class="it-eyebrow">{{#str}}navabout, theme_insuretech{{/str}}</span>
                     <h2 id="about-title">{{abouttitle}}</h2>
                     <div class="it-about-text">{{{abouttext}}}</div>
+                    <a href="#contact" class="btn btn-primary">{{#str}}learnmoreabout, theme_insuretech{{/str}} <i class="icon fa fa-arrow-right m-0 ms-1" aria-hidden="true"></i></a>
                 </div>
                 <ul class="it-features">
-                    <li><i class="icon fa fa-chalkboard-user m-0" aria-hidden="true"></i><div><h3>{{#str}}feat1title, theme_insuretech{{/str}}</h3><p>{{#str}}feat1text, theme_insuretech{{/str}}</p></div></li>
-                    <li><i class="icon fa fa-flask m-0" aria-hidden="true"></i><div><h3>{{#str}}feat2title, theme_insuretech{{/str}}</h3><p>{{#str}}feat2text, theme_insuretech{{/str}}</p></div></li>
-                    <li><i class="icon fa fa-chart-line m-0" aria-hidden="true"></i><div><h3>{{#str}}feat3title, theme_insuretech{{/str}}</h3><p>{{#str}}feat3text, theme_insuretech{{/str}}</p></div></li>
-                    <li><i class="icon fa fa-briefcase m-0" aria-hidden="true"></i><div><h3>{{#str}}feat4title, theme_insuretech{{/str}}</h3><p>{{#str}}feat4text, theme_insuretech{{/str}}</p></div></li>
+                    <li><span class="it-feature-icon"><i class="icon fa fa-chalkboard-user m-0" aria-hidden="true"></i></span><div><h3>{{#str}}feat1title, theme_insuretech{{/str}}</h3><p>{{#str}}feat1text, theme_insuretech{{/str}}</p></div></li>
+                    <li><span class="it-feature-icon"><i class="icon fa fa-flask m-0" aria-hidden="true"></i></span><div><h3>{{#str}}feat2title, theme_insuretech{{/str}}</h3><p>{{#str}}feat2text, theme_insuretech{{/str}}</p></div></li>
+                    <li><span class="it-feature-icon"><i class="icon fa fa-chart-line m-0" aria-hidden="true"></i></span><div><h3>{{#str}}feat3title, theme_insuretech{{/str}}</h3><p>{{#str}}feat3text, theme_insuretech{{/str}}</p></div></li>
+                    <li><span class="it-feature-icon"><i class="icon fa fa-briefcase m-0" aria-hidden="true"></i></span><div><h3>{{#str}}feat4title, theme_insuretech{{/str}}</h3><p>{{#str}}feat4text, theme_insuretech{{/str}}</p></div></li>
                 </ul>
+                <figure class="it-about-photo">
+                    <img src="{{imgabout}}" alt="" loading="lazy" width="600" height="400">
+                    {{#aboutcaption}}<figcaption><i class="icon fa fa-chart-simple m-0" aria-hidden="true"></i>{{aboutcaption}}</figcaption>{{/aboutcaption}}
+                </figure>
             </div>
         </section>
 
+        {{#hastestimonials}}{{#hasfaqs}}<div class="it-pub-section it-voices-faq"><div class="it-pub-container it-voices-faq-grid">{{/hasfaqs}}{{/hastestimonials}}
+        {{#hastestimonials}}
+            <section class="it-voices" id="reviews" aria-labelledby="voices-title">
+                <div class="it-pub-section-head">
+                    <span class="it-eyebrow">{{#str}}testimonialstag, theme_insuretech{{/str}}</span>
+                    <h2 id="voices-title">{{#str}}testimonialstitle, theme_insuretech{{/str}}</h2>
+                </div>
+                <div class="it-voices-track" data-region="it-voices">
+                    {{#testimonials}}
+                        <figure class="it-voice">
+                            {{#stars}}<span class="it-stars" aria-hidden="true">{{stars}}</span>{{/stars}}
+                            <blockquote>&ldquo;{{quote}}&rdquo;</blockquote>
+                            <figcaption><span class="it-voice-avatar" aria-hidden="true">{{initial}}</span><span><strong>{{name}}</strong>{{#role}}<small>{{role}}</small>{{/role}}</span></figcaption>
+                        </figure>
+                    {{/testimonials}}
+                </div>
+            </section>
+        {{/hastestimonials}}
         {{#hasfaqs}}
-            <section class="it-pub-section it-pub-section-alt" id="faq" aria-labelledby="faq-title">
-                <div class="it-pub-container it-faq-wrap">
-                    <div class="it-pub-section-head">
+            <section class="it-faq-block {{^hastestimonials}}it-pub-section it-faq-solo{{/hastestimonials}}" id="faq" aria-labelledby="faq-title">
+                <div class="{{^hastestimonials}}it-pub-container it-faq-wrap{{/hastestimonials}}">
+                    <div class="it-pub-section-head it-head-left">
                         <span class="it-eyebrow">{{#str}}navfaq, theme_insuretech{{/str}}</span>
                         <h2 id="faq-title">{{#str}}faqtitle, theme_insuretech{{/str}}</h2>
                     </div>
@@ -210,8 +276,9 @@
                 </div>
             </section>
         {{/hasfaqs}}
+        {{#hastestimonials}}{{#hasfaqs}}</div></div>{{/hasfaqs}}{{/hastestimonials}}
 
-        <section class="it-pub-section">
+        <section class="it-pub-section it-cta-section">
             <div class="it-pub-container">
                 <div class="it-cta-band">
                     <div>
@@ -219,8 +286,9 @@
                         <p>{{ctatext}}</p>
                     </div>
                     <div class="it-hero-actions">
-                        {{^loggedin}}<a href="{{loginurl}}" class="btn btn-lg btn-light">{{#str}}login{{/str}}</a>{{/loggedin}}
-                        {{#email}}<a href="mailto:{{email}}" class="btn btn-lg it-btn-ghost">{{#str}}contactus, theme_insuretech{{/str}}</a>{{/email}}
+                        {{^loggedin}}<a href="{{loginurl}}" class="btn btn-lg it-btn-ghost">{{#str}}login{{/str}}</a>{{/loggedin}}
+                        {{#loggedin}}<a href="{{dashboardurl}}" class="btn btn-lg it-btn-ghost">{{#str}}gotodashboard, theme_insuretech{{/str}}</a>{{/loggedin}}
+                        {{#email}}<a href="mailto:{{email}}" class="btn btn-lg btn-light">{{#str}}contactus, theme_insuretech{{/str}}</a>{{/email}}
                     </div>
                 </div>
             </div>
@@ -237,60 +305,111 @@
 </html>
 {{#js}}
 (function() {
-    var state = {type: 'all', category: 'all'};
-    var typeFilter = document.querySelector('[data-region="it-type-filter"]');
-    var catFilter = document.querySelector('[data-region="it-course-filter"]');
+    var state = {type: 'all', level: '', query: ''};
+    var filter = document.querySelector('[data-region="it-course-filter"]');
+    var grid = document.querySelector('[data-region="it-course-grid"]');
+    var empty = document.querySelector('[data-region="it-no-results"]');
+    var search = document.querySelector('[data-region="it-course-search"] input');
+    if (!grid) {
+        return;
+    }
 
-    var press = function(group, chip) {
-        group.querySelectorAll('.it-chip').forEach(function(c) {
-            var on = c === chip;
+    var apply = function() {
+        var shown = 0;
+        grid.querySelectorAll('.it-course').forEach(function(card) {
+            var text = card.textContent.toLowerCase();
+            var hide = (state.type !== 'all' && card.getAttribute('data-type') !== state.type) ||
+                (state.level && card.getAttribute('data-level') !== state.level) ||
+                (state.query && text.indexOf(state.query) === -1);
+            card.hidden = hide;
+            shown += hide ? 0 : 1;
+        });
+        if (empty) {
+            empty.hidden = shown > 0;
+        }
+        filter.querySelectorAll('[data-type]').forEach(function(c) {
+            var on = c.getAttribute('data-type') === state.type && (state.type !== 'all' || !state.level);
             c.classList.toggle('active', on);
             c.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
-    };
-    var apply = function() {
-        document.querySelectorAll('[data-region="it-course-grid"] .it-course').forEach(function(card) {
-            card.hidden = (state.type !== 'all' && card.getAttribute('data-type') !== state.type) ||
-                (state.category !== 'all' && card.getAttribute('data-category') !== state.category);
+        filter.querySelectorAll('[data-level]').forEach(function(c) {
+            var on = c.getAttribute('data-level') === state.level;
+            c.classList.toggle('active', on);
+            c.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
-    };
-    var setType = function(type) {
-        if (!typeFilter) {
-            return;
-        }
-        state.type = type;
-        press(typeFilter, typeFilter.querySelector('[data-type="' + type + '"]'));
-        apply();
+        grid.scrollTo({left: 0});
     };
 
-    if (typeFilter) {
-        typeFilter.addEventListener('click', function(e) {
-            var chip = e.target.closest('[data-type]');
-            if (chip) {
-                setType(chip.getAttribute('data-type'));
+    filter.addEventListener('click', function(e) {
+        var chip = e.target.closest('.it-chip');
+        if (!chip) {
+            return;
+        }
+        if (chip.hasAttribute('data-type')) {
+            state.type = chip.getAttribute('data-type');
+            if (state.type === 'all') {
+                state.level = '';
             }
-        });
-    }
-    if (catFilter) {
-        catFilter.addEventListener('click', function(e) {
-            var chip = e.target.closest('[data-filter]');
-            if (!chip) {
-                return;
-            }
-            state.category = chip.getAttribute('data-filter');
-            press(catFilter, chip);
+        } else {
+            var level = chip.getAttribute('data-level');
+            state.level = state.level === level ? '' : level;
+        }
+        apply();
+    });
+    if (search) {
+        search.addEventListener('input', function() {
+            state.query = search.value.trim().toLowerCase();
             apply();
         });
     }
-    // "Browse live / self-paced courses" buttons jump to the catalogue with that type selected.
+
+    // "Browse live / self-paced" buttons, the Courses menu (#live, #selfpaced) and the header search.
+    var showType = function(type) {
+        state.type = type;
+        state.level = '';
+        apply();
+    };
     document.querySelectorAll('[data-show-type]').forEach(function(link) {
         link.addEventListener('click', function() {
-            setType(link.getAttribute('data-show-type'));
+            showType(link.getAttribute('data-show-type'));
         });
     });
-    var hash = window.location.hash.replace('#', '');
-    if (hash === 'live' || hash === 'selfpaced') {
-        setType(hash);
-    }
+    var fromHash = function() {
+        var hash = window.location.hash.replace('#', '');
+        if (hash === 'live' || hash === 'selfpaced') {
+            showType(hash);
+            document.getElementById('courses').scrollIntoView({behavior: 'smooth'});
+        }
+    };
+    window.addEventListener('hashchange', fromHash);
+    fromHash();
+    document.querySelectorAll('[data-action="it-open-search"]').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            if (search) {
+                e.preventDefault();
+                document.getElementById('courses').scrollIntoView({behavior: 'smooth'});
+                setTimeout(function() {
+                    search.focus();
+                }, 400);
+            }
+        });
+    });
+
+    // Carousel arrows scroll by one card.
+    var step = function(dir) {
+        var card = grid.querySelector('.it-course:not([hidden])');
+        var width = card ? card.getBoundingClientRect().width + 24 : 320;
+        grid.scrollBy({left: dir * width, behavior: 'smooth'});
+    };
+    document.querySelectorAll('[data-action="it-prev"]').forEach(function(b) {
+        b.addEventListener('click', function() {
+            step(-1);
+        });
+    });
+    document.querySelectorAll('[data-action="it-next"]').forEach(function(b) {
+        b.addEventListener('click', function() {
+            step(1);
+        });
+    });
 })();
 {{/js}}

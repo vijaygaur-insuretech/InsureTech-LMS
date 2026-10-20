@@ -24,11 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026101400;
+$plugin->version   = 2026102000;
 $plugin->requires  = 2026100200;
 $plugin->component = 'theme_insuretech';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.3';
+$plugin->release   = '1.4';
 $plugin->dependencies = [
     'theme_boost' => 2026100500,
 ];
