@@ -46,18 +46,20 @@ if ($ADMIN->fulltree) {
         $default = get_string_manager()->string_exists('default_' . $name, 'theme_insuretech')
             ? get_string('default_' . $name, 'theme_insuretech') : '';
         $key = 'theme_insuretech/' . $name;
+        $desc = get_string_manager()->string_exists('set_' . $name . '_desc', 'theme_insuretech')
+            ? get_string('set_' . $name . '_desc', 'theme_insuretech') : '';
         switch ($type) {
             case 'textarea':
-                $setting = new admin_setting_configtextarea($key, $title, '', $default, PARAM_TEXT, 60, 3);
+                $setting = new admin_setting_configtextarea($key, $title, $desc, $default, PARAM_TEXT, 60, 3);
                 break;
             case 'html':
-                $setting = new admin_setting_confightmleditor($key, $title, '', $default);
+                $setting = new admin_setting_confightmleditor($key, $title, $desc, $default);
                 break;
             case 'url':
-                $setting = new admin_setting_configtext($key, $title, '', $default, PARAM_URL);
+                $setting = new admin_setting_configtext($key, $title, $desc, $default, PARAM_URL);
                 break;
             default:
-                $setting = new admin_setting_configtext($key, $title, '', $default, PARAM_TEXT);
+                $setting = new admin_setting_configtext($key, $title, $desc, $default, PARAM_TEXT);
         }
         $page->add($setting);
     };
@@ -68,6 +70,18 @@ if ($ADMIN->fulltree) {
     $add('getstartedurl');
     $add('seotitle');
     $add('seodescription', 'textarea');
+
+    // Banner slider at the top of the home page. When it has slides it replaces the text hero.
+    $page->add(new admin_setting_heading('theme_insuretech/h_slider', get_string('h_slider', 'theme_insuretech'),
+        get_string('h_slider_desc', 'theme_insuretech')));
+    $setting = new admin_setting_configstoredfile('theme_insuretech/heroslides', get_string('set_heroslides', 'theme_insuretech'),
+        get_string('set_heroslides_desc', 'theme_insuretech'), 'heroslides', 0,
+        ['maxfiles' => 8, 'accepted_types' => ['.jpg', '.jpeg', '.png', '.webp']]);
+    $setting->set_updatedcallback('theme_reset_all_caches');
+    $page->add($setting);
+    $add('heroslidelinks', 'textarea');
+    $add('heroslidealts', 'textarea');
+    $add('heroslideinterval');
 
     $page->add(new admin_setting_heading('theme_insuretech/h_hero', get_string('h_hero', 'theme_insuretech'), ''));
     $add('herobadge');

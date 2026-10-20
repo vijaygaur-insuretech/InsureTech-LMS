@@ -98,9 +98,20 @@ function theme_insuretech_get_precompiled_css() {
  * @return bool
  */
 function theme_insuretech_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
-    if ($context->contextlevel == CONTEXT_SYSTEM && in_array($filearea, ['imglive', 'imgselfpaced', 'imgabout', 'ogimage'])) {
+    if ($context->contextlevel == CONTEXT_SYSTEM && in_array($filearea, ['imglive', 'imgselfpaced', 'imgabout', 'ogimage', 'heroslides'])) {
         // Public landing page photos: no login needed.
         return theme_config::load('insuretech')->setting_file_serve($filearea, $args, $forcedownload, $options);
     }
     send_file_not_found();
+}
+
+/**
+ * Page set-up: mark pages that show the learner sidebar so the layout can make room for it.
+ *
+ * @param moodle_page $page
+ */
+function theme_insuretech_page_init(moodle_page $page) {
+    if (\theme_insuretech\local\sidenav::applies($page)) {
+        $page->add_body_class('it-has-sidenav');
+    }
 }

@@ -41,6 +41,29 @@
     {{> theme_insuretech/public_header }}
 
     <main id="page" class="it-landing">
+        {{#hasslides}}
+            <section class="it-slider" aria-roledescription="carousel" aria-label="{{#str}}sliderlabel, theme_insuretech{{/str}}"
+                    data-region="it-slider" data-interval="{{slideinterval}}">
+                <h1 class="visually-hidden">{{herolead}} {{herotitle}}{{herohighlight}}</h1>
+                <div class="it-slider-track" data-region="it-slider-track">
+                    {{#slides}}
+                        <div class="it-slide" role="group" aria-roledescription="slide" aria-label="{{number}} / {{slidecount}}"{{^first}} aria-hidden="true"{{/first}}>
+                            {{#link}}<a href="{{link}}" class="it-slide-link"{{^first}} tabindex="-1"{{/first}}>{{/link}}
+                                <img src="{{url}}" alt="{{alt}}" class="it-slide-img" {{#first}}fetchpriority="high"{{/first}}{{^first}}loading="lazy"{{/first}}>
+                            {{#link}}</a>{{/link}}
+                        </div>
+                    {{/slides}}
+                </div>
+                {{#multipleslides}}
+                    <button type="button" class="it-slider-arrow it-slider-prev" data-action="it-slide-prev" aria-label="{{#str}}prevslide, theme_insuretech{{/str}}"><i class="icon fa fa-chevron-left m-0" aria-hidden="true"></i></button>
+                    <button type="button" class="it-slider-arrow it-slider-next" data-action="it-slide-next" aria-label="{{#str}}nextslide, theme_insuretech{{/str}}"><i class="icon fa fa-chevron-right m-0" aria-hidden="true"></i></button>
+                    <div class="it-slider-dots" data-region="it-slider-dots">
+                        {{#slides}}<button type="button" class="it-slider-dot{{#first}} active{{/first}}" data-slide="{{index}}" aria-label="{{#str}}slidergoto, theme_insuretech, {{number}}{{/str}}"{{#first}} aria-current="true"{{/first}}></button>{{/slides}}
+                    </div>
+                {{/multipleslides}}
+            </section>
+        {{/hasslides}}
+        {{^hasslides}}
         <section class="it-hero">
             <div class="it-pub-container it-hero-grid">
                 <div class="it-hero-copy">
@@ -91,6 +114,8 @@
                 </div>
             </div>
         </section>
+
+        {{/hasslides}}
 
         {{#haspartners}}
             <section class="it-partners-strip" aria-label="{{#str}}partnerslabel, theme_insuretech{{/str}}">
@@ -411,5 +436,102 @@
             step(1);
         });
     });
+})();
+
+// Home page slider: arrows, dots, swipe, keyboard, autoplay (paused on hover, focus and for reduced motion).
+(function() {
+    var slider = document.querySelector('[data-region="it-slider"]');
+    if (!slider) {
+        return;
+    }
+    var track = slider.querySelector('[data-region="it-slider-track"]');
+    var slides = track.children;
+    var dots = slider.querySelectorAll('[data-slide]');
+    var count = slides.length;
+    var current = 0;
+    var timer = null;
+    var interval = parseInt(slider.getAttribute('data-interval'), 10) * 1000;
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var go = function(index) {
+        current = (index + count) % count;
+        track.style.transform = 'translateX(' + (-100 * current) + '%)';
+        Array.prototype.forEach.call(slides, function(slide, i) {
+            var on = i === current;
+            slide.setAttribute('aria-hidden', on ? 'false' : 'true');
+            var link = slide.querySelector('a');
+            if (link) {
+                link.tabIndex = on ? 0 : -1;
+            }
+        });
+        dots.forEach(function(dot, i) {
+            dot.classList.toggle('active', i === current);
+            if (i === current) {
+                dot.setAttribute('aria-current', 'true');
+            } else {
+                dot.removeAttribute('aria-current');
+            }
+        });
+    };
+    var stop = function() {
+        clearInterval(timer);
+        timer = null;
+    };
+    var start = function() {
+        stop();
+        if (count > 1 && interval > 0 && !reduced) {
+            timer = setInterval(function() {
+                go(current + 1);
+            }, interval);
+        }
+    };
+
+    slider.addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-action], [data-slide]');
+        if (!btn) {
+            return;
+        }
+        if (btn.hasAttribute('data-slide')) {
+            go(parseInt(btn.getAttribute('data-slide'), 10));
+        } else {
+            go(current + (btn.getAttribute('data-action') === 'it-slide-next' ? 1 : -1));
+        }
+        start();
+    });
+    slider.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+            go(current + (e.key === 'ArrowRight' ? 1 : -1));
+            start();
+        }
+    });
+    slider.addEventListener('mouseenter', stop);
+    slider.addEventListener('mouseleave', start);
+    slider.addEventListener('focusin', stop);
+    slider.addEventListener('focusout', start);
+
+    // Touch swipe.
+    var startx = null;
+    track.addEventListener('touchstart', function(e) {
+        startx = e.touches[0].clientX;
+        stop();
+    }, {passive: true});
+    track.addEventListener('touchend', function(e) {
+        if (startx !== null) {
+            var dx = e.changedTouches[0].clientX - startx;
+            if (Math.abs(dx) > 40) {
+                go(current + (dx < 0 ? 1 : -1));
+            }
+        }
+        startx = null;
+        start();
+    });
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            stop();
+        } else {
+            start();
+        }
+    });
+    start();
 })();
 {{/js}}

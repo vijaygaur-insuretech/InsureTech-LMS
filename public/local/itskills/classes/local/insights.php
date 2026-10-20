@@ -85,6 +85,9 @@ class insights {
                 'name' => format_string($row->name, true, ['escape' => false]),
                 'url' => (new \moodle_url('/mod/assign/view.php', ['id' => $cm->id]))->out(false),
                 'due' => $row->duedate ? userdate($row->duedate, get_string('strftimedatetimeshort', 'langconfig')) : '',
+                'duedate' => (int) $row->duedate,
+                'overdue' => $status === 'pending' && $row->duedate && $row->duedate < time(),
+                'course' => format_string(get_course($row->course)->fullname, true, ['escape' => false]),
                 'status' => $status,
                 'statuslabel' => get_string('assign_' . $status, 'local_itskills'),
             ];

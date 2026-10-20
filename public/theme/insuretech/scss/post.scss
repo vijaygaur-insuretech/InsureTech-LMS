@@ -4279,3 +4279,329 @@ $it-shadow-md: 0 2px 6px rgba(15, 30, 51, .06), 0 18px 40px rgba(15, 30, 51, .09
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+// =====================================================================================================================
+// Learner sidebar (left column on wide screens, bottom tab bar on phones).
+// =====================================================================================================================
+$it-sidenav-width: 15rem;
+$it-tabbar-height: 64px;
+
+.it-sidenav {
+    display: none;
+}
+
+body.it-has-sidenav {
+    .it-sidenav {
+        display: block;
+        position: fixed;
+        top: $navbar-height;
+        bottom: 0;
+        inset-inline-start: 0;
+        z-index: $zindex-fixed - 1;
+        width: $it-sidenav-width;
+        padding: 1.25rem .85rem;
+        overflow-y: auto;
+        background: linear-gradient(180deg, $it-navy 0%, #0E2238 100%);
+        box-shadow: 1px 0 0 rgba(255, 255, 255, .04);
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            gap: .3rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+    }
+
+    .it-sidenav-link {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+        padding: .7rem .9rem;
+        border-radius: .7rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, .72);
+        transition: background-color .15s, color .15s;
+
+        .icon {
+            width: 1.15rem;
+            font-size: 1rem;
+            text-align: center;
+            color: rgba(255, 255, 255, .55);
+        }
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            color: $white;
+            background-color: rgba(255, 255, 255, .07);
+
+            .icon {
+                color: #7FE0F2;
+            }
+        }
+
+        &.active {
+            color: $white;
+            background-color: rgba($it-teal, .28);
+
+            .icon {
+                color: #7FE0F2;
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                inset-inline-start: -.85rem;
+                top: .5rem;
+                bottom: .5rem;
+                width: 4px;
+                border-radius: 0 4px 4px 0;
+                background-color: #4CC3DD;
+            }
+        }
+    }
+
+}
+
+// Wide screens: make room for the sidebar, and dock the course outline (left drawer) right next to it instead of
+// Boost's centred anchoring, which does not know about the sidebar.
+@include media-breakpoint-up(lg) {
+    body.it-has-sidenav {
+        #page.drawers,
+        #page {
+            margin-inline-start: $it-sidenav-width !important;
+        }
+
+        #page.drawers.show-drawer-left {
+            margin-inline-start: calc(#{$it-sidenav-width} + 285px) !important;
+            padding-inline-start: 1rem;
+        }
+
+        .drawer.drawer-left:not(.drawer-primary) {
+            inset-inline-start: $it-sidenav-width !important;
+            right: auto !important;
+            top: $navbar-height !important;
+            bottom: 0;
+            height: auto !important;
+            max-height: none !important;
+            border-radius: 0 !important;
+        }
+    }
+}
+
+// Phones and tablets: a bottom tab bar instead of the column.
+@include media-breakpoint-down(lg) {
+    body.it-has-sidenav {
+        .it-sidenav {
+            top: auto;
+            inset-inline-end: 0;
+            width: auto;
+            height: $it-tabbar-height;
+            padding: 0 .25rem env(safe-area-inset-bottom);
+            overflow: visible;
+            background: $white;
+            border-top: 1px solid $it-line;
+            box-shadow: 0 -6px 20px rgba(15, 30, 51, .08);
+
+            ul {
+                flex-direction: row;
+                height: 100%;
+                gap: 0;
+            }
+
+            li {
+                flex: 1;
+            }
+        }
+
+        .it-sidenav-link {
+            flex-direction: column;
+            justify-content: center;
+            gap: .2rem;
+            height: 100%;
+            padding: .35rem .15rem;
+            border-radius: 0;
+            font-size: .68rem;
+            font-weight: 600;
+            text-align: center;
+            color: $it-muted;
+
+            span {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+
+            .icon {
+                font-size: 1.15rem;
+                width: auto;
+                color: $it-muted;
+            }
+
+            &:hover,
+            &:focus {
+                color: $it-teal-deep;
+                background: none;
+
+                .icon {
+                    color: $it-teal-deep;
+                }
+            }
+
+            &.active {
+                color: $it-teal-deep;
+                background: none;
+
+                .icon {
+                    color: $it-teal-deep;
+                }
+
+                &::before {
+                    inset-inline-start: 25%;
+                    inset-inline-end: 25%;
+                    top: 0;
+                    bottom: auto;
+                    width: auto;
+                    height: 3px;
+                    border-radius: 0 0 3px 3px;
+                    background-color: $it-teal-deep;
+                }
+            }
+        }
+
+        #page {
+            padding-bottom: $it-tabbar-height;
+        }
+
+        .drawer {
+            bottom: $it-tabbar-height;
+        }
+
+        .btn-footer-popover {
+            bottom: calc(#{$it-tabbar-height} + 1rem) !important;
+        }
+    }
+}
+
+// =====================================================================================================================
+// Home page banner slider.
+// =====================================================================================================================
+.it-slider {
+    position: relative;
+    overflow: hidden;
+    background-color: $it-navy;
+
+    &:focus-within .it-slider-arrow,
+    &:hover .it-slider-arrow {
+        opacity: 1;
+    }
+}
+
+.it-slider-track {
+    display: flex;
+    transition: transform .6s cubic-bezier(.22, .61, .36, 1);
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.it-slide {
+    flex: 0 0 100%;
+    min-width: 0;
+}
+
+.it-slide-link {
+    display: block;
+}
+
+.it-slide-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 640px;
+    object-fit: cover;
+}
+
+.it-slider-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    margin-top: -1.5rem;
+    border: 0;
+    border-radius: 50%;
+    color: $it-navy;
+    background-color: rgba(255, 255, 255, .9);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+    opacity: .85;
+    transition: opacity .2s, transform .2s;
+
+    &:hover,
+    &:focus-visible {
+        opacity: 1;
+        transform: scale(1.06);
+    }
+}
+
+.it-slider-prev {
+    inset-inline-start: 1.25rem;
+}
+
+.it-slider-next {
+    inset-inline-end: 1.25rem;
+}
+
+.it-slider-dots {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 1rem;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+}
+
+.it-slider-dot {
+    width: .6rem;
+    height: .6rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, .55);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .3);
+    transition: width .25s, background-color .25s;
+
+    &.active {
+        width: 1.8rem;
+        background-color: $white;
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .it-slider-arrow {
+        width: 2.3rem;
+        height: 2.3rem;
+        margin-top: -1.15rem;
+    }
+
+    .it-slider-prev {
+        inset-inline-start: .5rem;
+    }
+
+    .it-slider-next {
+        inset-inline-end: .5rem;
+    }
+
+    .it-slider-dots {
+        bottom: .5rem;
+    }
+}

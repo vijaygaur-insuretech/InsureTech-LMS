@@ -1,0 +1,64 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_itskills/mycertificates
+
+    My certificates.
+
+    Example context (json):
+    { "earned": [{"course": "AWS", "date": "1 Jan 2026", "code": "ITS-ABC", "url": "#", "downloadurl": "#", "verifyurl": "#"}],
+      "hasearned": true, "inprogress": [{"course": "Azure", "percent": 40, "url": "#"}], "hasinprogress": true }
+}}
+<div class="its its-mypage">
+    {{#hasearned}}
+        <div class="its-certgrid">
+            {{#earned}}
+                <div class="its-card its-certcard">
+                    <span class="its-certcard-badge"><i class="icon fa fa-award m-0" aria-hidden="true"></i></span>
+                    <strong>{{course}}</strong>
+                    <span class="its-muted">{{#str}}issued, local_itskills{{/str}} {{date}} · {{code}}</span>
+                    <div class="its-linkcard-actions">
+                        <a href="{{url}}" class="btn btn-sm btn-primary">{{#str}}viewpdf, local_itskills{{/str}}</a>
+                        <a href="{{downloadurl}}" class="btn btn-sm btn-outline-secondary"><i class="icon fa fa-download" aria-hidden="true"></i>{{#str}}downloadpdf, local_itskills{{/str}}</a>
+                        <a href="{{verifyurl}}" class="btn btn-sm btn-link" target="_blank" rel="noopener">{{#str}}verifylink, local_itskills{{/str}}</a>
+                    </div>
+                </div>
+            {{/earned}}
+        </div>
+    {{/hasearned}}
+    {{^hasearned}}
+        <div class="its-card its-emptystate">
+            <i class="icon fa fa-award m-0" aria-hidden="true"></i>
+            <p>{{#str}}nocertificates, local_itskills{{/str}}</p>
+        </div>
+    {{/hasearned}}
+
+    {{#hasinprogress}}
+        <h3 class="its-subtitle">{{#str}}certinprogress, local_itskills{{/str}}</h3>
+        <div class="its-rows">
+            {{#inprogress}}
+                <a class="its-row" href="{{url}}">
+                    <span class="its-row-icon"><i class="icon fa fa-graduation-cap m-0" aria-hidden="true"></i></span>
+                    <span class="its-row-main"><strong>{{course}}</strong>
+                        <span class="it-progress mt-1"><span style="width: {{percent}}%"></span></span>
+                    </span>
+                    <span class="its-chip its-chip-submitted">{{percent}}%</span>
+                </a>
+            {{/inprogress}}
+        </div>
+    {{/hasinprogress}}
+</div>

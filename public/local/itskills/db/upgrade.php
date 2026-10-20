@@ -57,5 +57,10 @@ function xmldb_local_itskills_upgrade($oldversion) {
         \local_itskills\local\fields::ensure();
         upgrade_plugin_savepoint(true, 2026101700, 'local', 'itskills');
     }
+    if ($oldversion < 2026102000) {
+        // The learner sidebar links to "My courses", so the page must be on.
+        set_config('enablemycourses', 1);
+        upgrade_plugin_savepoint(true, 2026102000, 'local', 'itskills');
+    }
     return true;
 }

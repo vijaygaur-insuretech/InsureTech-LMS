@@ -138,6 +138,19 @@ class core_renderer extends \theme_boost\output\core_renderer {
     }
 
     /**
+     * Top of the page body, plus the learner sidebar where it applies.
+     *
+     * @return string
+     */
+    public function standard_top_of_body_html() {
+        $html = parent::standard_top_of_body_html();
+        if (\theme_insuretech\local\sidenav::applies($this->page)) {
+            $html .= $this->render_from_template('theme_insuretech/sidenav', \theme_insuretech\local\sidenav::data($this->page));
+        }
+        return $html;
+    }
+
+    /**
      * Return the site's compact logo URL, falling back to the bundled insureTech logo.
      *
      * @param int $maxwidth The maximum width, or null when the maximum width does not matter.

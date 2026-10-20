@@ -1,0 +1,87 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_itskills/myassignments
+
+    My assignments: to do, submitted and reviewed, plus submissions waiting for trainers.
+
+    Example context (json):
+    { "items": [{"name": "Lab 1", "course": "AWS", "url": "#", "due": "1 Jan", "status": "pending", "statuslabel": "Pending", "overdue": false}],
+      "hasitems": true, "total": 1, "pending": 1, "submitted": 0, "reviewed": 0, "review": [], "hasreview": false }
+}}
+<div class="its its-mypage">
+    {{#hasreview}}
+        <h3 class="its-subtitle mt-0">{{#str}}toreview, local_itskills{{/str}}</h3>
+        <div class="its-rows">
+            {{#review}}
+                <a class="its-row" href="{{url}}">
+                    <span class="its-row-icon"><i class="icon fa fa-clipboard-check m-0" aria-hidden="true"></i></span>
+                    <span class="its-row-main"><strong>{{name}}</strong><small>{{course}}{{#due}} · {{#str}}due, local_itskills, {{due}}{{/str}}{{/due}}</small></span>
+                    {{#haswaiting}}<span class="its-chip its-chip-warn">{{#str}}waitingreview, local_itskills, {{waiting}}{{/str}}</span>{{/haswaiting}}
+                    {{^haswaiting}}<span class="its-chip its-chip-ok">{{#str}}allreviewed, local_itskills{{/str}}</span>{{/haswaiting}}
+                </a>
+            {{/review}}
+        </div>
+    {{/hasreview}}
+
+    {{#hasitems}}
+        <div class="its-tabs" role="group" aria-label="{{#str}}status, local_itskills{{/str}}" data-region="its-assign-tabs">
+            <button type="button" class="its-tab active" data-filter="all" aria-pressed="true">{{#str}}all{{/str}} <b>{{total}}</b></button>
+            <button type="button" class="its-tab" data-filter="pending" aria-pressed="false">{{#str}}assign_pending, local_itskills{{/str}} <b>{{pending}}</b></button>
+            <button type="button" class="its-tab" data-filter="submitted" aria-pressed="false">{{#str}}assign_submitted, local_itskills{{/str}} <b>{{submitted}}</b></button>
+            <button type="button" class="its-tab" data-filter="reviewed" aria-pressed="false">{{#str}}assign_reviewed, local_itskills{{/str}} <b>{{reviewed}}</b></button>
+        </div>
+        <div class="its-rows" data-region="its-assign-list">
+            {{#items}}
+                <a class="its-row" href="{{url}}" data-status="{{status}}">
+                    <span class="its-row-icon its-row-{{status}}"><i class="icon fa fa-file-pen m-0" aria-hidden="true"></i></span>
+                    <span class="its-row-main"><strong>{{name}}</strong><small>{{course}}{{#due}} · {{#str}}due, local_itskills, {{due}}{{/str}}{{/due}}</small></span>
+                    {{#overdue}}<span class="its-chip its-chip-danger">{{#str}}overdue, local_itskills{{/str}}</span>{{/overdue}}
+                    <span class="its-chip its-chip-{{status}}">{{statuslabel}}</span>
+                </a>
+            {{/items}}
+        </div>
+    {{/hasitems}}
+    {{^hasitems}}{{^hasreview}}
+        <div class="its-card its-emptystate">
+            <i class="icon fa fa-list-check m-0" aria-hidden="true"></i>
+            <p>{{#str}}noassignments, local_itskills{{/str}}</p>
+        </div>
+    {{/hasreview}}{{/hasitems}}
+</div>
+{{#js}}
+(function() {
+    var tabs = document.querySelector('[data-region="its-assign-tabs"]');
+    if (!tabs) {
+        return;
+    }
+    tabs.addEventListener('click', function(e) {
+        var tab = e.target.closest('[data-filter]');
+        if (!tab) {
+            return;
+        }
+        var value = tab.getAttribute('data-filter');
+        tabs.querySelectorAll('[data-filter]').forEach(function(t) {
+            t.classList.toggle('active', t === tab);
+            t.setAttribute('aria-pressed', t === tab ? 'true' : 'false');
+        });
+        document.querySelectorAll('[data-region="its-assign-list"] [data-status]').forEach(function(row) {
+            row.hidden = value !== 'all' && row.getAttribute('data-status') !== value;
+        });
+    });
+})();
+{{/js}}

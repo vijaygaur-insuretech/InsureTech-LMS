@@ -236,6 +236,39 @@ class landing {
     }
 
     /**
+     * Home page slider: the uploaded slides in file-name order, each with its optional link and description.
+     *
+     * @return array[]
+     */
+    public static function slides(): array {
+        global $CFG;
+        $context = \context_system::instance();
+        $files = get_file_storage()->get_area_files($context->id, 'theme_insuretech', 'heroslides', 0, 'filename', false);
+        $links = preg_split('/\R/', self::setting('heroslidelinks'));
+        $alts = preg_split('/\R/', self::setting('heroslidealts'));
+        $revision = theme_get_revision();
+        $slides = [];
+        foreach (array_values($files) as $i => $file) {
+            $link = trim($links[$i] ?? '');
+            if ($link !== '' && $link[0] === '/') {
+                $link = $CFG->wwwroot . $link;
+            } else if ($link !== '' && $link[0] !== '#') {
+                $link = clean_param($link, PARAM_URL);
+            }
+            $slides[] = [
+                'index' => $i,
+                'number' => $i + 1,
+                'first' => $i === 0,
+                'url' => moodle_url::make_pluginfile_url($context->id, 'theme_insuretech', 'heroslides', $revision, '/',
+                    $file->get_filename())->out(false),
+                'link' => $link,
+                'alt' => trim($alts[$i] ?? ''),
+            ];
+        }
+        return $slides;
+    }
+
+    /**
      * Testimonials: quotes entered by the admin, then approved course feedback with a written comment.
      *
      * @return array[]
@@ -409,6 +442,7 @@ class landing {
             $stats[$i]['icon'] = ['fa-user-graduate', 'fa-layer-group', 'fa-briefcase', 'fa-star'][$i] ?? 'fa-circle-check';
         }
         $testimonials = self::testimonials();
+        $slides = self::slides();
 
         $title = self::setting('seotitle');
         $description = self::setting('seodescription');
@@ -468,6 +502,11 @@ class landing {
             'aboutcaption' => self::setting('aboutcaption'),
             'testimonials' => $testimonials,
             'hastestimonials' => !empty($testimonials),
+            'slides' => $slides,
+            'hasslides' => !empty($slides),
+            'multipleslides' => count($slides) > 1,
+            'slidecount' => count($slides),
+            'slideinterval' => max(0, (int) self::setting('heroslideinterval')),
             'getstartedurl' => self::setting('getstartedurl') ?: '#contact',
             'herosubtitle' => self::setting('herosubtitle'),
             'stats' => $stats,

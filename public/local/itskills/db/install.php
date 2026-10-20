@@ -35,5 +35,6 @@ function xmldb_local_itskills_install() {
     \local_itskills\local\fields::ensure();
     local_itskills_apply_trainer_restrictions();
     local_itskills_disable_mobile_app();
+    set_config('enablemycourses', 1);
     return true;
 }
