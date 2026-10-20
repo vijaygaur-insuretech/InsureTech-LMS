@@ -54,4 +54,9 @@ host="${LMS_URL#*://}"; host="${host%%/*}"
 code=$(curl -s -o /dev/null -w '%{http_code}' -H "Host: $host" "http://127.0.0.1:${LMS_PORT:-8090}/login/index.php")
 echo "Login page HTTP $code"
 [ "$code" = "200" ] || { dc logs --tail=50 web; exit 1; }
+
+echo "==> Warming up the theme stylesheet"
+# The first request after a cache purge compiles the CSS; do it now so no visitor gets an unstyled page.
+css=$(curl -s -H "Host: $host" "http://127.0.0.1:${LMS_PORT:-8090}/" | grep -oE 'theme/styles\.php/[^"]+' | head -1)
+[ -n "$css" ] && curl -s -o /dev/null -m 300 -w "Stylesheet HTTP %{http_code}\n" -H "Host: $host" "http://127.0.0.1:${LMS_PORT:-8090}/$css" || true
 echo "==> Deployed"
