@@ -3,8 +3,7 @@
 Every push to `main` runs **GitHub Actions → Check and deploy**:
 
 1. **Check:** PHP and shell syntax of the custom code, plus a test build of the Docker image.
-2. **Deploy:** copies the code to the VPS over SSH and runs `deploy/remote-deploy.sh`. That script:
-   - builds the image;
+2. **Deploy:** builds the Docker image, pushes it to GitHub Container Registry (`ghcr.io/<owner>/insuretech-lms`), has the VPS pull it over SSH with a short-lived token, and runs `deploy/remote-deploy.sh`. That script:
    - installs the site on the first run, or upgrades the database on later runs;
    - restarts the web and cron containers;
    - checks that the login page answers.
