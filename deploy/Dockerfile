@@ -9,7 +9,7 @@ RUN composer install --no-dev --no-interaction --no-progress --prefer-dist --no-
 FROM php:8.3-apache
 
 COPY --from=mlocati/php-extension-installer:2.7 /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions gd intl zip pgsql soap exif opcache apcu \
+RUN install-php-extensions gd intl zip pgsql soap exif opcache \
     && apt-get update && apt-get install -y --no-install-recommends ghostscript \
     && rm -rf /var/lib/apt/lists/*
 
