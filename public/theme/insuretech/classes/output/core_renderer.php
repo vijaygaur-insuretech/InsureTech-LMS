@@ -117,7 +117,8 @@ class core_renderer extends \theme_boost\output\core_renderer {
             return '';
         }
 
-        if ($this->page->pagetype === 'my-index') {
+        // My courses (/my/courses.php) shares the dashboard's page type; the panel belongs on the Dashboard only.
+        if ($this->page->pagetype === 'my-index' && !str_ends_with($this->page->url->get_path(), '/my/courses.php')) {
             $data = role_panels::dashboard();
             return $data ? $this->render_from_template('theme_insuretech/dashboard_panel', $data) : '';
         }

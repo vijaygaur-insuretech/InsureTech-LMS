@@ -1,0 +1,76 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_insuretech/calendar_card
+
+    Dashboard calendar: month grid with event dots and the next events.
+
+    Example context (json):
+    { "monthlabel": "October 2026", "weekdays": [{"name": "Mo"}], "weeks": [{"days": [{"day": 1, "inmonth": true, "today": true,
+      "hasevents": true, "kinds": [{"kind": "class"}], "url": "#", "label": "1 Oct"}]}], "prevurl": "#", "nexturl": "#",
+      "istoday": true, "todayurl": "#", "fullurl": "#", "upcomingurl": "#",
+      "upcoming": [{"name": "Kubernetes class", "course": "MC", "day": "21", "month": "Oct", "time": "7:00 PM", "kind": "class",
+      "icon": "fa-video", "url": "#"}] }
+}}
+<div class="it-card it-cal">
+    <div class="it-cal-head">
+        <h3 class="it-cal-title"><i class="icon fa fa-calendar-days" aria-hidden="true"></i>{{monthlabel}}</h3>
+        <div class="it-cal-nav">
+            {{^istoday}}<a href="{{todayurl}}" class="it-cal-today">{{#str}}today{{/str}}</a>{{/istoday}}
+            <a href="{{prevurl}}" class="it-cal-arrow" aria-label="{{#str}}calprev, theme_insuretech{{/str}}"><i class="icon fa fa-chevron-left m-0" aria-hidden="true"></i></a>
+            <a href="{{nexturl}}" class="it-cal-arrow" aria-label="{{#str}}calnext, theme_insuretech{{/str}}"><i class="icon fa fa-chevron-right m-0" aria-hidden="true"></i></a>
+        </div>
+    </div>
+    <table class="it-cal-grid">
+        <thead><tr>{{#weekdays}}<th scope="col">{{name}}</th>{{/weekdays}}</tr></thead>
+        <tbody>
+            {{#weeks}}
+                <tr>
+                    {{#days}}
+                        <td>
+                            <a href="{{url}}" class="it-cal-day{{^inmonth}} out{{/inmonth}}{{#today}} today{{/today}}{{#hasevents}} has{{/hasevents}}" aria-label="{{label}}"{{#today}} aria-current="date"{{/today}}>
+                                <span>{{day}}</span>
+                                {{#hasevents}}<span class="it-cal-dots" aria-hidden="true">{{#kinds}}<i class="it-cal-dot {{kind}}"></i>{{/kinds}}</span>{{/hasevents}}
+                            </a>
+                        </td>
+                    {{/days}}
+                </tr>
+            {{/weeks}}
+        </tbody>
+    </table>
+    <div class="it-cal-legend" aria-hidden="true">
+        <span><i class="it-cal-dot class"></i>{{#str}}typelive, theme_insuretech{{/str}}</span>
+        <span><i class="it-cal-dot deadline"></i>{{#str}}caldeadlines, theme_insuretech{{/str}}</span>
+        <span><i class="it-cal-dot event"></i>{{#str}}calevents, theme_insuretech{{/str}}</span>
+    </div>
+
+    <h4 class="it-cal-subtitle">{{#str}}upcomingevents, calendar{{/str}}</h4>
+    {{#upcoming.0}}
+        <ul class="it-cal-list">
+            {{#upcoming}}
+                <li>
+                    <a href="{{url}}">
+                        <span class="it-cal-date {{kind}}"><b>{{day}}</b><small>{{month}}</small></span>
+                        <span class="it-cal-ev"><strong>{{name}}</strong><small><i class="icon fa {{icon}}" aria-hidden="true"></i>{{time}}{{#course}} · {{course}}{{/course}}</small></span>
+                    </a>
+                </li>
+            {{/upcoming}}
+        </ul>
+    {{/upcoming.0}}
+    {{^upcoming.0}}<p class="it-cal-empty">{{#str}}calnothing, theme_insuretech{{/str}}</p>{{/upcoming.0}}
+    <a href="{{fullurl}}" class="it-cal-full">{{#str}}calfull, theme_insuretech{{/str}} <i class="icon fa fa-arrow-right m-0" aria-hidden="true"></i></a>
+</div>

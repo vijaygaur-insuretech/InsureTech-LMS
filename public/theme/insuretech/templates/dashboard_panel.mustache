@@ -66,6 +66,7 @@
         </div>
     {{/admin}}
 
+    {{#calendar}}<div class="it-dash-layout"><div class="it-dash-main">{{/calendar}}
     {{#student}}
         {{#hasnotices}}
             <div class="it-notices">
@@ -208,5 +209,12 @@
             {{/courses}}
         </div>
     {{/trainer}}
+    {{#calendar}}
+        </div>
+        <aside class="it-dash-aside" id="it-calendar" aria-label="{{#str}}nav_calendar, theme_insuretech{{/str}}">
+            {{> theme_insuretech/calendar_card }}
+        </aside>
+    </div>
+    {{/calendar}}
 
 </section>

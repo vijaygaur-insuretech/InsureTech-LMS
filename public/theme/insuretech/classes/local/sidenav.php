@@ -20,7 +20,7 @@ use moodle_page;
 use moodle_url;
 
 /**
- * Learner sidebar: Dashboard, My courses, Live classes, Assignments and Certificates.
+ * Learner sidebar: Dashboard, My courses, Live classes, Assignments, Calendar and Certificates.
  *
  * Shown on every signed-in page for learners and trainers (site administrators keep the standard navigation).
  * On wide screens it is a fixed left column; on phones it becomes a bottom tab bar.
@@ -66,6 +66,8 @@ class sidenav {
                 'match' => ['/local/itskills/mylive.php', '/local/itskills/sessions.php']],
             ['key' => 'assignments', 'icon' => 'fa-list-check', 'url' => new moodle_url('/local/itskills/myassignments.php'),
                 'match' => ['/local/itskills/myassignments.php', '/mod/assign/']],
+            ['key' => 'calendar', 'icon' => 'fa-calendar-days', 'url' => new moodle_url('/calendar/view.php', ['view' => 'month']),
+                'match' => ['/calendar/']],
             ['key' => 'certificates', 'icon' => 'fa-award', 'url' => new moodle_url('/local/itskills/mycertificates.php'),
                 'match' => ['/local/itskills/mycertificates.php', '/local/itskills/certificate.php']],
         ];

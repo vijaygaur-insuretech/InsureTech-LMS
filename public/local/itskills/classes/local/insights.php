@@ -133,6 +133,8 @@ class insights {
                 $tags = [html_entity_decode(get_section_name($row->course, $section), ENT_QUOTES | ENT_HTML5, 'UTF-8')];
             }
             foreach ($tags as $tag) {
+                // Tag names come back HTML-escaped; templates escape again, so store plain text.
+                $tag = html_entity_decode($tag, ENT_QUOTES | ENT_HTML5, 'UTF-8');
                 $key = \core_text::strtolower($tag);
                 if (!isset($topics[$key])) {
                     $topics[$key] = ['topic' => $tag, 'mistakes' => 0, 'quizname' => format_string($row->quizname, true,

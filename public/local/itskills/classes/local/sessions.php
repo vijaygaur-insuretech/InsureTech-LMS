@@ -48,6 +48,7 @@ class sessions {
             $data->reminded = 0;
             $data->timecreated = $now;
             $data->id = $DB->insert_record('local_itskills_session', $data);
+            self::sync_calendar($data->id);
             self::notify_batch($data->id, 'sessionnew');
             return $data->id;
         }
@@ -56,10 +57,53 @@ class sessions {
             $data->reminded = 0;
         }
         $DB->update_record('local_itskills_session', $data);
+        self::sync_calendar($data->id);
         if ($old->timestart != $data->timestart || $old->meetingurl !== $data->meetingurl || $old->duration != $data->duration) {
             self::notify_batch($data->id, 'sessionchanged');
         }
         return $data->id;
+    }
+
+    /**
+     * Keep the session's calendar event in step: a course (or batch) event while scheduled, removed when cancelled.
+     *
+     * @param int $id Session id
+     */
+    public static function sync_calendar(int $id): void {
+        global $CFG, $DB;
+        require_once($CFG->dirroot . '/calendar/lib.php');
+        $session = $DB->get_record('local_itskills_session', ['id' => $id]);
+        $existing = $DB->get_record('event', ['component' => 'local_itskills', 'instance' => $id], '*', IGNORE_MULTIPLE);
+        if (!$session || $session->status == self::CANCELLED) {
+            if ($existing) {
+                \calendar_event::load($existing)->delete();
+            }
+            return;
+        }
+        $link = self::link($session);
+        $description = trim($session->description ?? '');
+        if ($link !== '') {
+            $description .= ($description === '' ? '' : "\n\n") . get_string('joinclass', 'local_itskills') . ': ' . $link;
+        }
+        $event = (object) [
+            'name' => $session->title,
+            'description' => s($description),
+            'format' => FORMAT_PLAIN,
+            'courseid' => $session->courseid,
+            'groupid' => (int) $session->groupid,
+            'userid' => 0,
+            'eventtype' => $session->groupid ? 'group' : 'course',
+            'component' => 'local_itskills',
+            'instance' => $session->id,
+            'timestart' => $session->timestart,
+            'timeduration' => $session->duration * MINSECS,
+            'visible' => 1,
+        ];
+        if ($existing) {
+            \calendar_event::load($existing)->update($event, false);
+        } else {
+            \calendar_event::create($event, false);
+        }
     }
 
     /**
@@ -72,6 +116,7 @@ class sessions {
         $DB->update_record('local_itskills_session', (object) [
             'id' => $id, 'status' => self::CANCELLED, 'usermodified' => $USER->id, 'timemodified' => time(),
         ]);
+        self::sync_calendar($id);
         self::notify_batch($id, 'sessioncancelled');
     }
 

@@ -78,6 +78,9 @@ class role_panels {
             return null;
         }
         $data['role'] = $data['admin'] ? 'admin' : ($data['trainer'] ? 'trainer' : 'student');
+        // Learners and trainers always see the calendar next to their dashboard.
+        $data['calendar'] = $data['admin'] ? null
+            : \theme_insuretech\local\calendar_card::data(optional_param('itcal', '', PARAM_ALPHANUMEXT));
         $data['subtitle'] = get_string('dashsubtitle' . $data['role'], 'theme_insuretech');
         return $data;
     }

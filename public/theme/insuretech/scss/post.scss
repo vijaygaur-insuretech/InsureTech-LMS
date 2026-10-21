@@ -4413,7 +4413,8 @@ body.it-has-sidenav {
             }
 
             li {
-                flex: 1;
+                flex: 1 1 0;
+                min-width: 0;
             }
         }
 
@@ -4422,9 +4423,10 @@ body.it-has-sidenav {
             justify-content: center;
             gap: .2rem;
             height: 100%;
-            padding: .35rem .15rem;
+            padding: .35rem .1rem;
             border-radius: 0;
-            font-size: .68rem;
+            font-size: .62rem;
+            letter-spacing: -.01em;
             font-weight: 600;
             text-align: center;
             color: $it-muted;
@@ -4604,4 +4606,328 @@ body.it-has-sidenav {
     .it-slider-dots {
         bottom: .5rem;
     }
+}
+
+// =====================================================================================================================
+// Dashboard with the calendar beside it; right-hand block drawer docked next to the content.
+// =====================================================================================================================
+// The dashboard needs room for two columns.
+body.pagelayout-mydashboard.it-has-sidenav {
+    #page.drawers .main-inner,
+    .header-maxwidth {
+        max-width: 1240px;
+    }
+}
+
+.it-dash-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20.5rem;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.it-dash-aside {
+    position: sticky;
+    top: calc(#{$navbar-height} + 1rem);
+}
+
+.it-dash-main > :first-child {
+    margin-top: 0;
+}
+
+.it-cal {
+    padding: 1.1rem 1.1rem 1rem;
+}
+
+.it-cal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-bottom: .6rem;
+}
+
+.it-cal-title {
+    margin: 0;
+    font-size: 1.02rem;
+    font-weight: 600;
+
+    .icon {
+        color: $it-teal-deep;
+        margin-inline-end: .45rem;
+    }
+}
+
+.it-cal-nav {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+}
+
+.it-cal-today {
+    margin-inline-end: .25rem;
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.it-cal-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    color: $it-ink;
+    font-size: .75rem;
+
+    &:hover,
+    &:focus {
+        text-decoration: none;
+        background-color: rgba($it-teal, .1);
+        color: $it-teal-deep;
+    }
+}
+
+.it-cal-grid {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+
+    th {
+        padding: .25rem 0 .4rem;
+        font-size: .72rem;
+        font-weight: 600;
+        text-align: center;
+        color: $it-muted;
+    }
+
+    td {
+        padding: 1px;
+        text-align: center;
+    }
+}
+
+.it-cal-day {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 2.3rem;
+    border-radius: .55rem;
+    font-size: .85rem;
+    font-weight: 500;
+    color: $it-ink;
+
+    &:hover,
+    &:focus {
+        text-decoration: none;
+        color: $it-ink;
+        background-color: $it-soft;
+    }
+
+    &.out {
+        color: #B3BECC;
+    }
+
+    &.has {
+        font-weight: 700;
+    }
+
+    &.today {
+        color: $white;
+        background: linear-gradient(135deg, $it-teal-deep, $it-teal);
+        box-shadow: 0 4px 10px rgba($it-teal-deep, .3);
+
+        .it-cal-dot {
+            box-shadow: 0 0 0 1px $white;
+        }
+    }
+}
+
+.it-cal-dots {
+    position: absolute;
+    bottom: .2rem;
+    display: flex;
+    gap: 2px;
+}
+
+.it-cal-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #8A99AD;
+
+    &.class {
+        background-color: #E5484D;
+    }
+
+    &.deadline {
+        background-color: #D99A00;
+    }
+
+    &.event {
+        background-color: $it-teal;
+    }
+}
+
+.it-cal-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem .9rem;
+    margin: .6rem 0 0;
+    font-size: .74rem;
+    color: $it-muted;
+
+    span {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+    }
+}
+
+.it-cal-subtitle {
+    margin: 1rem 0 .5rem;
+    padding-top: .9rem;
+    border-top: 1px solid $it-line;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: $it-teal-deep;
+}
+
+.it-cal-list {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    a {
+        display: flex;
+        align-items: center;
+        gap: .7rem;
+        padding: .4rem;
+        border-radius: .6rem;
+        color: $it-ink;
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            color: $it-ink;
+            background-color: $it-soft;
+        }
+    }
+}
+
+.it-cal-date {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.6rem;
+    height: 2.7rem;
+    border-radius: .6rem;
+    line-height: 1.05;
+    color: $it-teal-deep;
+    background-color: rgba($it-teal, .1);
+
+    b {
+        font-size: 1rem;
+    }
+
+    small {
+        font-size: .62rem;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+    }
+
+    &.class {
+        color: #C2373C;
+        background-color: rgba(#E5484D, .1);
+    }
+
+    &.deadline {
+        color: #9A6B00;
+        background-color: rgba(#D99A00, .14);
+    }
+}
+
+.it-cal-ev {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    strong {
+        font-size: .85rem;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    small {
+        font-size: .74rem;
+        color: $it-muted;
+
+        .icon {
+            font-size: .7rem;
+            margin-inline-end: .3rem;
+        }
+    }
+}
+
+.it-cal-empty {
+    margin: 0;
+    font-size: .85rem;
+    color: $it-muted;
+}
+
+.it-cal-full {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin-top: .75rem;
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+@include media-breakpoint-down(xl) {
+    .it-dash-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .it-dash-aside {
+        position: static;
+        max-width: 26rem;
+    }
+}
+
+// Right-hand block drawer: dock it to the right edge and shrink the content, instead of Boost's centred anchoring,
+// which does not know about the sidebar and ends up covering the content.
+@include media-breakpoint-up(lg) {
+    body.it-has-sidenav {
+        .drawer.drawer-right {
+            left: auto !important;
+            right: 0 !important;
+            top: $navbar-height !important;
+            bottom: 0;
+            height: auto !important;
+            max-height: none !important;
+            border-radius: 0 !important;
+        }
+
+        #page.drawers.show-drawer-right {
+            margin-inline-end: 315px !important;
+        }
+    }
+}
+
+// The dashboard has its own calendar: hide the duplicate calendar block in the side panel there.
+body.pagelayout-mydashboard.it-has-sidenav .drawer-right .block_calendar_month {
+    display: none;
 }

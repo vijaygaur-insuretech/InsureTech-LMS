@@ -62,5 +62,12 @@ function xmldb_local_itskills_upgrade($oldversion) {
         set_config('enablemycourses', 1);
         upgrade_plugin_savepoint(true, 2026102000, 'local', 'itskills');
     }
+    if ($oldversion < 2026102100) {
+        // Live sessions now appear in the calendar: create events for the ones already scheduled.
+        foreach ($DB->get_fieldset_select('local_itskills_session', 'id', 'status = 0') as $sessionid) {
+            \local_itskills\local\sessions::sync_calendar((int) $sessionid);
+        }
+        upgrade_plugin_savepoint(true, 2026102100, 'local', 'itskills');
+    }
     return true;
 }
