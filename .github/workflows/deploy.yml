@@ -58,14 +58,23 @@ jobs:
           else ssh-keyscan -p "$PORT" "$HOST" > ~/.ssh/known_hosts; fi
           printf 'Host vps\n  HostName %s\n  Port %s\n  User lmsdeploy\n  IdentityFile ~/.ssh/id_deploy\n' "$HOST" "$PORT" > ~/.ssh/config
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build and push image to GitHub Container Registry
         run: |
           IMAGE=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
           echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-          docker build -f deploy/Dockerfile -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" .
-          docker push "$IMAGE:${{ github.sha }}"
-          docker push "$IMAGE:latest"
+          # Layer cache in the registry: the PHP extensions layer is reused, so a PECL outage does not block deploys.
+          for attempt in 1 2 3; do
+            docker buildx build -f deploy/Dockerfile \
+              --cache-from "type=registry,ref=$IMAGE:buildcache" \
+              --cache-to "type=registry,ref=$IMAGE:buildcache,mode=max" \
+              -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest" --push . && break
+            [ "$attempt" = 3 ] && exit 1
+            echo "Build failed, retrying in 30 seconds"; sleep 30
+          done
 
       - name: Pull image on the server
         run: |
