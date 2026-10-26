@@ -71,6 +71,7 @@ class sidenav {
             ['key' => 'certificates', 'icon' => 'fa-award', 'url' => new moodle_url('/local/itskills/mycertificates.php'),
                 'match' => ['/local/itskills/mycertificates.php', '/local/itskills/certificate.php']],
         ];
+        $items = self::with_placement($items);
         $path = $page->url ? $page->url->get_path() : '';
         // The most specific match wins, so an assignment page highlights Assignments, not My courses.
         $best = ['key' => '', 'length' => 0];
@@ -86,10 +87,54 @@ class sidenav {
             $out[] = [
                 'url' => $item['url']->out(false),
                 'icon' => $item['icon'],
-                'label' => get_string('nav_' . $item['key'], 'theme_insuretech'),
+                'label' => $item['label'] ?? get_string('nav_' . $item['key'], 'theme_insuretech'),
                 'active' => $item['key'] === $best['key'],
             ];
         }
         return ['items' => $out];
+    }
+
+    /**
+     * Add the Job Placement portal. People who only use the portal (no courses) get its pages instead of the learning
+     * links; people who also learn get one "Job placement" link, so the phone tab bar stays short.
+     *
+     * @param array $items Learning items
+     * @return array
+     */
+    protected static function with_placement(array $items): array {
+        if (!class_exists('\\local_placement\\local\\perm')) {
+            return $items;
+        }
+        $perm = '\\local_placement\\local\\perm';
+        $isadmin = $perm::is_admin();
+        $isemployee = !$isadmin && $perm::is_employee();
+        $isclient = !$isadmin && !$isemployee && $perm::is_client();
+        if (!$isadmin && !$isemployee && !$isclient) {
+            return $items;
+        }
+        $link = fn(string $key, string $icon, string $file, string $string, array $match = []) => ['key' => $key, 'icon' => $icon,
+            'url' => new moodle_url('/local/placement/' . $file), 'label' => get_string($string, 'local_placement'),
+            'match' => $match ?: ['/local/placement/' . $file]];
+        if (enrol_get_my_courses(['id'], null, 1)) {
+            $items[] = $link('placement', 'fa-briefcase', 'index.php', 'pluginname', ['/local/placement/']);
+            return $items;
+        }
+        $placement = [$link('placement', 'fa-briefcase', 'index.php', 'tab_home')];
+        if ($isclient) {
+            $placement[] = $link('lpprofile', 'fa-id-card', 'profile.php', 'tab_myprofile', ['/local/placement/profile.php', '/local/placement/clientedit.php']);
+            $placement[] = $link('lpresume', 'fa-file-lines', 'resume.php', 'tab_myresumes');
+            $placement[] = $link('lpapps', 'fa-paper-plane', 'applications.php', 'tab_myapplications',
+                ['/local/placement/applications.php', '/local/placement/application.php']);
+        } else {
+            $placement[] = $link('lpclients', 'fa-users', 'clients.php', 'tab_clients', ['/local/placement/clients.php', '/local/placement/client.php']);
+            $placement[] = $link('lpapps', 'fa-paper-plane', 'applications.php', 'tab_applications',
+                ['/local/placement/applications.php', '/local/placement/application.php', '/local/placement/appedit.php']);
+            if ($isadmin || $perm::can('feat_daily_reports')) {
+                $placement[] = $link('lpreport', 'fa-clipboard-list', 'dailyreport.php', 'tab_dailyreport');
+            }
+        }
+        $placement[] = ['key' => 'calendar', 'icon' => 'fa-calendar-days', 'url' => new moodle_url('/calendar/view.php', ['view' => 'month']),
+            'match' => ['/calendar/']];
+        return $placement;
     }
 }

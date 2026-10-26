@@ -64,6 +64,15 @@ One system for three kinds of users:
   - assignment submitted (to the trainer), new learner (to the trainer) and a weekly inactive-learner report (to admins).
 - **Trainer restrictions**: trainers cannot enrol learners, change subscriptions or assign roles unless an admin allows it.
 
+### Job Placement portal
+A separate module for placement work, with three roles that each have their own dashboard: **Admin**, **Employee** and **Client** (job seeker). Everyone uses the same login.
+- **Clients:** master profile (personal, professional, job preferences, work authorization, references), resume and cover-letter versions (PDF/DOC/DOCX), and their own application history and status updates.
+- **Employees:** only the clients assigned to them. They record applications with job-specific screening answers, update statuses, set follow-ups and write daily work reports.
+- **Admins:** create and deactivate employees and clients, assign and reassign clients (including in bulk), approve or reject resumes or request a new version, and see all applications, reports and the audit log.
+- **Permission and feature control panel:** field, action and feature switches, set for all employees or per employee. Enforced on the server for every page and file; preview and download are separate.
+- **Configurable without code:** industries, screening questions (short or long text, yes/no, single or multiple choice, date, number, URL; required, optional or conditional), statuses and platforms.
+- **Duplicate warnings, follow-up reminders, CSV export, reports** (by status, industry, role, platform, employee and day) and notifications.
+
 ### Design
 - Custom brand theme (teal / navy / gold, Inter + Poppins typography).
 - Responsive from phone to desktop, light and dark mode, accessible markup (landmarks, labels, focus states, reduced-motion support).
@@ -123,6 +132,7 @@ The schema is created and upgraded automatically by the installer; never edit it
 │   │   ├── lang/en/                All user-facing text
 │   │   └── settings.php            Admin settings (branding, landing page, SEO)
 │   ├── local/itskills/             Sessions, attendance, handover, certificates, insights, feedback, emails
+│   ├── local/placement/            Job Placement portal: clients, employees, resumes, applications, permissions
 │   └── mod/itrecording/            Protected "Recording" activity
 ├── deploy/                         Docker image, compose stack and VPS deploy scripts
 ├── .github/workflows/deploy.yml    CI/CD: check and deploy on every push to main

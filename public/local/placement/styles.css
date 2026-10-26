@@ -1,0 +1,407 @@
+/* Job Placement portal. Colours follow the insureTech theme. */
+.lp-page {
+    --lp-teal: #0D7F97;
+    --lp-navy: #0C1A2B;
+    --lp-line: #E3EAF2;
+    --lp-soft: #F5F8FC;
+    --lp-muted: #5B6B80;
+}
+
+.lp-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+    margin: 0 0 1.5rem;
+    padding: .3rem;
+    border-radius: .9rem;
+    background: var(--lp-soft);
+    border: 1px solid var(--lp-line);
+}
+
+.lp-tab {
+    padding: .5rem .95rem;
+    border-radius: .65rem;
+    font-weight: 600;
+    font-size: .9rem;
+    color: #1E2A38;
+}
+
+.lp-tab:hover,
+.lp-tab:focus {
+    text-decoration: none;
+    color: var(--lp-teal);
+    background: #fff;
+}
+
+.lp-tab.active {
+    color: #fff;
+    background: var(--lp-teal);
+}
+
+.lp-card {
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+    background: #fff;
+    border: 1px solid var(--lp-line);
+    box-shadow: 0 1px 2px rgba(15, 30, 51, .05);
+}
+
+.lp-card-title {
+    margin: 0 0 .75rem;
+    font-size: 1.02rem;
+    font-weight: 600;
+}
+
+.lp-card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.lp-narrow {
+    max-width: 40rem;
+}
+
+.lp-h3 {
+    margin: 0 0 1rem;
+    font-size: 1.3rem;
+}
+
+.lp-h4 {
+    margin: 1.5rem 0 .75rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.lp-muted {
+    color: var(--lp-muted);
+}
+
+.lp-titlebar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.lp-headline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 500;
+}
+
+.lp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem;
+}
+
+.lp-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: 1rem;
+}
+
+.lp-filters .form-control,
+.lp-filters .form-select {
+    width: auto;
+    min-width: 10rem;
+}
+
+.lp-inlineform {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .35rem;
+    margin: 0;
+}
+
+.lp-inlineform .form-control,
+.lp-inlineform .form-select {
+    width: auto;
+    min-width: 9rem;
+}
+
+.lp-statusform {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    align-items: center;
+}
+
+.lp-statusform .form-control,
+.lp-statusform .form-select {
+    width: auto;
+    flex: 1 1 10rem;
+}
+
+.lp-table td,
+.lp-table th {
+    vertical-align: middle;
+}
+
+.lp-status {
+    display: inline-block;
+    padding: .15rem .6rem;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.lp-st-grey { color: #475467; background: #EEF2F6; }
+.lp-st-blue { color: #1D4ED8; background: rgba(29, 78, 216, .1); }
+.lp-st-purple { color: #6D28D9; background: rgba(109, 40, 217, .1); }
+.lp-st-green { color: #15803D; background: rgba(21, 128, 61, .12); }
+.lp-st-red { color: #B42318; background: rgba(180, 35, 24, .1); }
+.lp-st-amber { color: #8A5A00; background: rgba(212, 175, 55, .22); }
+
+.lp-overdue {
+    color: #B42318;
+    font-weight: 600;
+}
+
+.lp-req {
+    display: inline-block;
+    margin-left: .35rem;
+    padding: 0 .45rem;
+    border-radius: 999px;
+    font-size: .68rem;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+.lp-req-required { color: #B42318; background: rgba(180, 35, 24, .08); }
+.lp-req-optional { color: #475467; background: #EEF2F6; }
+.lp-req-conditional { color: #8A5A00; background: rgba(212, 175, 55, .2); }
+
+.lp-dl {
+    display: grid;
+    grid-template-columns: minmax(10rem, 14rem) 1fr;
+    gap: .45rem 1rem;
+    margin: 0;
+}
+
+.lp-dl dt {
+    font-weight: 500;
+    color: var(--lp-muted);
+}
+
+.lp-dl dd {
+    margin: 0;
+    word-break: break-word;
+}
+
+.lp-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.lp-grid:has(.lp-side-left) {
+    grid-template-columns: 18rem minmax(0, 1fr);
+}
+
+.lp-list,
+.lp-navlist,
+.lp-timeline {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.lp-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem .6rem;
+    padding: .55rem 0;
+    border-bottom: 1px solid var(--lp-line);
+}
+
+.lp-list li:last-child {
+    border-bottom: 0;
+}
+
+.lp-navlist li {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .35rem .5rem;
+    border-radius: .5rem;
+}
+
+.lp-navlist li.active {
+    background: rgba(17, 153, 182, .1);
+    font-weight: 600;
+}
+
+.lp-navlist + .lp-inlineform {
+    margin-top: .75rem;
+}
+
+.lp-count {
+    margin-left: auto;
+    padding: 0 .45rem;
+    border-radius: 999px;
+    font-size: .72rem;
+    background: #EEF2F6;
+}
+
+.lp-timeline li {
+    position: relative;
+    padding: .2rem 0 .8rem 1.25rem;
+    border-left: 2px solid var(--lp-line);
+    margin-left: .35rem;
+}
+
+.lp-timeline li::before {
+    content: "";
+    position: absolute;
+    left: -.4rem;
+    top: .45rem;
+    width: .7rem;
+    height: .7rem;
+    border-radius: 50%;
+    background: var(--lp-teal);
+}
+
+.lp-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: .85rem;
+    margin-bottom: 1.25rem;
+}
+
+.lp-tile {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    padding: 1rem 1.1rem;
+    border-radius: 1rem;
+    background: #fff;
+    border: 1px solid var(--lp-line);
+    color: inherit;
+}
+
+a.lp-tile:hover,
+a.lp-tile:focus {
+    text-decoration: none;
+    color: inherit;
+    border-color: var(--lp-teal);
+}
+
+.lp-tile strong {
+    font-size: 1.6rem;
+    line-height: 1.1;
+    color: var(--lp-navy);
+}
+
+.lp-tile span {
+    font-size: .85rem;
+    color: var(--lp-muted);
+}
+
+.lp-tile-warn strong {
+    color: #B42318;
+}
+
+.lp-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 1rem;
+}
+
+.lp-bar {
+    position: relative;
+    min-width: 8rem;
+    height: 1.4rem;
+    border-radius: .4rem;
+    background: var(--lp-soft);
+}
+
+.lp-bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: .4rem;
+    background: rgba(17, 153, 182, .35);
+}
+
+.lp-bar-n {
+    position: relative;
+    padding-left: .5rem;
+    font-weight: 600;
+    font-size: .85rem;
+    line-height: 1.4rem;
+}
+
+.lp-permtable .lp-radios {
+    white-space: nowrap;
+}
+
+.lp-radio {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    margin-right: .9rem;
+    font-size: .88rem;
+}
+
+.lp-radio-allow input:checked + * ,
+.lp-radio-allow:has(input:checked) {
+    color: #15803D;
+    font-weight: 600;
+}
+
+.lp-radio-deny:has(input:checked) {
+    color: #B42318;
+    font-weight: 600;
+}
+
+.lp-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem 1.25rem;
+    margin-top: .5rem;
+}
+
+.lp-check {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+}
+
+.lp-hello {
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 991.98px) {
+    .lp-grid,
+    .lp-grid:has(.lp-side-left) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .lp-dl {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .lp-dl dd {
+        margin-bottom: .5rem;
+    }
+}
+
+/* The portal uses wide tables and dashboards: give its pages more room than the standard reading width. */
+body.lp-page #page.drawers .main-inner,
+body.lp-page .header-maxwidth {
+    max-width: 1240px;
+}
