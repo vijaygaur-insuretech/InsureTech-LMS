@@ -22,7 +22,7 @@ use moodle_url;
 /**
  * Learner sidebar: Dashboard, My courses, Live classes, Assignments, Calendar and Certificates.
  *
- * Shown on every signed-in page for learners and trainers (site administrators keep the standard navigation).
+ * Shown on every signed-in page. Site administrators get their own items.
  * On wide screens it is a fixed left column; on phones it becomes a bottom tab bar.
  *
  * @package    theme_insuretech
@@ -41,7 +41,7 @@ class sidenav {
      * @return bool
      */
     public static function applies(moodle_page $page): bool {
-        if (during_initial_install() || !isloggedin() || isguestuser() || is_siteadmin()) {
+        if (during_initial_install() || !isloggedin() || isguestuser()) {
             return false;
         }
         if (in_array($page->pagelayout, self::SKIP_LAYOUTS)) {
@@ -71,7 +71,7 @@ class sidenav {
             ['key' => 'certificates', 'icon' => 'fa-award', 'url' => new moodle_url('/local/itskills/mycertificates.php'),
                 'match' => ['/local/itskills/mycertificates.php', '/local/itskills/certificate.php']],
         ];
-        $items = self::with_placement($items);
+        $items = is_siteadmin() ? self::admin_items() : self::with_placement($items);
         $path = $page->url ? $page->url->get_path() : '';
         // The most specific match wins, so an assignment page highlights Assignments, not My courses.
         $best = ['key' => '', 'length' => 0];
@@ -92,6 +92,34 @@ class sidenav {
             ];
         }
         return ['items' => $out];
+    }
+
+    /**
+     * Items for site administrators: the screens they run the academy from.
+     *
+     * @return array
+     */
+    protected static function admin_items(): array {
+        $item = fn(string $key, string $icon, string $path, array $match, array $params = []) => ['key' => $key, 'icon' => $icon,
+            'url' => new moodle_url($path, $params), 'match' => $match];
+        $items = [
+            $item('dashboard', 'fa-gauge-high', '/my/', ['/my/index.php', '/my/']),
+            $item('mycourses', 'fa-book-open', '/course/management.php', ['/course/'], []),
+            $item('people', 'fa-users', '/theme/insuretech/manage/people.php',
+                ['/theme/insuretech/manage/people.php', '/theme/insuretech/manage/addperson.php', '/user/']),
+            $item('batches', 'fa-video', '/theme/insuretech/manage/classes.php',
+                ['/theme/insuretech/manage/classes.php', '/local/itskills/sessions.php', '/group/']),
+            $item('calendar', 'fa-calendar-days', '/calendar/view.php', ['/calendar/'], ['view' => 'month']),
+        ];
+        $items[0]['label'] = get_string('nav_dashboard', 'theme_insuretech');
+        $items[1]['label'] = get_string('dashallcourses', 'theme_insuretech');
+        if (class_exists('\\local_placement\\local\\perm')) {
+            $items[] = ['key' => 'placement', 'icon' => 'fa-briefcase', 'url' => new moodle_url('/local/placement/index.php'),
+                'label' => get_string('pluginname', 'local_placement'), 'match' => ['/local/placement/']];
+        }
+        $items[] = $item('reports', 'fa-chart-pie', '/admin/category.php', ['/report/'], ['category' => 'reports']);
+        $items[] = $item('siteadmin', 'fa-gear', '/admin/search.php', ['/admin/']);
+        return $items;
     }
 
     /**

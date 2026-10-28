@@ -67,10 +67,17 @@ class role_panels {
             }
         }
 
+        $isadmin = is_siteadmin();
+        if ($isadmin) {
+            // Administrators run every course, whether or not they are enrolled in it.
+            $teaching = array_values(array_filter(get_courses('all', 'c.fullname ASC'), fn($c) => $c->id != SITEID));
+            $learning = [];
+        }
+
         $data = [
             'greeting' => get_string('dashgreeting', 'theme_insuretech', $USER->firstname),
-            'admin' => is_siteadmin() ? self::admin_actions() : null,
-            'trainer' => $teaching ? self::trainer($teaching) : null,
+            'admin' => $isadmin ? self::admin_actions() : null,
+            'trainer' => $teaching || $isadmin ? self::trainer($teaching) + ['title' => get_string($isadmin ? 'dashallcourses' : 'mybatches', 'theme_insuretech')] : null,
             'student' => $learning ? self::student($learning) : null,
         ];
 
@@ -78,9 +85,8 @@ class role_panels {
             return null;
         }
         $data['role'] = $data['admin'] ? 'admin' : ($data['trainer'] ? 'trainer' : 'student');
-        // Learners and trainers always see the calendar next to their dashboard.
-        $data['calendar'] = $data['admin'] ? null
-            : \theme_insuretech\local\calendar_card::data(optional_param('itcal', '', PARAM_ALPHANUMEXT));
+        // Everyone sees the calendar next to their dashboard.
+        $data['calendar'] = \theme_insuretech\local\calendar_card::data(optional_param('itcal', '', PARAM_ALPHANUMEXT));
         $data['subtitle'] = get_string('dashsubtitle' . $data['role'], 'theme_insuretech');
         return $data;
     }

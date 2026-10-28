@@ -168,7 +168,7 @@
 
     {{#trainer}}
         <div class="it-section-head">
-            <h3 class="it-section-title">{{#str}}mybatches, theme_insuretech{{/str}}</h3>
+            <h3 class="it-section-title">{{title}}</h3>
             <a href="{{manageurl}}" class="it-section-link"><i class="icon fa fa-video" aria-hidden="true"></i>{{#str}}managelinks, theme_insuretech{{/str}}</a>
         </div>
         <div class="it-grid">
@@ -207,6 +207,7 @@
                     </div>
                 </div>
             {{/courses}}
+            {{^courses}}<p class="it-live-none">{{#str}}dashnocourses, theme_insuretech{{/str}}</p>{{/courses}}
         </div>
     {{/trainer}}
     {{#calendar}}

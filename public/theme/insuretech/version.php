@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026102100;
+$plugin->version   = 2026102800;
 $plugin->requires  = 2026100200;
 $plugin->component = 'theme_insuretech';
 $plugin->maturity  = MATURITY_STABLE;
