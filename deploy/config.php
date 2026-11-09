@@ -33,5 +33,12 @@ $CFG->debug = 0;
 $CFG->debugdisplay = 0;
 $CFG->preventexecpath = true;
 $CFG->disableupdateautodeploy = true;
+// No upstream promotions, update checks, marketplace or documentation links.
+$CFG->disableupdatenotifications = true;
+$CFG->disablenotificationctas = ['marketplace', 'moodlecloud', 'partners', 'feedback'];
+$CFG->showservicesandsupportcontent = false;
+$CFG->enableuserfeedback = 0;
+$CFG->activitychooseractivefooter = 'hidden';
+$CFG->docroot = '';
 
 require_once(__DIR__ . '/lib/setup.php');
